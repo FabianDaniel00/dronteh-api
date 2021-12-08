@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,14 +41,14 @@ class RegistrationController extends AbstractController
             $user->setPassword(
             $userPasswordHasher->hashPassword(
                     $user,
-                    $data['plainPassword']
+                    $form->get('plainPassword')->getData()
                 )
             );
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // // generate a signed url and email it to the user
+            // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('api_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('dronteh.confirm@gmail.com', 'DronTeh Confirm'))
@@ -58,29 +58,37 @@ class RegistrationController extends AbstractController
             );
             // do anything else you need here, like send an email
 
-            return $this->json(['message' => 'Registration was successful!']);
+            return $this->json(['message' => 'Registration was successful! Verification email was sent.']);
         }
 
         return $this->json(['form' => $form]);
     }
 
     /**
-     * @Route("/api/verify/email", name="api_verify_email")
+     * @Route("api/verify/email", name="api_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $id = $request->get('id');
+
+        if (null === $id) {
+            return $this->json(['message' => "Can't find the user ID!"]);
+        }
+
+        $user = $userRepository->find($id);
+
+        if (null === $user) {
+            return $this->json(['message' => "Can't find the user!"]);
+        }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
-
-            return new Response("Validation failed, try again!");
+            return $this->json(['message' => 'Something went wrong. Error: '.$exception->getReason()]);
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        return new Response("Validation success!");
+        return $this->json(['message' => 'Successfully verified.']);
     }
 }

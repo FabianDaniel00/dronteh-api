@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json", options={"default": "ROLE_USER"})
      */
-    private $roles = 'ROLE_USER';
+    private $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
