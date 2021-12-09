@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\RefreshToken;
 use App\Form\LoginFormType;
 use App\Repository\UserRepository;
+use App\Repository\RefreshTokenRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +21,7 @@ class LoginController extends AbstractController
     /**
      * @Route("/api/auth/login", name="api_login", methods={"POST"})
      */
-    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
+    public function login(Request $request, UserRepository $userRepository, RefreshTokenRepository $refreshTokenRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = $request->request->all();
 
@@ -35,13 +38,30 @@ class LoginController extends AbstractController
                     'message' => 'Wrong email or password.',
                 ]);
             }
-            $payload = [
+            $payloadToken = [
                 "user" => $user->getEmail(),
                 "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
             ];
+            $payloadRefreshToken = [
+                "user" => $user->getEmail(),
+                "exp" => (new \DateTime())->modify("+2 weeks")->getTimestamp(),
+            ];
     
-            $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'), 'HS256');
-    
+            $jwt = JWT::encode($payloadToken, $this->getParameter('jwt_secret'), 'HS256');
+            $refreshJwt = JWT::encode($payloadRefreshToken, $this->getParameter('refresh_jwt_secret'), 'HS256');
+
+            $refreshToken = $refreshTokenRepository->findOneBy(['email'=>$user->getEmail()]);
+
+            if($refreshToken) {
+                $refreshToken->setToken($refreshJwt);
+            } else {
+                $refreshToken = new RefreshToken();
+                $refreshToken->setToken($refreshJwt);
+                $refreshToken->setEmail($user->getEmail());
+                $entityManager->persist($refreshToken);
+            }
+            $entityManager->flush();
+
             return $this->json([
                 'message' => 'Success!',
                 'token' => sprintf('Bearer %s', $jwt),

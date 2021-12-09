@@ -31,7 +31,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         $email = $request->request->get('email', '');
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        if(!$user->isVerified()) {
+        if($user && !$user->isVerified()) {
             throw new CustomUserMessageAuthenticationException('You are not verified, please verify your email');
         }
 
