@@ -26,15 +26,13 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/api/auth/register", name="api_register", methods={"POST"})
+     * @Route("/api/register", name="api_register", methods={"POST"})
      */
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
-        $data = $request->request->all();
-
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->submit($data);
+        $form->submit($request->request->all());
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
