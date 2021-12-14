@@ -53,11 +53,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=6, nullable=true)
-     */
-    private $verification_code;
-
-    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $tel;
@@ -186,18 +181,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getVerificationCode(): ?string
-    {
-        return $this->verification_code;
-    }
-
-    public function setVerificationCode(string $verification_code): self
-    {
-        $this->verification_code = $verification_code;
 
         return $this;
     }

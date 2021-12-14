@@ -11,7 +11,7 @@ security:
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
     # used to reload user from session & other features (e.g. switch_user)
-    app_user_provider:
+    api_user_provider:
       entity:
         class: App\Entity\User
         property: email
@@ -19,25 +19,28 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
     login:
       pattern: ^/api/login
       stateless: true
-      provider: app_user_provider
+      provider: api_user_provider
       json_login:
-        check_path: api_login # or api_login_check as defined in config/routes.yaml
+        check_path: api_login_check # or api_login_check as defined in config/routes.yaml
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
-      remember_me:
-        secret: "%kernel.secret%"
-        lifetime: 604800 # 2 weeks in seconds
-        path: /
+
+    api_token_refresh:
+      pattern: ^/api/token/refresh
+      stateless: true
+      refresh_jwt: ~
+
     api:
       pattern: ^/api
       stateless: true
-      provider: app_user_provider
+      provider: api_user_provider
       jwt: ~
-      logout:
-        path: api_logout
+
+    main:
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall

@@ -15,6 +15,7 @@ class TestApiController extends AbstractController
     {
         return $this->json([
             'message' => 'test!',
+            'user' => $this->getUser()
         ]);
     }
 }
