@@ -1,0 +1,110 @@
+{
+	"info": {
+		"name": "json_api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"description": "",
+			"item": [
+				{
+					"name": "User List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": "",
+						"url": {
+							"raw": "{{host}}/users/",
+							"host": ["{{host}}"],
+							"path": ["/users", ""]
+						}
+					}
+				},
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"type\": \"users\",\n        \"attributes\": {\n            \"email\": \"string\",\n            \"roles\": \"json\",\n            \"password\": \"string\",\n            \"firstname\": \"string\",\n            \"lastname\": \"string\",\n            \"tel\": \"string\",\n            \"created_at\": \"datetime_immutable\",\n            \"updated_at\": \"datetime_immutable\",\n            \"isVerified\": \"boolean\"\n        },\n        \"relationships\": []\n    }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/users/",
+							"host": ["{{host}}"],
+							"path": ["/users", ""]
+						}
+					}
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"type\": \"users\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"email\": \"string\",\n            \"roles\": \"json\",\n            \"password\": \"string\",\n            \"firstname\": \"string\",\n            \"lastname\": \"string\",\n            \"tel\": \"string\",\n            \"created_at\": \"datetime_immutable\",\n            \"updated_at\": \"datetime_immutable\",\n            \"isVerified\": \"boolean\"\n        },\n        \"relationships\": []\n    }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/users/1",
+							"host": ["{{host}}"],
+							"path": ["/users", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": "",
+						"url": {
+							"raw": "{{host}}/users/1",
+							"host": ["{{host}}"],
+							"path": ["/users", "1"]
+						}
+					}
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": "",
+						"url": {
+							"raw": "{{host}}/users/1",
+							"host": ["{{host}}"],
+							"path": ["/users", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

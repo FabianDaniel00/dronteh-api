@@ -6,16 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\jsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TestApiController extends AbstractController
+class MeController extends AbstractController
 {
     /**
-    * @Route("/api/test", name="testapi", methods={"GET"})
+    * @Route("/api/me", name="api_me", methods={"GET"})
     */
-    public function test(): JsonResponse
+    public function index(): JsonResponse
     {
         return $this->json([
-            'message' => 'test!',
-            'user' => $this->getUser()
+            'current_user' => $this->getUser()
         ]);
     }
 }

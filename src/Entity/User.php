@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -17,11 +19,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     function __construct() {
         $this->created_at = new \DateTimeImmutable('@'.strtotime('now'));
         $this->updated_at = new \DateTimeImmutable('@'.strtotime('now'));
+        $this->reservations = new ArrayCollection();
     }
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
