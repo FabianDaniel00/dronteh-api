@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,7 +27,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/api/register", name="api_register", methods={"POST"})
+     * @Route("/register", name="api_register", methods={"POST"})
      */
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -49,44 +50,53 @@ class RegistrationController extends AbstractController
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('api_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('dronteh.confirm@gmail.com', 'DronTeh Confirm'))
+                    ->from(new Address($this->getParameter('sender_email'), 'DronTeh Confirm'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
-            return $this->json(['message' => 'Registration was successful! Verification email was sent.']);
+            return $this->json([
+                'code' => Response::HTTP_OK,
+                'message' => 'Registration was successful! Verification email was sent.'
+            ]);
         }
 
-        return $this->json(['form' => $form]);
+        return $this->json([
+            'code' => Response::HTTP_FORBIDDEN,
+            'form' => $form
+        ], Response::HTTP_FORBIDDEN);
     }
 
     /**
-     * @Route("api/verify/email", name="api_verify_email")
+     * @Route("/verify/email", name="api_verify_email")
      */
-    public function verifyUserEmail(Request $request, UserRepository $userRepository): JsonResponse
+    public function verifyUserEmail(Request $request, UserRepository $userRepository): Response
     {
         $id = $request->get('id');
 
         if (null === $id) {
-            return $this->json(['message' => "Can't find the user ID!"]);
+            return new Response("Can't find the user ID!", Response::HTTP_FORBIDDEN);
         }
 
         $user = $userRepository->find($id);
 
         if (null === $user) {
-            return $this->json(['message' => "Can't find the user!"]);
+            return new Response("Can't find the user!", Response::HTTP_FORBIDDEN);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            return $this->json(['message' => 'Something went wrong. Error: '.$exception->getReason()]);
+            return new Response('Something went wrong. '.$exception->getReason(), Response::HTTP_FORBIDDEN);
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        return $this->json(['message' => 'Successfully verified.']);
+        return new Response(
+            'Your email have been successfully verified. <a href="'.$this->getParameter('client_side_host').'/auth?success_verification=true">Click here to login</a>',
+            Response::HTTP_OK
+        );
     }
 }

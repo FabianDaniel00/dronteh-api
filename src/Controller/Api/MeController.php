@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\jsonResponse;
@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MeController extends AbstractController
 {
     /**
-    * @Route("/api/me", name="api_me", methods={"GET"})
+    * @Route("/me", name="api_me", methods={"GET"})
     */
     public function index(): JsonResponse
     {

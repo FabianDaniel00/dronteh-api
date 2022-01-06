@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Reservation
 {
+    function __construct()
+    {
+        $this->created_at = new \DateTime('@'.strtotime('now'));
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -26,22 +31,54 @@ class Reservation
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $coordinates;
+    private $parcel_number;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="float")
+     */
+    private $land_area;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Chemical::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $chemical;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $created_at;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $time;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="smallint", options={"default": 0})
      */
-    private $plant_type;
+    private $status;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $to_be_present;
+
+    /**
+     * @ORM\Column(type="string", length=5000, nullable=true)
+     */
+    private $comment;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Plant::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $plant;
 
     public function getId(): ?int
     {
@@ -60,50 +97,122 @@ class Reservation
         return $this;
     }
 
-    public function getCoordinates(): ?string
+    public function getParcelNumber(): ?string
     {
-        return $this->coordinates;
+        return $this->parcel_number;
     }
 
-    public function setCoordinates(string $coordinates): self
+    public function setParcelNumber(string $parcel_number): self
     {
-        $this->coordinates = $coordinates;
+        $this->parcel_number = $parcel_number;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getLandArea(): ?float
+    {
+        return $this->land_area;
+    }
+
+    public function setLandArea(float $land_area): self
+    {
+        $this->land_area = $land_area;
+
+        return $this;
+    }
+
+    public function getChemical(): ?Chemical
+    {
+        return $this->chemical;
+    }
+
+    public function setChemical(?Chemical $chemical): self
+    {
+        $this->chemical = $chemical;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getTime(): ?\DateTimeImmutable
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
+    public function getTime(): ?\DateTime
     {
         return $this->time;
     }
 
-    public function setTime(\DateTimeImmutable $time): self
+    public function setTime(\DateTime $time): self
     {
         $this->time = $time;
 
         return $this;
     }
 
-    public function getPlantType(): ?string
+    public function getStatus(): ?int
     {
-        return $this->plant_type;
+        return $this->status;
     }
 
-    public function setPlantType(string $plant_type): self
+    public function setStatus(int $status): self
     {
-        $this->plant_type = $plant_type;
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getToBePresent(): ?bool
+    {
+        return $this->to_be_present;
+    }
+
+    public function setToBePresent(bool $to_be_present): self
+    {
+        $this->to_be_present = $to_be_present;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getPlant(): ?Plant
+    {
+        return $this->plant;
+    }
+
+    public function setPlant(?Plant $plant): self
+    {
+        $this->plant = $plant;
 
         return $this;
     }

@@ -42,6 +42,9 @@ class CreateUserHydrator extends AbstractUserHydrator
             'isVerified' => function (User $user, $attribute, $data, $attributeName) {
                 $user->setIsVerified($attribute);
             },
+            'is_deleted' => function (User $user, $attribute, $data, $attributeName) {
+                $user->setIsDeleted($attribute);
+            },
         ];
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\JsonApi\Document\User\UserDocument;
 use App\JsonApi\Document\User\UsersDocument;
-use App\JsonApi\Hydrator\User\CreateUserHydrator;
 use App\JsonApi\Hydrator\User\UpdateUserHydrator;
 use App\JsonApi\Transformer\UserResourceTransformer;
 use App\Repository\UserRepository;
@@ -20,12 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends Controller
 {
     /**
-     * @Route("/", name="users_index", methods="GET")
+     * @Route("/", name="api_users_index", methods="GET")
      */
     public function index(UserRepository $userRepository, ResourceCollection $resourceCollection): Response
     {
         $resourceCollection->setRepository($userRepository);
 
+        $resourceCollection->getQuery()->where('r.is_deleted = 0');
         $resourceCollection->handleIndexRequest();
 
         return $this->respondOk(
@@ -35,31 +35,14 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/", name="users_new", methods="POST")
-     */
-    public function new(): Response
-    {
-        $user = $this->jsonApi()->hydrate(
-            new CreateUserHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
-            new User()
-        );
-
-        $this->validate($user);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        return $this->respondOk(
-            new UserDocument(new UserResourceTransformer()),
-            $user
-        );
-    }
-
-    /**
-     * @Route("/{id}", name="users_show", methods="GET")
+     * @Route("/{id}", name="api_users_show", methods="GET")
      */
     public function show(User $user): Response
     {
+        if ($user->isDeleted()) {
+            throw $this->createNotFoundException("Can't find this user");
+        }
+
         return $this->respondOk(
             new UserDocument(new UserResourceTransformer()),
             $user
@@ -67,10 +50,14 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="users_edit", methods="PATCH")
+     * @Route("/{id}", name="api_users_edit", methods="PATCH")
      */
     public function edit(User $user): Response
     {
+        if ($user->isDeleted()) {
+            throw $this->createNotFoundException("Can't find this user");
+        }
+
         $user = $this->jsonApi()->hydrate(
             new UpdateUserHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
             $user
@@ -87,11 +74,15 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="users_delete", methods="DELETE")
+     * @Route("/{id}", name="api_users_delete", methods="DELETE")
      */
     public function delete(User $user): Response
     {
-        $this->entityManager->remove($user);
+        if ($user->isDeleted()) {
+            throw $this->createNotFoundException("Can't find this user");
+        }
+
+        $user->setIsDeleted(1);
         $this->entityManager->flush();
 
         return $this->respondNoContent();

@@ -24,6 +24,7 @@ security:
       pattern: ^/api/login
       stateless: true
       provider: api_user_provider
+      user_checker: App\Security\UserChecker
       json_login:
         check_path: api_login_check # or api_login_check as defined in config/routes.yaml
         success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -33,14 +34,14 @@ security:
       pattern: ^/api/token/refresh
       stateless: true
       refresh_jwt: ~
+      user_checker: App\Security\UserChecker
 
     api:
       pattern: ^/api
       stateless: true
       provider: api_user_provider
+      user_checker: App\Security\UserChecker
       jwt: ~
-
-    main:
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall
@@ -51,7 +52,13 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/api/admin, roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
-    - { path: ^/api/profile, roles: [IS_AUTHENTICATED_FULLY, ROLE_USER] }
-    - { path: ^/api/test, roles: [IS_AUTHENTICATED_FULLY, ROLE_USER] }
-    - { path: ^/api, roles: PUBLIC_ACCESS }
+    - { path: ^/api/register, roles: PUBLIC_ACCESS }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/verify/email, roles: PUBLIC_ACCESS }
+    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/users/admin, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }
+    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }

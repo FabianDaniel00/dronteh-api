@@ -23,19 +23,19 @@ class Chemical
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=300)
-     */
-    private $area_of_use;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $quantity_per_ha;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $price_per_liter;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $area_of_use = [];
 
     public function getId(): ?int
     {
@@ -54,30 +54,6 @@ class Chemical
         return $this;
     }
 
-    public function getAreaOfUse(): ?string
-    {
-        return $this->area_of_use;
-    }
-
-    public function setAreaOfUse(string $area_of_use): self
-    {
-        $this->area_of_use = $area_of_use;
-
-        return $this;
-    }
-
-    public function getQuantityPerHa(): ?float
-    {
-        return $this->quantity_per_ha;
-    }
-
-    public function setQuantityPerHa(float $quantity_per_ha): self
-    {
-        $this->quantity_per_ha = $quantity_per_ha;
-
-        return $this;
-    }
-
     public function getPricePerLiter(): ?float
     {
         return $this->price_per_liter;
@@ -86,6 +62,30 @@ class Chemical
     public function setPricePerLiter(float $price_per_liter): self
     {
         $this->price_per_liter = $price_per_liter;
+
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
+    public function getAreaOfUse(): ?array
+    {
+        return $this->area_of_use;
+    }
+
+    public function setAreaOfUse(array $area_of_use): self
+    {
+        $this->area_of_use = $area_of_use;
 
         return $this;
     }

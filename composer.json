@@ -13,6 +13,7 @@
 		"doctrine/doctrine-migrations-bundle": "^3.2",
 		"doctrine/orm": "^2.10",
 		"gesdinet/jwt-refresh-token-bundle": "^1.0",
+		"google/recaptcha": "^1.2",
 		"lexik/jwt-authentication-bundle": "^2.14",
 		"nelmio/cors-bundle": "^2.2",
 		"paknahad/jsonapi-bundle": "^5.0",

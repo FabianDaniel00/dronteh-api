@@ -77,6 +77,9 @@ class UserResourceTransformer extends AbstractResource
             'isVerified' => function (User $user) {
                 return $user->isVerified();
             },
+            'is_deleted' => function (User $user) {
+                return $user->isDeleted();
+            },
         ];
     }
 

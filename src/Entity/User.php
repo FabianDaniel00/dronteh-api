@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -17,9 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     function __construct() {
-        $this->created_at = new \DateTimeImmutable('@'.strtotime('now'));
-        $this->updated_at = new \DateTimeImmutable('@'.strtotime('now'));
-        $this->reservations = new ArrayCollection();
+        $this->created_at = new \DateTime('@'.strtotime('now'));
+        $this->updated_at = new \DateTime('@'.strtotime('now'));
     }
 
     /**
@@ -37,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json", options={"default": "ROLE_USER"})
      */
-    private $roles = ["ROLE_USER"];
+    private $roles = [];
 
     /**
      * @var string The hashed password
@@ -61,12 +58,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $tel;
 
     /**
-     * @ORM\Column(type="datetime_immutable", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $created_at;
 
     /**
-     * @ORM\Column(type="datetime_immutable", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $updated_at;
 
@@ -74,6 +71,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean", options={"default": 0})
      */
     private $isVerified = 0;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
 
     public function getId(): ?int
     {
@@ -200,24 +202,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updated_at): self
     {
         $this->updated_at = $updated_at;
 
@@ -241,6 +243,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function updatedTimestamps(): void
     {
-        $this->setUpdatedAt(new \DateTimeImmutable('@'.strtotime('now')));
+        $this->setUpdatedAt(new \DateTime('@'.strtotime('now')));
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
+
+        return $this;
     }
 }

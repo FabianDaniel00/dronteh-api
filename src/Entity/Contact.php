@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Contact
 {
+    function __construct()
+    {
+        $this->created_at = new \DateTime('@'.strtotime('now'));
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -28,9 +33,14 @@ class Contact
     private $message;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $created_at;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
 
     public function getId(): ?int
     {
@@ -61,14 +71,26 @@ class Contact
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
 
         return $this;
     }

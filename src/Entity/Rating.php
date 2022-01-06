@@ -34,6 +34,11 @@ class Rating
      */
     private $rating;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Rating
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
 
         return $this;
     }
