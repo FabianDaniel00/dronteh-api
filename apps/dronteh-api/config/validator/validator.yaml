@@ -1,0 +1,18 @@
+App\Entity\User:
+  properties:
+    email:
+      - NotBlank: { message: "Email can't be blank." }
+      - Email: { message: 'Please enter a valid email.' }
+    password:
+      - NotBlank: { message: "Password can't be blank." }
+    firstname:
+      - NotBlank: { message: "Fistname can't be blank."}
+      - Length: { min: 2 , minMessage: 'The firstname must be {{limit}} characters.', max: 4096 }
+    lastname:
+      - NotBlank: { message: "Lastname can't be blank."}
+      - Length: { min: 2 , minMessage: 'The lastname must be {{limit}} characters.', max: 4096 }
+    tel:
+      - NotBlank: { message: "Phone number can't be blank."}
+      - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber: { defaultRegion: 'SR', message: "Not valid phone number" }
+    # captcha:
+    #   - Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3: { message: 'Sorry but the captcha was not valid, Try again later' }

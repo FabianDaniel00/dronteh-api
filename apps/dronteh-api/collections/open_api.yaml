@@ -1,0 +1,1885 @@
+openapi: 3.0.0
+info:
+  description: 'This is where you can give more detailed description of your API'
+  version: 1.0.0
+  title: 'Openapi JsonApi'
+  termsOfService: 'http://swagger.io/terms/'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /chemicals:
+    get:
+      tags:
+        - chemicals
+      summary: 'Chemical List'
+      operationId: listChemical
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/chemicals?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/chemicals?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/chemicals?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: chemicals
+                        attributes:
+                          $ref: '#/components/schemas/Chemical'
+                        relationships:
+                          properties: {  }
+    post:
+      tags:
+        - chemicals
+      summary: 'Add Chemical'
+      operationId: addChemical
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: chemicals
+                    attributes:
+                      $ref: '#/components/schemas/Chemical'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: chemicals
+                      attributes:
+                        $ref: '#/components/schemas/Chemical'
+                      relationships:
+                        properties: {  }
+  '/chemicals/{Chemical_id}':
+    patch:
+      tags:
+        - chemicals
+      summary: 'Edit Chemical'
+      operationId: editChemical
+      parameters:
+        -
+          name: Chemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: chemicals
+                    attributes:
+                      $ref: '#/components/schemas/Chemical'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: chemicals
+                      attributes:
+                        $ref: '#/components/schemas/Chemical'
+                      relationships:
+                        properties: {  }
+    delete:
+      tags:
+        - chemicals
+      summary: 'Delete Chemical'
+      operationId: deleteChemical
+      parameters:
+        -
+          name: Chemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: chemicals
+                      attributes:
+                        $ref: '#/components/schemas/Chemical'
+                      relationships:
+                        properties: {  }
+    get:
+      tags:
+        - chemicals
+      summary: 'Get Chemical'
+      operationId: viewChemical
+      parameters:
+        -
+          name: Chemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: chemicals
+                      attributes:
+                        $ref: '#/components/schemas/Chemical'
+                      relationships:
+                        properties: {  }
+  /contacts:
+    get:
+      tags:
+        - contacts
+      summary: 'Contact List'
+      operationId: listContact
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/contacts?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/contacts?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/contacts?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: contacts
+                        attributes:
+                          $ref: '#/components/schemas/Contact'
+                        relationships:
+                          properties: {  }
+    post:
+      tags:
+        - contacts
+      summary: 'Add Contact'
+      operationId: addContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: contacts
+                    attributes:
+                      $ref: '#/components/schemas/Contact'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /contacts
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: contacts
+                      attributes:
+                        $ref: '#/components/schemas/Contact'
+                      relationships:
+                        properties: {  }
+  '/contacts/{Contact_id}':
+    patch:
+      tags:
+        - contacts
+      summary: 'Edit Contact'
+      operationId: editContact
+      parameters:
+        -
+          name: Contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: contacts
+                    attributes:
+                      $ref: '#/components/schemas/Contact'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /contacts
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: contacts
+                      attributes:
+                        $ref: '#/components/schemas/Contact'
+                      relationships:
+                        properties: {  }
+    delete:
+      tags:
+        - contacts
+      summary: 'Delete Contact'
+      operationId: deleteContact
+      parameters:
+        -
+          name: Contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /contacts
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: contacts
+                      attributes:
+                        $ref: '#/components/schemas/Contact'
+                      relationships:
+                        properties: {  }
+    get:
+      tags:
+        - contacts
+      summary: 'Get Contact'
+      operationId: viewContact
+      parameters:
+        -
+          name: Contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /contacts
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: contacts
+                      attributes:
+                        $ref: '#/components/schemas/Contact'
+                      relationships:
+                        properties: {  }
+  /drone/data/per/reservations:
+    get:
+      tags:
+        - drone_data_per_reservations
+      summary: 'DroneDataPerReservation List'
+      operationId: listDroneDataPerReservation
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/drone/data/per/reservations?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/drone/data/per/reservations?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/drone/data/per/reservations?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: drone_data_per_reservations
+                        attributes:
+                          $ref: '#/components/schemas/DroneDataPerReservation'
+                        relationships:
+                          properties:
+                            reservation:
+                              $ref: '#/components/schemas/ReservationRelation'
+    post:
+      tags:
+        - drone_data_per_reservations
+      summary: 'Add DroneDataPerReservation'
+      operationId: addDroneDataPerReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: drone_data_per_reservations
+                    attributes:
+                      $ref: '#/components/schemas/DroneDataPerReservation'
+                    relationships:
+                      properties:
+                        reservation:
+                          $ref: '#/components/schemas/ReservationRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /drone/data/per/reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: drone_data_per_reservations
+                      attributes:
+                        $ref: '#/components/schemas/DroneDataPerReservation'
+                      relationships:
+                        properties:
+                          reservation:
+                            $ref: '#/components/schemas/ReservationRelation'
+  '/drone/data/per/reservations/{DroneDataPerReservation_id}':
+    patch:
+      tags:
+        - drone_data_per_reservations
+      summary: 'Edit DroneDataPerReservation'
+      operationId: editDroneDataPerReservation
+      parameters:
+        -
+          name: DroneDataPerReservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: drone_data_per_reservations
+                    attributes:
+                      $ref: '#/components/schemas/DroneDataPerReservation'
+                    relationships:
+                      properties:
+                        reservation:
+                          $ref: '#/components/schemas/ReservationRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /drone/data/per/reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: drone_data_per_reservations
+                      attributes:
+                        $ref: '#/components/schemas/DroneDataPerReservation'
+                      relationships:
+                        properties:
+                          reservation:
+                            $ref: '#/components/schemas/ReservationRelation'
+    delete:
+      tags:
+        - drone_data_per_reservations
+      summary: 'Delete DroneDataPerReservation'
+      operationId: deleteDroneDataPerReservation
+      parameters:
+        -
+          name: DroneDataPerReservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /drone/data/per/reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: drone_data_per_reservations
+                      attributes:
+                        $ref: '#/components/schemas/DroneDataPerReservation'
+                      relationships:
+                        properties:
+                          reservation:
+                            $ref: '#/components/schemas/ReservationRelation'
+    get:
+      tags:
+        - drone_data_per_reservations
+      summary: 'Get DroneDataPerReservation'
+      operationId: viewDroneDataPerReservation
+      parameters:
+        -
+          name: DroneDataPerReservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /drone/data/per/reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: drone_data_per_reservations
+                      attributes:
+                        $ref: '#/components/schemas/DroneDataPerReservation'
+                      relationships:
+                        properties:
+                          reservation:
+                            $ref: '#/components/schemas/ReservationRelation'
+  /plants:
+    get:
+      tags:
+        - plants
+      summary: 'Plant List'
+      operationId: listPlant
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/plants?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/plants?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/plants?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: plants
+                        attributes:
+                          $ref: '#/components/schemas/Plant'
+                        relationships:
+                          properties: {  }
+    post:
+      tags:
+        - plants
+      summary: 'Add Plant'
+      operationId: addPlant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: plants
+                    attributes:
+                      $ref: '#/components/schemas/Plant'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /plants
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: plants
+                      attributes:
+                        $ref: '#/components/schemas/Plant'
+                      relationships:
+                        properties: {  }
+  '/plants/{Plant_id}':
+    patch:
+      tags:
+        - plants
+      summary: 'Edit Plant'
+      operationId: editPlant
+      parameters:
+        -
+          name: Plant_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: plants
+                    attributes:
+                      $ref: '#/components/schemas/Plant'
+                    relationships:
+                      properties: {  }
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /plants
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: plants
+                      attributes:
+                        $ref: '#/components/schemas/Plant'
+                      relationships:
+                        properties: {  }
+    delete:
+      tags:
+        - plants
+      summary: 'Delete Plant'
+      operationId: deletePlant
+      parameters:
+        -
+          name: Plant_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /plants
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: plants
+                      attributes:
+                        $ref: '#/components/schemas/Plant'
+                      relationships:
+                        properties: {  }
+    get:
+      tags:
+        - plants
+      summary: 'Get Plant'
+      operationId: viewPlant
+      parameters:
+        -
+          name: Plant_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /plants
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: plants
+                      attributes:
+                        $ref: '#/components/schemas/Plant'
+                      relationships:
+                        properties: {  }
+  /ratings:
+    get:
+      tags:
+        - ratings
+      summary: 'Rating List'
+      operationId: listRating
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/ratings?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/ratings?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/ratings?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: ratings
+                        attributes:
+                          $ref: '#/components/schemas/Rating'
+                        relationships:
+                          properties:
+                            user:
+                              $ref: '#/components/schemas/UserRelation'
+                            chemical:
+                              $ref: '#/components/schemas/ChemicalRelation'
+    post:
+      tags:
+        - ratings
+      summary: 'Add Rating'
+      operationId: addRating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: ratings
+                    attributes:
+                      $ref: '#/components/schemas/Rating'
+                    relationships:
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /ratings
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: ratings
+                      attributes:
+                        $ref: '#/components/schemas/Rating'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+  '/ratings/{Rating_id}':
+    patch:
+      tags:
+        - ratings
+      summary: 'Edit Rating'
+      operationId: editRating
+      parameters:
+        -
+          name: Rating_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: ratings
+                    attributes:
+                      $ref: '#/components/schemas/Rating'
+                    relationships:
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /ratings
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: ratings
+                      attributes:
+                        $ref: '#/components/schemas/Rating'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+    delete:
+      tags:
+        - ratings
+      summary: 'Delete Rating'
+      operationId: deleteRating
+      parameters:
+        -
+          name: Rating_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /ratings
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: ratings
+                      attributes:
+                        $ref: '#/components/schemas/Rating'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+    get:
+      tags:
+        - ratings
+      summary: 'Get Rating'
+      operationId: viewRating
+      parameters:
+        -
+          name: Rating_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /ratings
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: ratings
+                      attributes:
+                        $ref: '#/components/schemas/Rating'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+  /reservations:
+    get:
+      tags:
+        - reservations
+      summary: 'Reservation List'
+      operationId: listReservation
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/reservations?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/reservations?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/reservations?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: reservations
+                        attributes:
+                          $ref: '#/components/schemas/Reservation'
+                        relationships:
+                          properties:
+                            user:
+                              $ref: '#/components/schemas/UserRelation'
+                            chemical:
+                              $ref: '#/components/schemas/ChemicalRelation'
+                            plant:
+                              $ref: '#/components/schemas/PlantRelation'
+    post:
+      tags:
+        - reservations
+      summary: 'Add Reservation'
+      operationId: addReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: reservations
+                    attributes:
+                      $ref: '#/components/schemas/Reservation'
+                    relationships:
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+                        plant:
+                          $ref: '#/components/schemas/PlantRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: reservations
+                      attributes:
+                        $ref: '#/components/schemas/Reservation'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+  '/reservations/{Reservation_id}':
+    patch:
+      tags:
+        - reservations
+      summary: 'Edit Reservation'
+      operationId: editReservation
+      parameters:
+        -
+          name: Reservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: reservations
+                    attributes:
+                      $ref: '#/components/schemas/Reservation'
+                    relationships:
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+                        plant:
+                          $ref: '#/components/schemas/PlantRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: reservations
+                      attributes:
+                        $ref: '#/components/schemas/Reservation'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+    delete:
+      tags:
+        - reservations
+      summary: 'Delete Reservation'
+      operationId: deleteReservation
+      parameters:
+        -
+          name: Reservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: reservations
+                      attributes:
+                        $ref: '#/components/schemas/Reservation'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+    get:
+      tags:
+        - reservations
+      summary: 'Get Reservation'
+      operationId: viewReservation
+      parameters:
+        -
+          name: Reservation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /reservations
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: reservations
+                      attributes:
+                        $ref: '#/components/schemas/Reservation'
+                      relationships:
+                        properties:
+                          user:
+                            $ref: '#/components/schemas/UserRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+externalDocs:
+  description: 'Find out more about Swagger'
+  url: 'http://swagger.io'
+servers:
+  -
+    url: 'http://localhost:8000/api'
+    description: 'Local Environment'
+components:
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Chemical:
+      type: object
+      properties:
+        name:
+          type: string
+        price_per_liter:
+          type: number
+          format: float
+        is_deleted:
+          type: boolean
+        area_of_use:
+          type: array
+    ChemicalRelation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - chemicals
+          example: chemicals
+        id:
+          type: integer
+          minimum: 1
+          description: 'Chemical ID'
+          example: 76
+    Contact:
+      type: object
+      properties:
+        email:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        is_deleted:
+          type: boolean
+    DroneDataPerReservation:
+      type: object
+      properties:
+        gps_coordinates:
+          type: string
+        results:
+          type: string
+        chemical_quantity_per_ha:
+          type: number
+          format: float
+        water_quantity:
+          type: number
+          format: float
+        is_deleted:
+          type: boolean
+    Plant:
+      type: object
+      properties:
+        name:
+          type: string
+    PlantRelation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - plants
+          example: plants
+        id:
+          type: integer
+          minimum: 1
+          description: 'Plant ID'
+          example: 71
+    Rating:
+      type: object
+      properties:
+        rating:
+          type: integer
+          format: int32
+        is_deleted:
+          type: boolean
+    Reservation:
+      type: object
+      properties:
+        parcel_number:
+          type: string
+        land_area:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+        is_deleted:
+          type: boolean
+        time:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        to_be_present:
+          type: boolean
+        comment:
+          type: string
+    ReservationRelation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - reservations
+          example: reservations
+        id:
+          type: integer
+          minimum: 1
+          description: 'Reservation ID'
+          example: 69
+    UserRelation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - users
+          example: users
+        id:
+          type: integer
+          minimum: 1
+          description: 'User ID'
+          example: 69

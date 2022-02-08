@@ -1,0 +1,65 @@
+security:
+  enable_authenticator_manager: true
+  role_hierarchy:
+    ROLE_ADMIN: ROLE_USER
+  # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
+    App\Entity\User:
+      algorithm: bcrypt
+
+  # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+  providers:
+    # used to reload user from session & other features (e.g. switch_user)
+    api_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    login:
+      pattern: ^/api/login
+      stateless: true
+      provider: api_user_provider
+      user_checker: App\Security\UserChecker
+      json_login:
+        check_path: api_login_check # or api_login_check as defined in config/routes.yaml
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+    api_token_refresh:
+      pattern: ^/api/token/refresh
+      stateless: true
+      refresh_jwt: ~
+      user_checker: App\Security\UserChecker
+
+    api:
+      pattern: ^/api
+      stateless: true
+      provider: api_user_provider
+      user_checker: App\Security\UserChecker
+      jwt: ~
+
+    # activate different ways to authenticate
+    # https://symfony.com/doc/current/security.html#the-firewall
+
+    # https://symfony.com/doc/current/security/impersonating_user.html
+    # switch_user: true
+
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users/verify/email, roles: PUBLIC_ACCESS }
+    - { path: ^/api/contacts, roles: PUBLIC_ACCESS }
+    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/users/admin, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }
+    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }
