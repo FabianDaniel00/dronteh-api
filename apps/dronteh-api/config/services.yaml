@@ -6,6 +6,8 @@
 parameters:
   client_side_host: "%env(CLIENT_SIDE_HOST)%"
   sender_email: "%env(SENDER_EMAIL)%"
+  csrf_token_id: "%env(CSRF_TOKEN_ID)%"
+  app.locales: 'en|hu|sr'
 
 services:
   # default configuration for services in *this* file

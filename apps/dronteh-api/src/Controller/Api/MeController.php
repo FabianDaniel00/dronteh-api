@@ -14,7 +14,9 @@ class MeController extends AbstractController
     public function index(): JsonResponse
     {
         return $this->json([
-            'current_user' => $this->getUser()
+            'data' => [
+                'current_user' => $this->getUser()
+            ]
         ]);
     }
 }

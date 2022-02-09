@@ -1,11 +1,13 @@
-<h1>Hi! Please confirm your email!</h1>
+{% trans_default_domain 'api' %}
+
+<h1>{{ 'mails.register_confirmation.header'|trans }}</h1>
 
 <p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+    {{ 'mails.register_confirmation.content'|trans }}:<br><br>
+    <a href="{{ signedUrl }}">{{ 'mails.register_confirmation.confirm_email'|trans }}</a>.
+    {{ 'mails.register_confirmation.expires_in'|trans(expiresAtMessageData) }}.
 </p>
 
 <p>
-    Cheers!
+    {{ 'mails.register_confirmation.cheers'|trans }}
 </p>

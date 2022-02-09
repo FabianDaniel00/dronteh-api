@@ -1,3 +1,3 @@
 json_api:
   documentationSchema: "openapi"
-  controllerNamespace: "Controller"
+  controllerNamespace: "Controller\\Api"

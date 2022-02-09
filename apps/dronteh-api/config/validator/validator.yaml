@@ -14,5 +14,5 @@ App\Entity\User:
     tel:
       - NotBlank: { message: "Phone number can't be blank."}
       - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber: { defaultRegion: 'SR', message: "Not valid phone number" }
-    # captcha:
-    #   - Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3: { message: 'Sorry but the captcha was not valid, Try again later' }
+    captcha:
+      - Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3: { message: 'Sorry but the captcha was not valid, Try again later' }

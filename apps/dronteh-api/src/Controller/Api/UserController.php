@@ -17,8 +17,10 @@ use App\JsonApi\Hydrator\User\UpdateUserHydrator;
 use Paknahad\JsonApiBundle\Controller\Controller;
 use App\JsonApi\Transformer\UserResourceTransformer;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/users")
@@ -44,16 +46,21 @@ class UserController extends Controller
     /**
      * @Route("/", name="api_users_new", methods="POST")
      */
-    public function new(UserPasswordHasherInterface $userPasswordHasher, EmailVerifier $emailVerifier): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EmailVerifier $emailVerifier, TranslatorInterface $translator): Response
     {
+        if (!$this->isCsrfTokenValid($this->getParameter('csrf_token_id'), $request->headers->get('x-csrf-token'))) {
+            // throw new AccessDeniedHttpException('api.users.invlaid_csrf_token');
+        }
+
         $user = $this->jsonApi()->hydrate(
             new CreateUserHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
             new User()
         );
 
+        $user->setCaptcha($request->headers->get('x-captcha'));
+
         $this->validate($user);
 
-        $user->setCaptcha(null);
         $user->setPassword(
             $userPasswordHasher->hashPassword(
                 $user,
@@ -66,9 +73,9 @@ class UserController extends Controller
 
         $emailVerifier->sendEmailConfirmation('api_users_verify_email', $user,
             (new TemplatedEmail())
-                ->from(new Address($this->getParameter('sender_email'), 'DronTeh Confirm'))
+                ->from(new Address($this->getParameter('sender_email'), $translator->trans('mails.register_confirmation.name', [], 'api')))
                 ->to($user->getEmail())
-                ->subject('Please Confirm your Email')
+                ->subject($translator->trans('mails.register_confirmation.subject', [], 'api'))
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );
 
@@ -84,7 +91,7 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         if ($user->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this user");
+            throw $this->createNotFoundException('api.users.show.is_deleted');
         }
 
         return $this->respondOk(
@@ -99,7 +106,7 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         if ($user->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this user");
+            throw $this->createNotFoundException('api.users.show.is_deleted');
         }
 
         $user = $this->jsonApi()->hydrate(
@@ -123,7 +130,7 @@ class UserController extends Controller
     public function delete(User $user): Response
     {
         if ($user->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this user");
+            throw $this->createNotFoundException('api.users.show.is_deleted');
         }
 
         $user->setIsDeleted(1);
@@ -133,33 +140,34 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/verify/email", name="api_users_verify_email", methods="GET")
+     * @Route("/{_locale}/verify/email", name="api_users_verify_email", methods="GET")
      */
-    public function verifyUserEmail(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier, TranslatorInterface $translator, $_locale): Response
     {
+        $request->setLocale($_locale);
+
         $id = $request->get('id');
 
         if (null === $id) {
-            return new Response("Can't find the user ID!", Response::HTTP_FORBIDDEN);
+            return new Response($translator->trans('api.users.verify_email.id_null', [], 'api'), Response::HTTP_FORBIDDEN);
         }
 
         $user = $userRepository->find($id);
 
         if (null === $user) {
-            return new Response("Can't find the user!", Response::HTTP_FORBIDDEN);
+            return new Response($translator->trans('api.users.verify_email.user_null', [], 'api'), Response::HTTP_FORBIDDEN);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            return new Response('Something went wrong. '.$exception->getReason(), Response::HTTP_FORBIDDEN);
+            return new Response($translator->trans('api.users.verify_email.error', [], 'api').$exception->getReason(), Response::HTTP_FORBIDDEN);
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         return new Response(
-            'Your email have been successfully verified. <a href="'.$this->getParameter('client_side_host').'/auth?success_verification=true">Click here to login</a>',
-            Response::HTTP_OK
+            $translator->trans('api.users.verify_email.success.message', [], 'api').' <a href="'.$this->getParameter('client_side_host').'/auth?success_verification=true">'.$translator->trans('api.users.verify_email.success.click', [], 'api').'</a>'
         );
     }
 }

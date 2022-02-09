@@ -54,8 +54,9 @@ security:
   access_control:
     - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/users/verify/email, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users/('%app.locales%')/verify/email, roles: PUBLIC_ACCESS }
     - { path: ^/api/contacts, roles: PUBLIC_ACCESS }
+    - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS }
     - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }

@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json", options={"default": "ROLE_USER"})
      */
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
@@ -77,9 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $is_deleted = 0;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $captcha;
 
     public function getId(): ?int

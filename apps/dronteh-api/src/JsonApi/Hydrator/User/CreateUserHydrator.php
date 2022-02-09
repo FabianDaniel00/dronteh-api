@@ -44,7 +44,7 @@ class CreateUserHydrator extends AbstractUserHydrator
             },
             'is_deleted' => function (User $user, $attribute, $data, $attributeName) {
                 $user->setIsDeleted($attribute);
-            }
+            },
         ];
     }
 }

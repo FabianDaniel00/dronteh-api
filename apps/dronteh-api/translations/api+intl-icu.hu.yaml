@@ -1,0 +1,34 @@
+mails:
+  register_confirmation:
+    subject:
+      'Kérjük erősítse meg az email címét'
+    name:
+      'Dronteh Megerősítés'
+    header:
+      'Hello! Kérjük erősítse meg az email címét!'
+    content:
+      'Kérjük erősítse meg az email címét erre a linkre kattintva'
+    confirm_email:
+      'Email címem megerősítése'
+    expires_in: >-
+      {count, select,
+        1 {Ez a link le fog {count} napon belül}
+        other {Ez a link le fog {count} napon belül}
+      }
+    cheers:
+      'Üdv! Dronteh csapata.'
+
+api:
+  users:
+    verify_email:
+      id_null:
+        "Nem található a user ID! Próbálja újra."
+      user_null:
+        "Nem található a user! Próbálja újra."
+      error:
+        'Valami elromlott. Próbálja újra. '
+      success:
+        message:
+          'Az ön email címe sikeresen megerősítve.'
+        click:
+          'Kattintson ide a bejelentkezéshez'
