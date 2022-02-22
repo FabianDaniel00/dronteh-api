@@ -12,6 +12,13 @@ use WoohooLabs\Yin\JsonApi\Schema\Resource\AbstractResource;
  */
 class PlantResourceTransformer extends AbstractResource
 {
+    private $locale;
+
+    public function __construct(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +58,10 @@ class PlantResourceTransformer extends AbstractResource
     {
         return [
             'name' => function (Plant $plant) {
-                return $plant->getName();
+                return $plant->{'getName'.ucfirst($this->locale)}();
+            },
+            'is_deleted' => function (Plant $plant) {
+                return $plant->isDeleted();
             },
         ];
     }

@@ -1,0 +1,5 @@
+forms:
+  reset_password_request:
+    e-mail:
+      not_blank:
+        'Unesite svoju e-mail'

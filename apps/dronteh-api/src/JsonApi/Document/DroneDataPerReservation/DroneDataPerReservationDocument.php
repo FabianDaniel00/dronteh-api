@@ -18,7 +18,7 @@ class DroneDataPerReservationDocument extends AbstractSingleResourceDocument
     {
         return DocumentLinks::createWithoutBaseUri(
             [
-                'self' => new Link('/drone/data/per/reservations/'.$this->getResourceId()),
+                'self' => new Link('/drone_data_per_reservations/'.$this->getResourceId()),
             ]
         );
     }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Contact
 {
-    function __construct()
+    public function __construct()
     {
         $this->created_at = new \DateTime('@'.strtotime('now'));
     }

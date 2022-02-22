@@ -3,16 +3,17 @@
 namespace App\Controller\Api;
 
 use App\Entity\Chemical;
-use App\JsonApi\Document\Chemical\ChemicalDocument;
-use App\JsonApi\Document\Chemical\ChemicalsDocument;
-use App\JsonApi\Hydrator\Chemical\CreateChemicalHydrator;
-use App\JsonApi\Hydrator\Chemical\UpdateChemicalHydrator;
-use App\JsonApi\Transformer\ChemicalResourceTransformer;
 use App\Repository\ChemicalRepository;
-use Paknahad\JsonApiBundle\Controller\Controller;
-use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Paknahad\JsonApiBundle\Controller\Controller;
+use App\JsonApi\Document\Chemical\ChemicalDocument;
+use App\JsonApi\Document\Chemical\ChemicalsDocument;
+use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use App\JsonApi\Transformer\ChemicalResourceTransformer;
+// use App\JsonApi\Hydrator\Chemical\CreateChemicalHydrator;
+// use App\JsonApi\Hydrator\Chemical\UpdateChemicalHydrator;
 
 /**
  * @Route("/chemicals")
@@ -22,7 +23,7 @@ class ChemicalController extends Controller
     /**
      * @Route("/", name="chemicals_index", methods="GET")
      */
-    public function index(ChemicalRepository $chemicalRepository, ResourceCollection $resourceCollection): Response
+    public function index(ChemicalRepository $chemicalRepository, ResourceCollection $resourceCollection, Request $request): Response
     {
         $resourceCollection->setRepository($chemicalRepository);
 
@@ -30,83 +31,83 @@ class ChemicalController extends Controller
         $resourceCollection->handleIndexRequest();
 
         return $this->respondOk(
-            new ChemicalsDocument(new ChemicalResourceTransformer()),
+            new ChemicalsDocument(new ChemicalResourceTransformer($request->getLocale())),
             $resourceCollection
         );
     }
 
-    /**
-     * @Route("/", name="chemicals_new", methods="POST")
-     */
-    public function new(): Response
-    {
-        $chemical = $this->jsonApi()->hydrate(
-            new CreateChemicalHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
-            new Chemical()
-        );
+    // /**
+    //  * @Route("/", name="chemicals_new", methods="POST")
+    //  */
+    // public function new(Request $request): Response
+    // {
+    //     $chemical = $this->jsonApi()->hydrate(
+    //         new CreateChemicalHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
+    //         new Chemical()
+    //     );
 
-        $this->validate($chemical);
+    //     $this->validate($chemical);
 
-        $this->entityManager->persist($chemical);
-        $this->entityManager->flush();
+    //     $this->entityManager->persist($chemical);
+    //     $this->entityManager->flush();
 
-        return $this->respondOk(
-            new ChemicalDocument(new ChemicalResourceTransformer()),
-            $chemical
-        );
-    }
+    //     return $this->respondOk(
+    //         new ChemicalDocument(new ChemicalResourceTransformer($request->getLocale())),
+    //         $chemical
+    //     );
+    // }
 
     /**
      * @Route("/{id}", name="chemicals_show", methods="GET")
      */
-    public function show(Chemical $chemical): Response
+    public function show(Chemical $chemical, Request $request): Response
     {
         if ($chemical->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this chemical");
+            throw $this->createNotFoundException('api.chemicals.is_deleted');
         }
 
         return $this->respondOk(
-            new ChemicalDocument(new ChemicalResourceTransformer()),
+            new ChemicalDocument(new ChemicalResourceTransformer($request->getLocale())),
             $chemical
         );
     }
 
-    /**
-     * @Route("/{id}", name="chemicals_edit", methods="PATCH")
-     */
-    public function edit(Chemical $chemical): Response
-    {
-        if ($chemical->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this chemical");
-        }
+    // /**
+    //  * @Route("/{id}", name="chemicals_edit", methods="PATCH")
+    //  */
+    // public function edit(Chemical $chemical, Request $request): Response
+    // {
+    //     if ($chemical->isDeleted()) {
+    //         throw $this->createNotFoundException('api.chemicals.is_deleted');
+    //     }
 
-        $chemical = $this->jsonApi()->hydrate(
-            new UpdateChemicalHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
-            $chemical
-        );
+    //     $chemical = $this->jsonApi()->hydrate(
+    //         new UpdateChemicalHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
+    //         $chemical
+    //     );
 
-        $this->validate($chemical);
+    //     $this->validate($chemical);
 
-        $this->entityManager->flush();
+    //     $this->entityManager->flush();
 
-        return $this->respondOk(
-            new ChemicalDocument(new ChemicalResourceTransformer()),
-            $chemical
-        );
-    }
+    //     return $this->respondOk(
+    //         new ChemicalDocument(new ChemicalResourceTransformer($request->getLocale())),
+    //         $chemical
+    //     );
+    // }
 
-    /**
-     * @Route("/{id}", name="chemicals_delete", methods="DELETE")
-     */
-    public function delete(Chemical $chemical): Response
-    {
-        if ($chemical->isDeleted()) {
-            throw $this->createNotFoundException("Can't find this chemical");
-        }
+    // /**
+    //  * @Route("/{id}", name="chemicals_delete", methods="DELETE")
+    //  */
+    // public function delete(Chemical $chemical): Response
+    // {
+    //     if ($chemical->isDeleted()) {
+    //         throw $this->createNotFoundException('api.chemicals.is_deleted');
+    //     }
 
-        $chemical->setIsDeleted(1);
-        $this->entityManager->flush();
+    //     $chemical->setIsDeleted(1);
+    //     $this->entityManager->flush();
 
-        return $this->respondNoContent();
-    }
+    //     return $this->respondNoContent();
+    // }
 }

@@ -297,7 +297,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"data\": {\n        \"type\": \"chemicals\",\n        \"attributes\": {\n            \"name\": \"string\",\n            \"price_per_liter\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"area_of_use\": \"array\"\n        },\n        \"relationships\": []\n    }\n}"
+                            "raw": "{\n    \"data\": {\n        \"type\": \"chemicals\",\n        \"attributes\": {\n            \"price_per_liter\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"area_of_use\": \"array\",\n            \"name_hu\": \"string\",\n            \"name_en\": \"string\",\n            \"name_sr\": \"string\"\n        },\n        \"relationships\": []\n    }\n}"
                         },
                         "url": {
                             "raw": "{{host}}\/chemicals\/",
@@ -323,7 +323,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"data\": {\n        \"type\": \"chemicals\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"name\": \"string\",\n            \"price_per_liter\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"area_of_use\": \"array\"\n        },\n        \"relationships\": []\n    }\n}"
+                            "raw": "{\n    \"data\": {\n        \"type\": \"chemicals\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"price_per_liter\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"area_of_use\": \"array\",\n            \"name_hu\": \"string\",\n            \"name_en\": \"string\",\n            \"name_sr\": \"string\"\n        },\n        \"relationships\": []\n    }\n}"
                         },
                         "url": {
                             "raw": "{{host}}\/chemicals\/1",
@@ -678,7 +678,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"data\": {\n        \"type\": \"drone_data_per_reservations\",\n        \"attributes\": {\n            \"gps_coordinates\": \"string\",\n            \"results\": \"string\",\n            \"chemical_quantity_per_ha\": \"float\",\n            \"water_quantity\": \"float\",\n            \"is_deleted\": \"boolean\"\n        },\n        \"relationships\": {\n            \"reservation\": {\n                \"data\": {\n                    \"type\": \"reservations\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
+                            "raw": "{\n    \"data\": {\n        \"type\": \"drone_data_per_reservations\",\n        \"attributes\": {\n            \"gps_coordinates\": \"string\",\n            \"results\": \"string\",\n            \"chemical_quantity_per_ha\": \"float\",\n            \"water_quantity\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"created_at\": \"datetime\"\n        },\n        \"relationships\": {\n            \"reservation\": {\n                \"data\": {\n                    \"type\": \"reservations\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
                         },
                         "url": {
                             "raw": "{{host}}\/drone\/data\/per\/reservations\/",
@@ -704,7 +704,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"data\": {\n        \"type\": \"drone_data_per_reservations\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"gps_coordinates\": \"string\",\n            \"results\": \"string\",\n            \"chemical_quantity_per_ha\": \"float\",\n            \"water_quantity\": \"float\",\n            \"is_deleted\": \"boolean\"\n        },\n        \"relationships\": {\n            \"reservation\": {\n                \"data\": {\n                    \"type\": \"reservations\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
+                            "raw": "{\n    \"data\": {\n        \"type\": \"drone_data_per_reservations\",\n        \"id\": \"1\",\n        \"attributes\": {\n            \"gps_coordinates\": \"string\",\n            \"results\": \"string\",\n            \"chemical_quantity_per_ha\": \"float\",\n            \"water_quantity\": \"float\",\n            \"is_deleted\": \"boolean\",\n            \"created_at\": \"datetime\"\n        },\n        \"relationships\": {\n            \"reservation\": {\n                \"data\": {\n                    \"type\": \"reservations\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
                         },
                         "url": {
                             "raw": "{{host}}\/drone\/data\/per\/reservations\/1",
@@ -886,6 +886,133 @@
                             ],
                             "path": [
                                 "\/contacts",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "AreaOfUseChemicals",
+            "description": "",
+            "item": [
+                {
+                    "name": "AreaOfUseChemicals List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/area\/of\/use\/chemicals\/",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/area\/of\/use\/chemicals",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add AreaOfUseChemicals",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"data\": {\n        \"type\": \"area_of_use_chemicals\",\n        \"attributes\": [],\n        \"relationships\": {\n            \"plant\": {\n                \"data\": {\n                    \"type\": \"plants\",\n                    \"id\": \"1\"\n                }\n            },\n            \"chemical\": {\n                \"data\": {\n                    \"type\": \"chemicals\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "{{host}}\/area\/of\/use\/chemicals\/",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/area\/of\/use\/chemicals",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Edit AreaOfUseChemicals",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"data\": {\n        \"type\": \"area_of_use_chemicals\",\n        \"id\": \"1\",\n        \"attributes\": [],\n        \"relationships\": {\n            \"plant\": {\n                \"data\": {\n                    \"type\": \"plants\",\n                    \"id\": \"1\"\n                }\n            },\n            \"chemical\": {\n                \"data\": {\n                    \"type\": \"chemicals\",\n                    \"id\": \"1\"\n                }\n            }\n        }\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "{{host}}\/area\/of\/use\/chemicals\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/area\/of\/use\/chemicals",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete AreaOfUseChemicals",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/area\/of\/use\/chemicals\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/area\/of\/use\/chemicals",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get AreaOfUseChemicals",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": "",
+                        "url": {
+                            "raw": "{{host}}\/area\/of\/use\/chemicals\/1",
+                            "host": [
+                                "{{host}}"
+                            ],
+                            "path": [
+                                "\/area\/of\/use\/chemicals",
                                 "1"
                             ]
                         }

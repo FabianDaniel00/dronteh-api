@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
+{% trans_default_domain 'app' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}{{ 'app.reset_password.reset.title'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Reset your password</h1>
+    <h1>{{ 'app.reset_password.reset.header'|trans }}</h1>
 
     {{ form_start(resetForm) }}
         {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
+        <button class="btn btn-primary">{{ 'app.reset_password.reset.button'|trans }}</button>
     {{ form_end(resetForm) }}
 {% endblock %}

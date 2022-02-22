@@ -18,9 +18,6 @@ class CreateRatingHydrator extends AbstractRatingHydrator
             'rating' => function (Rating $rating, $attribute, $data, $attributeName) {
                 $rating->setRating($attribute);
             },
-            'is_deleted' => function (Rating $rating, $attribute, $data, $attributeName) {
-                $rating->setIsDeleted($attribute);
-            },
         ];
     }
 }

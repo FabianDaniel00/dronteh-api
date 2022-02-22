@@ -13,6 +13,13 @@ use WoohooLabs\Yin\JsonApi\Schema\Resource\AbstractResource;
  */
 class RatingResourceTransformer extends AbstractResource
 {
+    private string $locale;
+
+    public function __construct(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -55,7 +62,7 @@ class RatingResourceTransformer extends AbstractResource
                 return $rating->getRating();
             },
             'is_deleted' => function (Rating $rating) {
-                return $rating->getIsDeleted();
+                return $rating->isDeleted();
             },
         ];
     }
@@ -90,7 +97,7 @@ class RatingResourceTransformer extends AbstractResource
                         function () use ($rating) {
                             return $rating->getChemical();
                         },
-                        new ChemicalResourceTransformer()
+                        new ChemicalResourceTransformer($this->locale)
                     )
                     ->omitDataWhenNotIncluded();
             },

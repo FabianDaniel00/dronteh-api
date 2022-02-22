@@ -1,0 +1,24 @@
+forms:
+  reset_password_request:
+    email:
+      not_blank:
+        'Kérjük adja meg e-mail címét'
+
+  change_password:
+    plain_password:
+      first_options:
+        not_blank:
+          'Adjon meg egy jelszót'
+        length:
+          'A jelszónak legalább {limit} karakterből kell állnia'
+        label:
+          'Új jelszó'
+        placeholder:
+          'Jelszó...'
+      second_options:
+        label:
+          'Új jelszó megerősítése'
+        placeholder:
+          'Jelszó megerősítése'
+      invalid_message:
+        'A jelszómezőknek egyeznie kell.'

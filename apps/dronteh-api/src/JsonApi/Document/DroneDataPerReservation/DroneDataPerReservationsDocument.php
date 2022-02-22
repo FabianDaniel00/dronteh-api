@@ -16,6 +16,6 @@ class DroneDataPerReservationsDocument extends AbstractCollectionDocument
     public function getLinks(): ?DocumentLinks
     {
         return DocumentLinks::createWithoutBaseUri()
-            ->setPagination('/drone/data/per/reservations', $this->object);
+            ->setPagination('/drone_data_per_reservations', $this->object);
     }
 }

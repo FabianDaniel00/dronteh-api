@@ -8,6 +8,309 @@ info:
     name: 'Apache 2.0'
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
+  /area/of/use/chemicals:
+    get:
+      tags:
+        - area_of_use_chemicals
+      summary: 'AreaOfUseChemicals List'
+      operationId: listAreaOfUseChemicals
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/area/of/use/chemicals?page[number]=1&page[size]=100'
+                      first:
+                        type: string
+                        example: '/area/of/use/chemicals?page[number]=1&page[size]=100'
+                      last:
+                        type: string
+                        example: '/area/of/use/chemicals?page[number]=1&page[size]=100'
+                      prev:
+                        type: string
+                        example: 'null'
+                      next:
+                        type: string
+                        example: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                          example: 12
+                        type:
+                          type: string
+                          example: area_of_use_chemicals
+                        attributes:
+                          $ref: '#/components/schemas/AreaOfUseChemicals'
+                        relationships:
+                          properties:
+                            plant:
+                              $ref: '#/components/schemas/PlantRelation'
+                            chemical:
+                              $ref: '#/components/schemas/ChemicalRelation'
+    post:
+      tags:
+        - area_of_use_chemicals
+      summary: 'Add AreaOfUseChemicals'
+      operationId: addAreaOfUseChemicals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: area_of_use_chemicals
+                    attributes:
+                      $ref: '#/components/schemas/AreaOfUseChemicals'
+                    relationships:
+                      properties:
+                        plant:
+                          $ref: '#/components/schemas/PlantRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /area/of/use/chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: area_of_use_chemicals
+                      attributes:
+                        $ref: '#/components/schemas/AreaOfUseChemicals'
+                      relationships:
+                        properties:
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+  '/area/of/use/chemicals/{AreaOfUseChemical_id}':
+    patch:
+      tags:
+        - area_of_use_chemicals
+      summary: 'Edit AreaOfUseChemicals'
+      operationId: editAreaOfUseChemicals
+      parameters:
+        -
+          name: AreaOfUseChemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 12
+                    type:
+                      type: string
+                      example: area_of_use_chemicals
+                    attributes:
+                      $ref: '#/components/schemas/AreaOfUseChemicals'
+                    relationships:
+                      properties:
+                        plant:
+                          $ref: '#/components/schemas/PlantRelation'
+                        chemical:
+                          $ref: '#/components/schemas/ChemicalRelation'
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /area/of/use/chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: area_of_use_chemicals
+                      attributes:
+                        $ref: '#/components/schemas/AreaOfUseChemicals'
+                      relationships:
+                        properties:
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+    delete:
+      tags:
+        - area_of_use_chemicals
+      summary: 'Delete AreaOfUseChemicals'
+      operationId: deleteAreaOfUseChemicals
+      parameters:
+        -
+          name: AreaOfUseChemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /area/of/use/chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: area_of_use_chemicals
+                      attributes:
+                        $ref: '#/components/schemas/AreaOfUseChemicals'
+                      relationships:
+                        properties:
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
+    get:
+      tags:
+        - area_of_use_chemicals
+      summary: 'Get AreaOfUseChemicals'
+      operationId: viewAreaOfUseChemicals
+      parameters:
+        -
+          name: AreaOfUseChemical_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonapi:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        example: '1.0'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /area/of/use/chemicals
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 12
+                      type:
+                        type: string
+                        example: area_of_use_chemicals
+                      attributes:
+                        $ref: '#/components/schemas/AreaOfUseChemicals'
+                      relationships:
+                        properties:
+                          plant:
+                            $ref: '#/components/schemas/PlantRelation'
+                          chemical:
+                            $ref: '#/components/schemas/ChemicalRelation'
   /chemicals:
     get:
       tags:
@@ -1742,25 +2045,14 @@ paths:
                             $ref: '#/components/schemas/ChemicalRelation'
                           plant:
                             $ref: '#/components/schemas/PlantRelation'
-externalDocs:
-  description: 'Find out more about Swagger'
-  url: 'http://swagger.io'
-servers:
-  -
-    url: 'http://localhost:8000/api'
-    description: 'Local Environment'
 components:
-  securitySchemes:
-    bearerToken:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   schemas:
+    AreaOfUseChemicals:
+      type: object
+      properties: {  }
     Chemical:
       type: object
       properties:
-        name:
-          type: string
         price_per_liter:
           type: number
           format: float
@@ -1768,6 +2060,12 @@ components:
           type: boolean
         area_of_use:
           type: array
+        name_hu:
+          type: string
+        name_en:
+          type: string
+        name_sr:
+          type: string
     ChemicalRelation:
       type: object
       properties:
@@ -1781,18 +2079,6 @@ components:
           minimum: 1
           description: 'Chemical ID'
           example: 76
-    Contact:
-      type: object
-      properties:
-        email:
-          type: string
-        message:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        is_deleted:
-          type: boolean
     DroneDataPerReservation:
       type: object
       properties:
@@ -1808,11 +2094,9 @@ components:
           format: float
         is_deleted:
           type: boolean
-    Plant:
-      type: object
-      properties:
-        name:
+        created_at:
           type: string
+          format: date-time
     PlantRelation:
       type: object
       properties:
@@ -1825,38 +2109,7 @@ components:
           type: integer
           minimum: 1
           description: 'Plant ID'
-          example: 71
-    Rating:
-      type: object
-      properties:
-        rating:
-          type: integer
-          format: int32
-        is_deleted:
-          type: boolean
-    Reservation:
-      type: object
-      properties:
-        parcel_number:
-          type: string
-        land_area:
-          type: number
-          format: float
-        created_at:
-          type: string
-          format: date-time
-        is_deleted:
-          type: boolean
-        time:
-          type: string
-          format: date-time
-        status:
-          type: integer
-          format: int32
-        to_be_present:
-          type: boolean
-        comment:
-          type: string
+          example: 69
     ReservationRelation:
       type: object
       properties:
@@ -1869,17 +2122,4 @@ components:
           type: integer
           minimum: 1
           description: 'Reservation ID'
-          example: 69
-    UserRelation:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - users
-          example: users
-        id:
-          type: integer
-          minimum: 1
-          description: 'User ID'
           example: 69

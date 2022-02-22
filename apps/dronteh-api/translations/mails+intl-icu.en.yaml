@@ -1,0 +1,73 @@
+mails:
+  cheers:
+    'Cheers! Team DronTeh.'
+
+  register_confirmation:
+    name:
+      'DronTeh Confirm'
+    subject:
+      'Please Confirm your E-mail'
+    header:
+      'Hi {name}! Please confirm your e-mail!'
+    content:
+      'Please confirm your e-mail address by clicking the following link:'
+    confirm_email:
+      'Confirm my E-mail'
+    expires_in: >-
+      {count, plural,
+        one {This link will expire in {count} day.}
+        other {This link will expire in {count} days.}
+      }
+
+  reset_password:
+    name:
+      'DronTeh password reset'
+    subject:
+      'Your password reset request'
+    header:
+      'Hi {name}!'
+    content:
+      'To reset your password, please visit the following link:'
+    expires_in: >-
+      {count, plural,
+        one {This link will expire in {count} hour.}
+        other {This link will expire in {count} hours.}
+      }
+
+  reservation_notification:
+    name:
+      'DronTeh Reservation'
+    subject:
+      '#{parcel_number} | DronTeh Reservation'
+    header:
+      'Hi {name}! DronTeh Reservation.'
+    time:
+      'Your accurate date and time for your reservation is "{time}". See the details bellow:'
+    time_interval:
+      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start} and {time_interval_end}". See the details bellow:'
+    details:
+      parcel_number:
+        'Parcel number: {parcel_number}'
+      land_area:
+        'Area of the land is {land_area}'
+      chemical:
+        'Chemical is {chemical}'
+      time:
+        'The accurate time of the spraying is "{time}"'
+      to_be_present: >-
+        {to_be_present, select,
+          true {You will be there when the spray happening}
+          false {You will't be there when the spray happening}
+        }
+      plant:
+        "Plant what we're going to spray is {plant}"
+      status: >-
+        {status, select,
+          -1 {The reservation is non-active}
+          0 {The reservation is pending}
+          1 {The reservation is in process}
+        }
+      comment:
+        "Comment: '{comment}'"
+      no_comment:
+        'Comment: -There is no comment-'

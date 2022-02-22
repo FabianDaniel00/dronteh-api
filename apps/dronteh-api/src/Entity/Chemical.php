@@ -18,11 +18,6 @@ class Chemical
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $name;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $price_per_liter;
@@ -33,25 +28,23 @@ class Chemical
     private $is_deleted = 0;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $area_of_use = [];
+    private $name_hu;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name_en;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name_sr;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getPricePerLiter(): ?float
@@ -86,6 +79,42 @@ class Chemical
     public function setAreaOfUse(array $area_of_use): self
     {
         $this->area_of_use = $area_of_use;
+
+        return $this;
+    }
+
+    public function getNameHu(): ?string
+    {
+        return $this->name_hu;
+    }
+
+    public function setNameHu(?string $name_hu): self
+    {
+        $this->name_hu = $name_hu;
+
+        return $this;
+    }
+
+    public function getNameEn(): ?string
+    {
+        return $this->name_en;
+    }
+
+    public function setNameEn(string $name_en): self
+    {
+        $this->name_en = $name_en;
+
+        return $this;
+    }
+
+    public function getNameSr(): ?string
+    {
+        return $this->name_sr;
+    }
+
+    public function setNameSr(?string $name_sr): self
+    {
+        $this->name_sr = $name_sr;
 
         return $this;
     }

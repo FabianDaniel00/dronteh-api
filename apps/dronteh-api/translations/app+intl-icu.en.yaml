@@ -1,0 +1,59 @@
+app:
+  reset_password:
+    request:
+      title:
+        'Reset your password | DronTeh'
+      header:
+        'Reset your password'
+      small:
+        'Enter your e-mail address and we will send you a link to reset your password.'
+      send:
+        'Send password reset e-mail'
+      errors:
+        'The link in your email is expired. Please try to reset your password again.':
+          'There was a problem validating your reset request - The link in your e-mail is expired. Please try to reset your password again.'
+        'The reset password link is invalid. Please try to reset your password again.':
+          'There was a problem validating your reset request - The reset password link is invalid. Please try to reset your password again.'
+        'You have already requested a reset password email. Please check your email or try again soon.':
+          'There was a problem validating your reset request - You have already requested a reset password e-mail. Please check your e-mail or try again soon.'
+        token_null:
+          'No reset password token found in the URL or in the session.'
+
+    check_email:
+      title:
+        'Password Reset Email Sent | DronTeh'
+      paragraph1: >-
+        {count, plural,
+          one {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count} hour.}
+          other {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count} hours.}
+        }
+      paragraph2:
+        "If you don't receive an email please check your spam folder or"
+      try_again:
+        'Try again'
+
+    reset:
+      title:
+        'Reset your password | DronTeh'
+      header:
+        'Reset your password'
+      button:
+        'Reset password'
+
+  verify_user_email:
+    id_null:
+      "Can't find the the user ID... Please request a new link."
+    user_null:
+      "Can't find the user... Please request a new link."
+    errors:
+      'The link to verify your email has expired. Please request a new link.':
+        'Something went wrong... The link to verify your email has expired. Please request a new link.'
+      'The link to verify your email is invalid. Please request a new link.':
+        'Something went wrong... The link to verify your email is invalid. Please request a new link.'
+      'The link to verify your email appears to be for a different account or email. Please request a new link.':
+        'Something went wrong... The link to verify your email appears to be for a different account or email. Please request a new link.'
+    success:
+      message:
+        'Your email has been successfully verificated!'
+      click:
+        'Click here to login'

@@ -13,6 +13,13 @@ use WoohooLabs\Yin\JsonApi\Schema\Resource\AbstractResource;
  */
 class DroneDataPerReservationResourceTransformer extends AbstractResource
 {
+    private string $locale;
+
+    public function __construct(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,7 +49,7 @@ class DroneDataPerReservationResourceTransformer extends AbstractResource
      */
     public function getLinks($droneDataPerReservation): ?ResourceLinks
     {
-        return ResourceLinks::createWithoutBaseUri()->setSelf(new Link('/drone/data/per/reservations/'.$this->getId($droneDataPerReservation)));
+        return ResourceLinks::createWithoutBaseUri()->setSelf(new Link('/drone_data_per_reservations/'.$this->getId($droneDataPerReservation)));
     }
 
     /**
@@ -65,6 +72,9 @@ class DroneDataPerReservationResourceTransformer extends AbstractResource
             },
             'is_deleted' => function (DroneDataPerReservation $droneDataPerReservation) {
                 return $droneDataPerReservation->isDeleted();
+            },
+            'created_at' => function (DroneDataPerReservation $droneDataPerReservation) {
+                return $droneDataPerReservation->getCreatedAt()->format(\DATE_ATOM);
             },
         ];
     }
@@ -89,7 +99,7 @@ class DroneDataPerReservationResourceTransformer extends AbstractResource
                         function () use ($droneDataPerReservation) {
                             return $droneDataPerReservation->getReservation();
                         },
-                        new ReservationResourceTransformer()
+                        new ReservationResourceTransformer($this->locale)
                     )
                     ->omitDataWhenNotIncluded();
             },

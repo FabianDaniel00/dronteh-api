@@ -52,15 +52,14 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
+    - { path: ^/api/users/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
     - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
+    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/users/('%app.locales%')/verify/email, roles: PUBLIC_ACCESS }
-    - { path: ^/api/contacts, roles: PUBLIC_ACCESS }
+    - { path: ^/api/contacts, roles: PUBLIC_ACCESS, methods: [POST] }
     - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS }
     - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/users/admin, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }
-    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api, allow_if: "is_granted('ROLE_ADMIN') and is_fully_authenticated()" }
+    - { path: ^/api, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }

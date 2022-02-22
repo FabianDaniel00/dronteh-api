@@ -80,6 +80,9 @@ class UserResourceTransformer extends AbstractResource
             'is_deleted' => function (User $user) {
                 return $user->isDeleted();
             },
+            'locale' => function (User $user) {
+                return $user->getLocale();
+            },
         ];
     }
 

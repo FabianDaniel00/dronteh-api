@@ -1,13 +1,13 @@
-{% trans_default_domain 'api' %}
+{% trans_default_domain 'mails' %}
 
-<h1>{{ 'mails.register_confirmation.header'|trans }}</h1>
+<h1>{{ 'mails.register_confirmation.header'|trans({'%name%': name}) }}</h1>
 
 <p>
-    {{ 'mails.register_confirmation.content'|trans }}:<br><br>
+    {{ 'mails.register_confirmation.content'|trans }}<br><br>
     <a href="{{ signedUrl }}">{{ 'mails.register_confirmation.confirm_email'|trans }}</a>.
-    {{ 'mails.register_confirmation.expires_in'|trans(expiresAtMessageData) }}.
+    {{ 'mails.register_confirmation.expires_in'|trans(expiresAtMessageData) }}
 </p>
 
 <p>
-    {{ 'mails.register_confirmation.cheers'|trans }}
+    {{ 'mails.cheers'|trans }}
 </p>

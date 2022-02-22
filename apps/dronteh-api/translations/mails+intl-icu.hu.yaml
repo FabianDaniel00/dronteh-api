@@ -1,0 +1,73 @@
+mails:
+  cheers:
+    'Üdv! DronTeh Csapata.'
+
+  register_confirmation:
+    subject:
+      'Kérjük erősítse meg az e-mail címét'
+    name:
+      'DronTeh Megerősítés'
+    header:
+      'Helló {name}! Kérjük erősítse meg az e-mail címét!'
+    content:
+      'Kérjük erősítse meg az e-mail címét erre a linkre kattintva:'
+    confirm_email:
+      'E-mail címem megerősítése'
+    expires_in: >-
+      {count, plural,
+        one {Ez a link le fog járni {count} napon belül.}
+        other {Ez a link le fog járni {count} napon belül.}
+      }
+
+  reset_password:
+    name:
+      'DronTeh Jelszó visszaállítás'
+    subject:
+      'Jelszó visszaállítási kérelem'
+    header:
+      'Helló {name}!'
+    content:
+      'Jelszava visszaállításához kérjük, látogasson el az alábbi linkre:'
+    expires_in: >-
+      {count, plural,
+        one {Ez a link lejár {count} órán belül.}
+        other {Ez a link lejár {count} órán belül.}
+      }
+
+  reservation_notification:
+    name:
+      'DronTeh Foglalás'
+    subject:
+      '#{parcel_number} | DronTeh Foglalás'
+    header:
+      'Helló {name}! DronTeh Foglalás.'
+    time:
+      'Foglalásának pontos dátuma és időpontja "{time}". Lásd a részleteket alább:'
+    time_interval:
+      'Foglalása függőben van. Majd e-mailben értesítjük önt a pontos dátumról és időröl ami "{time_interval_start} és {time_interval_end}" között van. Lásd a részleteket alább:'
+    details:
+      parcel_number:
+        'Parcella szám: {parcel_number}'
+      land_area:
+        'A föld területe {land_area}'
+      chemical:
+        'A vegyszer amit használni fogunk: {chemical}'
+      time:
+        'A permetezés pontos dátuma és időpontja "{time}"'
+      to_be_present: >-
+        {to_be_present, select,
+          true {Ott lesz, amikor a permetezés történik}
+          false {Nem lesz ott, amikor a permetezés történik}
+        }
+      plant:
+        "A növény amit permetezni fogunk az/a {plant}"
+      status: >-
+        {status, select,
+          -1 {A foglalás nem aktív}
+          0 {A foglalás függőben}
+          1 {A foglalás folyamatban}
+        }
+      comment: >-
+        "Hozzászólás: {comment}"
+      no_comment:
+        'hozzászólás: -Nincs megjegyzés-'

@@ -12,6 +12,13 @@ use WoohooLabs\Yin\JsonApi\Schema\Resource\AbstractResource;
  */
 class ChemicalResourceTransformer extends AbstractResource
 {
+    private string $locale;
+
+    public function __construct(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -50,17 +57,14 @@ class ChemicalResourceTransformer extends AbstractResource
     public function getAttributes($chemical): array
     {
         return [
-            'name' => function (Chemical $chemical) {
-                return $chemical->getName();
-            },
             'price_per_liter' => function (Chemical $chemical) {
                 return $chemical->getPricePerLiter();
             },
             'is_deleted' => function (Chemical $chemical) {
                 return $chemical->isDeleted();
             },
-            'area_of_use' => function (Chemical $chemical) {
-                return $chemical->getAreaOfUse();
+            'name' => function (Chemical $chemical) {
+                return $chemical->{'getName'.ucfirst($this->locale)}();
             },
         ];
     }

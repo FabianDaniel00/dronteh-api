@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class DroneDataPerReservation
 {
+    public function __construct()
+    {
+        $this->created_at = new \DateTime('@'.strtotime('now'));
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -47,6 +52,11 @@ class DroneDataPerReservation
      * @ORM\Column(type="boolean", options={"default": 0})
      */
     private $is_deleted = 0;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $created_at;
 
     public function getId(): ?int
     {
@@ -121,6 +131,18 @@ class DroneDataPerReservation
     public function setIsDeleted(bool $is_deleted): self
     {
         $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

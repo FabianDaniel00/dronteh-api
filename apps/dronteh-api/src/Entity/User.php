@@ -10,13 +10,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="api.users.new.constraint.unique")
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    function __construct() {
-        $this->created_at = new \DateTime('@'.strtotime('now'));
-        $this->updated_at = new \DateTime('@'.strtotime('now'));
+    private $captcha;
+
+    private static $supportedLocales;
+
+    private static $supportedRoles;
+
+    public function __construct(string $captcha, array $supportedLocales, array $supportedRoles)
+    {
+        $this->captcha = $captcha;
+        self::$supportedLocales = $supportedLocales;
+        self::$supportedRoles = $supportedRoles;
     }
 
     /**
@@ -77,7 +86,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $is_deleted = 0;
 
-    private $captcha;
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $locale;
 
     public function getId(): ?int
     {
@@ -124,13 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
@@ -209,23 +214,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTime $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTime $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
     }
 
     public function isVerified(): bool
@@ -238,14 +229,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps(): void
-    {
-        $this->setUpdatedAt(new \DateTime('@'.strtotime('now')));
     }
 
     public function isDeleted(): ?bool
@@ -265,10 +248,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->captcha;
     }
 
-    public function setCaptcha(?string $captcha): self
+    public function getLocale(): ?string
     {
-        $this->captcha = $captcha;
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
+    }
+
+    public static function getSupportedLocales(): array
+    {
+        return self::$supportedLocales;
+    }
+
+    public static function getSupportedRoles(): array
+    {
+        return self::$supportedRoles;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function convertDates(): void
+    {
+        $this->created_at = new \DateTime('@'.strtotime('now'));
+        $this->updated_at = new \DateTime('@'.strtotime('now'));
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps(): void
+    {
+        $this->updated_at = new \DateTime('@'.strtotime('now'));
     }
 }

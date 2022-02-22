@@ -1,0 +1,20 @@
+mails:
+  cheers:
+    'Živeli! Tim DronTeh.'
+
+  register_confirmation:
+    subject:
+      'Molimo Vas da potvrdite e-mail'
+    name:
+      'DronTeh Potvrdi'
+    header:
+      'Zdravo {name}! Molimo vas da potvrdite e-mail!'
+    content:
+      'Molimo potvrdite svoju e-mail adresu klikom na sledeću linku:'
+    confirm_email:
+      'Potvrdi moju E-mail'
+    expires_in: >-
+      {count, plural,
+        one {Ovaj link će isteći za {count} dana.}
+        other {Ovaj link će isteći za {count} dan.}
+      }

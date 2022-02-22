@@ -1,0 +1,59 @@
+app:
+  reset_password:
+    request:
+      title:
+        'Jelszó visszaállítás | DronTeh'
+      header:
+        'Állítsa vissza a jelszavát'
+      small:
+        'Adja meg e-mail címét, és küldünk egy linket a jelszó visszaállításához.'
+      send:
+        'Jelszó-visszaállítási e-mail küldése'
+      errors:
+        'The link in your email is expired. Please try to reset your password again.':
+          'Hiba történt a visszaállítási kérés érvényesítése során - Az e-mailben található link lejárt. Kérjük, próbálja meg újra visszaállítani a jelszavát.'
+        'The reset password link is invalid. Please try to reset your password again.':
+          'Hiba történt a visszaállítási kérés érvényesítése során - Az e-mailben található link érvénytelen. Kérjük, próbálja meg újra visszaállítani a jelszavát.'
+        'You have already requested a reset password email. Please check your email or try again soon.':
+          'Hiba történt a visszaállítási kérés érvényesítése során - Már kért jelszó-visszaállítási e-mailt. Kérjük, ellenőrizze e-mailjeit, vagy próbálja újra később.'
+        token_null:
+          'Nem található jelszó visszaállítási token az URL-ben vagy a munkamenetben.'
+
+    check_email:
+      title:
+        'Jelszó visszaállítási e-mail elküldve | DronTeh'
+      paragraph1: >-
+        {count, plural,
+          one {Ha létezik az ön e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count} órán belül.}
+          other {Ha létezik az 0n e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count} órán belül.}
+        }
+      paragraph2:
+        "Ha nem kapott e-mailt, kérjük, ellenőrizze a spam mappáját vagy"
+      try_again:
+        'Próbálja újra'
+
+    reset:
+      title:
+        'Jelszó visszaállítás | DronTeh'
+      header:
+        'Állítsa vissza a jelszavát'
+      button:
+        'Jelszó visszaállítása'
+
+  verify_user_email:
+    id_null:
+      "Nem található a felhasználói azonosító... Kérjen új linket."
+    user_null:
+      "Nem található a felhasználó... Kérjen új linket."
+    errors:
+      'The link to verify your email has expired. Please request a new link.':
+        'Hiba történt... Az e-mail címét igazoló link lejárt. Kérjen új linket.'
+      'The link to verify your email is invalid. Please request a new link.':
+        'Hiba történt... Az e-mail cím ellenőrzésére szolgáló link érvénytelen. Kérjen új linket.'
+      'The link to verify your email appears to be for a different account or email. Please request a new link.':
+        'Hiba történt... Úgy tűnik, hogy az e-mail-cím ellenőrzésére szolgáló link egy másik fiókhoz vagy e-mail-címhez tartozik. Kérjen új linket.'
+    success:
+      message:
+        'Az e-mail-címét sikeresen ellenőriztük!'
+      click:
+        'Kattints ide a bejelentkezéshez'

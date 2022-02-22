@@ -18,9 +18,6 @@ class UpdateUserHydrator extends AbstractUserHydrator
             'email' => function (User $user, $attribute, $data, $attributeName) {
                 $user->setEmail($attribute);
             },
-            'roles' => function (User $user, $attribute, $data, $attributeName) {
-                $user->setRoles($attribute);
-            },
             'password' => function (User $user, $attribute, $data, $attributeName) {
                 $user->setPassword($attribute);
             },
@@ -33,17 +30,8 @@ class UpdateUserHydrator extends AbstractUserHydrator
             'tel' => function (User $user, $attribute, $data, $attributeName) {
                 $user->setTel($attribute);
             },
-            'created_at' => function (User $user, $attribute, $data, $attributeName) {
-                $user->setCreatedAt(new \DateTime($attribute));
-            },
-            'updated_at' => function (User $user, $attribute, $data, $attributeName) {
-                $user->setUpdatedAt(new \DateTime($attribute));
-            },
-            'isVerified' => function (User $user, $attribute, $data, $attributeName) {
-                $user->setIsVerified($attribute);
-            },
-            'is_deleted' => function (User $user, $attribute, $data, $attributeName) {
-                $user->setIsDeleted($attribute);
+            'locale' => function (User $user, $attribute, $data, $attributeName) {
+                $user->setLocale($attribute);
             },
         ];
     }

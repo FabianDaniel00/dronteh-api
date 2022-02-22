@@ -13,6 +13,13 @@ use WoohooLabs\Yin\JsonApi\Schema\Resource\AbstractResource;
  */
 class ReservationResourceTransformer extends AbstractResource
 {
+    private string $locale;
+
+    public function __construct(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -64,7 +71,9 @@ class ReservationResourceTransformer extends AbstractResource
                 return $reservation->isDeleted();
             },
             'time' => function (Reservation $reservation) {
-                return $reservation->getTime()->format(\DATE_ATOM);
+                $time = $reservation->getTime();
+
+                return $time ? $time->format(\DATE_ATOM) : null;
             },
             'status' => function (Reservation $reservation) {
                 return $reservation->getStatus();
@@ -74,6 +83,19 @@ class ReservationResourceTransformer extends AbstractResource
             },
             'comment' => function (Reservation $reservation) {
                 return $reservation->getComment();
+            },
+            'updated_at' => function (Reservation $reservation) {
+                return $reservation->getUpdatedAt()->format(\DATE_ATOM);
+            },
+            'reservation_interval_start' => function (Reservation $reservation) {
+                $reservationIntervalStart = $reservation->getReservationIntervalStart();
+
+                return $reservationIntervalStart ? $reservationIntervalStart->format(\DATE_ATOM) : null;
+            },
+            'reservation_interval_end' => function (Reservation $reservation) {
+                $reservationIntervalEnd = $reservation->getReservationIntervalEnd();
+
+                return $reservationIntervalEnd ? $reservationIntervalEnd->format(\DATE_ATOM) : null;
             },
         ];
     }
@@ -108,7 +130,7 @@ class ReservationResourceTransformer extends AbstractResource
                         function () use ($reservation) {
                             return $reservation->getChemical();
                         },
-                        new ChemicalResourceTransformer()
+                        new ChemicalResourceTransformer($this->locale)
                     )
                     ->omitDataWhenNotIncluded();
             },
@@ -118,7 +140,7 @@ class ReservationResourceTransformer extends AbstractResource
                         function () use ($reservation) {
                             return $reservation->getPlant();
                         },
-                        new PlantResourceTransformer()
+                        new PlantResourceTransformer($this->locale)
                     )
                     ->omitDataWhenNotIncluded();
             },
