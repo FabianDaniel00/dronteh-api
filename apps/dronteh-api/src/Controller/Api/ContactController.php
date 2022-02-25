@@ -60,7 +60,7 @@ class ContactController extends Controller
     // public function show(Contact $contact): Response
     // {
     //     if ($contact->isDeleted()) {
-    //         throw $this->createNotFoundException('api.contacts.is_deleted');
+    //         throw $this->createNotFoundException('api.contacts.not_found');
     //     }
 
     //     return $this->respondOk(
@@ -75,7 +75,7 @@ class ContactController extends Controller
     // public function edit(Contact $contact): Response
     // {
     //     if ($contact->isDeleted()) {
-    //         throw $this->createNotFoundException('api.contacts.is_deleted');
+    //         throw $this->createNotFoundException('api.contacts.not_found');
     //     }
 
     //     $contact = $this->jsonApi()->hydrate(
@@ -99,7 +99,7 @@ class ContactController extends Controller
     // public function delete(Contact $contact): Response
     // {
     //     if ($contact->isDeleted()) {
-    //         throw $this->createNotFoundException('api.contacts.is_deleted');
+    //         throw $this->createNotFoundException('api.contacts.not_found');
     //     }
 
     //     $contact->setIsDeleted(1);

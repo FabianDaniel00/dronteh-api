@@ -26,7 +26,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
         $locale = $request->headers->get('locale');
         if ($locale && in_array($locale, $this->params->get('app.supported_locales'))) {
-            $request->setLocale($locale);
+            return $request->setLocale($locale);
         }
     }
 

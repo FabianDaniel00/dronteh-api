@@ -11,12 +11,13 @@ App\Entity\User:
       - Length: { min: 6, minMessage: 'api.users.constraint.password.length', max: 4096 }
     firstname:
       - NotBlank: { message: 'api.users.constraint.firstname.not_blank' }
-      - Length: { min: 2, minMessage: 'api.users.constraint.firstname.length', max: 4096 }
+      - Length: { min: 2, max: 50, minMessage: 'api.users.constraint.firstname.min_length,{{ limit }}', maxMessage: 'api.users.constraint.firstname.max_length,{{ limit }}' }
     lastname:
       - NotBlank: { message: 'api.users.constraint.lastname.not_blank' }
-      - Length: { min: 2, minMessage: 'api.users.constraint.lastname.length', max: 4096 }
+      - Length: { min: 2, max: 50, minMessage: 'api.users.constraint.lastname.min_length,{{ limit }}', maxMessage: 'api.users.constraint.lastname.max_length,{{ limit }}' }
     tel:
       - NotBlank: { message: 'api.users.constraint.tel.not_blank' }
+      - Length: { min: 6, max: 20, minMessage: 'api.users.constraint.tel.min_length,{{ limit }}', maxMessage: 'api.users.constraint.tel.max_length,{{ limit }}' }
       - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber: { defaultRegion: 'SR', message: 'api.users.constraint.tel.phone_number' }
     locale:
       - Choice: { callback: getSupportedLocales, message: 'api.users.constraint.locale.invalid' }
@@ -32,15 +33,22 @@ App\Entity\User:
     is_deleted:
       - NotBlank: { message: 'api.users.constraint.is_deleted.not_blank' }
       - Choice: { choices: [true, false, 1, 0], message: 'api.users.constraint.is_deleted.invalid' }
+    last_verification_email_sent:
+      - DateTime: {message: 'api.users.constraint.last_verification_email_sent.invalid'}
+
 
 App\Entity\Reservation:
   properties:
+    user:
+      - NotBlank: { message: 'api.reservations.constraint.user.not_blank' }
     parcel_number:
       - NotBlank: { message: 'api.reservations.constraint.parcel_number.not_blank' }
       - Positive: { message: 'api.reservations.constraint.parcel_number.positive' }
     land_area:
       - NotBlank: { message: 'api.reservations.constraint.land_area.not_blank' }
       - Positive: { message: 'api.reservations.constraint.land_area.positive' }
+    chemical:
+      - NotBlank: { message: 'api.reservations.constraint.chemical.not_blank' }
     created_at:
       - DateTime: {message: 'api.reservations.constraint.created_at.invalid'}
     updated_at:
@@ -58,12 +66,105 @@ App\Entity\Reservation:
       - NotBlank: { message: 'api.reservations.constraint.to_be_present.not_blank' }
       - Choice: { choices: [true, false, 1, 0], message: 'api.reservations.constraint.to_be_present.invalid' }
     comment:
-      - Length: { max: 5000, maxMessage: 'api.reservations.constraint.comment.length' }
+      - Length: { max: 5000, maxMessage: 'api.reservations.constraint.comment.max_length,{{ limit }}' }
+    plant:
+      - NotBlank: { message: 'api.reservations.constraint.plant.not_blank' }
     reservation_interval_start:
-      - DateTime: { message: 'api.reservations.constraint.reservation_interval_start.invalid' }
+      - Date: { message: 'api.reservations.constraint.reservation_interval_start.invalid' }
     reservation_interval_end:
-      - DateTime: { message: 'api.reservations.constraint.reservation_interval_end.invalid' }
+      - Date: { message: 'api.reservations.constraint.reservation_interval_end.invalid' }
 
   getters:
     minDifferenceBetweenTwoDates:
       - 'IsTrue': { message: 'api.reservations.constraint.less_difference' }
+
+
+App\Entity\Rating:
+  properties:
+    user:
+      - NotBlank: { message: 'api.ratings.constraint.user.not_blank' }
+    chemical:
+      - NotBlank: { message: 'api.ratings.constraint.chemical.not_blank' }
+    rating:
+      - NotBlank: { message: 'api.ratings.constraint.rating.not_blank' }
+      - Range: { min: 1, max: 5, notInRangeMessage: 'api.ratings.constraint.rating.not_in_range' }
+    is_deleted:
+      - NotBlank: { message: 'api.ratings.constraint.is_deleted.not_blank' }
+      - Choice: { choices: [true, false, 1, 0], message: 'api.ratings.constraint.is_deleted.invalid' }
+
+
+App\Entity\Plant:
+  properties:
+    name_hu:
+      - Length: { max: 255, maxMessage: 'api.plants.constraint.name.max_length,{{ limit }}' }
+    name_en:
+      - NotBlank: { message: 'api.plants.constraint.name.not_blank' }
+      - Length: { min: 2, max: 255, minMessage: 'api.plants.constraint.name.min_length,{{ limit }}', maxMessage: 'api.plants.constraint.name.max_length,{{ limit }}' }
+    name_sr:
+      - Length: { max: 255, maxMessage: 'api.plants.constraint.name.max_length,{{ limit }}' }
+    is_deleted:
+      - NotBlank: { message: 'api.plants.constraint.is_deleted.not_blank' }
+      - Choice: { choices: [true, false, 1, 0], message: 'api.plants.constraint.is_deleted.invalid' }
+
+
+App\Entity\DroneDataPerReservation:
+  properties:
+    gps_coordinates:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.gps_coordinates.not_blank' }
+      - Regex: { pattern: '/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?);[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', match: false, message: 'api.drone_data_per_reservations.constraint.gps_coordinates.invalid' }
+    results:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.results.not_blank' }
+      - Length: { min: 2, max: 5000, minMessage: 'api.drone_data_per_reservations.constraint.results.min_length,{{ limit }}', maxMessage: 'api.drone_data_per_reservations.constraint.results.max_length,{{ limit }}' }
+    chemical_quantity_per_ha:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.chemical_quantity_per_ha.not_blank' }
+      - Positive: { message: 'api.drone_data_per_reservations.constraint.chemical_quantity_per_ha.positive' }
+    water_quantity:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.water_quantity.not_blank' }
+      - Positive: { message: 'api.drone_data_per_reservations.constraint.water_quantity.positive' }
+    reservation:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.reservation.not_blank' }
+    is_deleted:
+      - NotBlank: { message: 'api.drone_data_per_reservations.constraint.is_deleted.not_blank' }
+      - Choice: { choices: [true, false, 1, 0], message: 'api.drone_data_per_reservations.constraint.is_deleted.invalid' }
+    created_at:
+      - DateTime: { message: 'api.drone_data_per_reservations.constraint.created_at.invalid' }
+
+
+App\Entity\Contact:
+  properties:
+    email:
+      - NotBlank: { message: 'api.contacts.constraint.email.not_blank' }
+      - Email: { message: 'api.contacts.constraint.email.email' }
+    message:
+      - NotBlank: { message: 'api.contacts.constraint.message.not_blank' }
+      - Length: { min: 2, max: 5000, minMessage: 'api.contacts.constraint.message.min_length,{{ limit }}', maxMessage: 'api.contacts.constraint.message.max_length,{{ limit }}' }
+    created_at:
+      - DateTime: { message: 'api.contacts.constraint.created_at.invalid' }
+    is_deleted:
+      - NotBlank: { message: 'api.contacts.constraint.is_deleted.not_blank' }
+      - Choice: { choices: [true, false, 1, 0], message: 'api.contacts.constraint.is_deleted.invalid' }
+
+
+App\Entity\Chemical:
+  properties:
+    price_per_liter:
+      - NotBlank: { message: 'api.chemicals.constraint.is_deleted.not_blank' }
+      - Positive: { message: 'api.chemicals.constraint.price_per_liter.positive' }
+    is_deleted:
+      - NotBlank: { message: 'api.chemicals.constraint.is_deleted.not_blank' }
+      - Choice: { choices: [true, false, 1, 0], message: 'api.chemicals.constraint.is_deleted.invalid' }
+    name_hu:
+      - Length: { max: 255, maxMessage: 'api.chemicals.constraint.name.max_length,{{ limit }}' }
+    name_en:
+      - NotBlank: { message: 'api.chemicals.constraint.name.not_blank' }
+      - Length: { min: 2, max: 255, minMessage: 'api.chemicals.constraint.name.min_length,{{ limit }}', maxMessage: 'api.chemicals.constraint.name.max_length,{{ limit }}' }
+    name_sr:
+      - Length: { max: 255, maxMessage: 'api.chemicals.constraint.name.max_length,{{ limit }}' }
+
+
+App\Entity\AreaOfUseChemical:
+  properties:
+    plant:
+      - NotBlank: { message: 'api.chemicals.area_of_use_chemicals.plant.not_blank' }
+    chemical:
+      - NotBlank: { message: 'api.chemicals.area_of_use_chemicals.chemical.not_blank' }

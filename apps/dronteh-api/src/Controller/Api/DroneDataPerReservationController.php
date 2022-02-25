@@ -3,13 +3,14 @@
 namespace App\Controller\Api;
 
 use App\Entity\DroneDataPerReservation;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Paknahad\JsonApiBundle\Controller\Controller;
 use App\Repository\DroneDataPerReservationRepository;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use App\JsonApi\Transformer\DroneDataPerReservationResourceTransformer;
 use App\JsonApi\Document\DroneDataPerReservation\DroneDataPerReservationDocument;
 use App\JsonApi\Document\DroneDataPerReservation\DroneDataPerReservationsDocument;
@@ -26,13 +27,20 @@ class DroneDataPerReservationController extends Controller
      */
     public function index(DroneDataPerReservationRepository $droneDataPerReservationRepository, ResourceCollection $resourceCollection, Request $request): Response
     {
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
         $resourceCollection->setRepository($droneDataPerReservationRepository);
 
         $resourceCollection
             ->getQuery()
             ->join('r.reservation', 'r1')
             ->where('r.is_deleted = 0')
-            ->andWhere('r1.is_deleted = 0');
+            ->andWhere('r1.is_deleted = 0')
+            ->andWhere('r1.user = :user_id')
+            ->setParameter('user_id', $currentUser->getId());
         $resourceCollection->handleIndexRequest();
 
         return $this->respondOk(
@@ -65,11 +73,16 @@ class DroneDataPerReservationController extends Controller
     /**
      * @Route("/{id}", name="drone_data_per_reservations_show", methods="GET")
      */
-    public function show(DroneDataPerReservation $droneDataPerReservation, ManagerRegistry $doctrine, Request $request): Response
+    public function show(DroneDataPerReservation $droneDataPerReservation, ReservationRepository $reservationRepository, Request $request): Response
     {
-        $isReservationDeleted = $doctrine->getManager()->getRepository(Reservation::class)->find($droneDataPerReservation->getReservation())->isDeleted();
-        if($isReservationDeleted || $droneDataPerReservation->isDeleted()) {
-            throw $this->createNotFoundException('api.drone_data_per_reservations.is_deleted');
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
+        $isReservationDeleted = $reservationRepository->find($droneDataPerReservation->getReservation())->isDeleted();
+        if($isReservationDeleted || $droneDataPerReservation->isDeleted() || $droneDataPerReservation->getReservation()->getUser()->getId() !== $currentUser->getId()) {
+            throw $this->createNotFoundException('api.drone_data_per_reservations.not_found');
         }
 
         return $this->respondOk(
@@ -81,11 +94,11 @@ class DroneDataPerReservationController extends Controller
     // /**
     //  * @Route("/{id}", name="drone_data_per_reservations_edit", methods="PATCH")
     //  */
-    // public function edit(DroneDataPerReservation $droneDataPerReservation, ManagerRegistry $doctrine): Response
+    // public function edit(DroneDataPerReservation $droneDataPerReservation, ReservationRepository $reservationRepository): Response
     // {
-    //     $isReservationDeleted = $doctrine->getManager()->getRepository(Reservation::class)->find($droneDataPerReservation->getReservation())->isDeleted();
+    //     $isReservationDeleted = $reservationRepository->find($droneDataPerReservation->getReservation())->isDeleted();
     //     if($isReservationDeleted || $droneDataPerReservation->isDeleted()) {
-    //         throw $this->createNotFoundException('api.drone_data_per_reservations.is_deleted');
+    //         throw $this->createNotFoundException('api.drone_data_per_reservations.not_found');
     //     }
 
     //     $droneDataPerReservation = $this->jsonApi()->hydrate(
@@ -106,11 +119,11 @@ class DroneDataPerReservationController extends Controller
     // /**
     //  * @Route("/{id}", name="drone_data_per_reservations_delete", methods="DELETE")
     //  */
-    // public function delete(DroneDataPerReservation $droneDataPerReservation, ManagerRegistry $doctrine): Response
+    // public function delete(DroneDataPerReservation $droneDataPerReservation, ReservationRepository $reservationRepository): Response
     // {
-    //     $isReservationDeleted = $doctrine->getManager()->getRepository(Reservation::class)->find($droneDataPerReservation->getReservation())->isDeleted();
+    //     $isReservationDeleted = $reservationRepository->find($droneDataPerReservation->getReservation())->isDeleted();
     //     if($isReservationDeleted || $droneDataPerReservation->isDeleted()) {
-    //         throw $this->createNotFoundException('api.drone_data_per_reservations.is_deleted');
+    //         throw $this->createNotFoundException('api.drone_data_per_reservations.not_found');
     //     }
 
     //     $droneDataPerReservation->setIsDeleted(1);

@@ -34,6 +34,10 @@ class VerifyUserEmailController extends AbstractController
             return new Response($translator->trans('app.verify_user_email.user_null', [], 'app'), Response::HTTP_FORBIDDEN);
         }
 
+        if ($user->isVerified()) {
+            return new Response($translator->trans('app.verify_user_email.is_verified', [], 'app').' <a href="'.$this->getParameter('client_side_host').'/auth?locale='.$request->getLocale().'">'.$translator->trans('app.verify_user_email.success.click', [], 'app').'</a>.');
+        }
+
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $emailVerifier->handleEmailConfirmation($request, $user);

@@ -17,7 +17,7 @@ class UserChecker implements UserCheckerInterface
 
         if ($user->isDeleted()) {
             // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('api.users.is_deleted');
+            throw new CustomUserMessageAccountStatusException('api.users.not_found');
         }
 
         if (!$user->isVerified()) {

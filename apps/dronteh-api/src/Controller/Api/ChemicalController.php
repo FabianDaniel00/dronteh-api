@@ -63,7 +63,7 @@ class ChemicalController extends Controller
     public function show(Chemical $chemical, Request $request): Response
     {
         if ($chemical->isDeleted()) {
-            throw $this->createNotFoundException('api.chemicals.is_deleted');
+            throw $this->createNotFoundException('api.chemicals.not_found');
         }
 
         return $this->respondOk(
@@ -78,7 +78,7 @@ class ChemicalController extends Controller
     // public function edit(Chemical $chemical, Request $request): Response
     // {
     //     if ($chemical->isDeleted()) {
-    //         throw $this->createNotFoundException('api.chemicals.is_deleted');
+    //         throw $this->createNotFoundException('api.chemicals.not_found');
     //     }
 
     //     $chemical = $this->jsonApi()->hydrate(
@@ -102,7 +102,7 @@ class ChemicalController extends Controller
     // public function delete(Chemical $chemical): Response
     // {
     //     if ($chemical->isDeleted()) {
-    //         throw $this->createNotFoundException('api.chemicals.is_deleted');
+    //         throw $this->createNotFoundException('api.chemicals.not_found');
     //     }
 
     //     $chemical->setIsDeleted(1);

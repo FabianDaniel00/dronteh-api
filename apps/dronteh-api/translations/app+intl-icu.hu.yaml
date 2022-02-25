@@ -43,6 +43,8 @@ app:
   verify_user_email:
     id_null:
       "Nem található a felhasználói azonosító... Kérjen új linket."
+    is_verified:
+      'A felhasználó már ellenőrizve van.'
     user_null:
       "Nem található a felhasználó... Kérjen új linket."
     errors:

@@ -91,6 +91,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $locale;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $last_verification_email_sent;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -260,6 +265,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getLastVerificationEmailSent(): ?\DateTime
+    {
+        return $this->last_verification_email_sent;
+    }
+
+    public function setLastVerificationEmailSent(?\DateTime $last_verification_email_sent): self
+    {
+        $this->last_verification_email_sent = $last_verification_email_sent;
+
+        return $this;
+    }
+
     public static function getSupportedLocales(): array
     {
         return self::$supportedLocales;
@@ -277,6 +294,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->created_at = new \DateTime('@'.strtotime('now'));
         $this->updated_at = new \DateTime('@'.strtotime('now'));
+        $this->last_verification_email_sent = new \DateTime('@'.strtotime('now'));
     }
 
     /**

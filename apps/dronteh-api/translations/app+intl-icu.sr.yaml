@@ -1,0 +1,61 @@
+app:
+  reset_password:
+    request:
+      title:
+        'Resetujte vašu lozinku | DronTeh'
+      header:
+        'Resetujte vašu lozinku'
+      small:
+        'Unesite svoju e-mail adresu i poslaćemo vam link za resetovanje vaše lozinke.'
+      send:
+        'Pošaljite e-mail za poništavanje lozinke'
+      errors:
+        'The link in your email is expired. Please try to reset your password again.':
+          'Došlo je do problema pri validaciji vašeg zahteva za resetovanje - veza u vašoj e-mail je istekla. Pokušajte ponovo da resetujete lozinku.'
+        'The reset password link is invalid. Please try to reset your password again.':
+          'Došlo je do problema pri validaciji vašeg zahteva za resetovanje - Veza za resetovanje lozinke je nevažeća. Pokušajte ponovo da resetujete lozinku.'
+        'You have already requested a reset password email. Please check your email or try again soon.':
+          'Došlo je do problema pri validaciji vašeg zahteva za resetovanje - Već ste zahtevali e-mail za resetovanje lozinke. Proverite svoju e-mail ili pokušajte ponovo uskoro.'
+        token_null:
+          'Nije pronađen token za resetovanje lozinke u URL-u ili u sesiji.'
+
+    check_email:
+      title:
+        'Poruka e-mail za resetovanje lozinke je poslata | DronTeh'
+      paragraph1: >-
+        {count, plural,
+          one {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count} sat.}
+          other {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count} sati.}
+        }
+      paragraph2:
+        'Ako ne dobijete e-mailu, proverite svoj spam folder ili'
+      try_again:
+        'Pokušajte ponovo'
+
+    reset:
+      title:
+        'Resetujte vašu lozinku | DronTeh'
+      header:
+        'Resetujte vašu lozinku'
+      button:
+        'Resetuj šifru'
+
+  verify_user_email:
+    id_null:
+      'Ne mogu da pronađem korisnički ID... Zahtevajte novu vezu.'
+    user_null:
+      'Ne mogu da pronađem korisnika... Zahtevajte novu vezu.'
+    is_verified:
+      'Korisnik je već verifikovan.'
+    errors:
+      'The link to verify your email has expired. Please request a new link.':
+        'Nešto je pošlo naopako... Veza za verifikaciju vaše e-mail je istekla. Zatražite novu vezu.'
+      'The link to verify your email is invalid. Please request a new link.':
+        'Nešto je pošlo naopako... Link za verifikaciju vaše e-mail je nevažeći. Zatražite novu vezu.'
+      'The link to verify your email appears to be for a different account or email. Please request a new link.':
+        'Nešto je pošlo naopako... Izgleda da je veza za verifikaciju vaše e-mail za drugi nalog ili e-mail. Zatražite novu vezu.'
+    success:
+      message:
+        'Vaša e-maila je uspešno verifikovana!'
+      click:
+        'Kliknite ovde da se ulogujete'

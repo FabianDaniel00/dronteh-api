@@ -3,10 +3,10 @@ mails:
     'Živeli! Tim DronTeh.'
 
   register_confirmation:
-    subject:
-      'Molimo Vas da potvrdite e-mail'
     name:
       'DronTeh Potvrdi'
+    subject:
+      'Molimo Vas da potvrdite e-mail'
     header:
       'Zdravo {name}! Molimo vas da potvrdite e-mail!'
     content:
@@ -15,6 +15,59 @@ mails:
       'Potvrdi moju E-mail'
     expires_in: >-
       {count, plural,
-        one {Ovaj link će isteći za {count} dana.}
-        other {Ovaj link će isteći za {count} dan.}
+        one {Ovaj link će isteći za {count} dan.}
+        other {Ovaj link će isteći za {count} dana.}
       }
+
+  reset_password:
+    name:
+      'DronTeh resetovanje lozinke'
+    subject:
+      'Vaš zahtev za resetovanje lozinke'
+    header:
+      'Zdravo {name}!'
+    content:
+      'Da biste resetovali lozinku, posetite sledeću vezu:'
+    expires_in: >-
+      {count, plural,
+        one {Ova veza ističe za {count} sat.}
+        other {Ova veza ističe za {count} sati.}
+      }
+
+  reservation_notification:
+    name:
+      'DronTeh Reservation'
+    subject:
+      '#{parcel_number} | DronTeh Reservation'
+    header:
+      'Zdravo {name}! DronTeh Reservation.'
+    time:
+      'Vaš tačan datum i vreme za vašu rezervaciju je "{time}". Pogledajte detalje u nastavku:'
+    time_interval:
+      'Vaša rezervacija je na čekanju. Obavestićemo vas o tačnom datumu i vremenu putem e-mail koja je između "{time_interval_start} i {time_interval_end}". Pogledajte detalje u nastavku:'
+    details:
+      parcel_number:
+        'Parcela broj: {parcel_number}'
+      land_area:
+        'Površina zemljišta je {land_area}'
+      chemical:
+        'Hemikalija je {chemical}'
+      time:
+        'Tačno vreme prskanja je "{time}"'
+      to_be_present: >-
+        {to_be_present, select,
+          true {Bićete tamo kada se sprej desi}
+          false {Nećete biti tamo kada se sprej desi}
+        }
+      plant:
+        "Posadite ono što ćemo prskati je {plant}"
+      status: >-
+        {status, select,
+          -1 {Rezervacija je neaktivna}
+          0 {Rezervacija je na čekanju}
+          1 {Rezervacija je u toku}
+        }
+      comment:
+        "Komentar: '{comment}'"
+      no_comment:
+        'Komentar: -Nema komentara-'

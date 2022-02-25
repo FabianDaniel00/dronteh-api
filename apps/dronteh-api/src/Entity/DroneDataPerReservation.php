@@ -7,14 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=DroneDataPerReservationRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class DroneDataPerReservation
 {
-    public function __construct()
-    {
-        $this->created_at = new \DateTime('@'.strtotime('now'));
-    }
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -140,10 +136,11 @@ class DroneDataPerReservation
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTime $created_at): self
+    /**
+     * @ORM\PrePersist
+     */
+    public function convertDates(): void
     {
-        $this->created_at = $created_at;
-
-        return $this;
+        $this->created_at = new \DateTime('@'.strtotime('now'));
     }
 }

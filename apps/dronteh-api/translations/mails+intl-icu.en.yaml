@@ -42,9 +42,9 @@ mails:
     header:
       'Hi {name}! DronTeh Reservation.'
     time:
-      'Your accurate date and time for your reservation is "{time}". See the details bellow:'
+      'Your accurate date and time for your reservation is "{time}". See the details below:'
     time_interval:
-      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start} and {time_interval_end}". See the details bellow:'
+      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start} and {time_interval_end}". See the details below:'
     details:
       parcel_number:
         'Parcel number: {parcel_number}'

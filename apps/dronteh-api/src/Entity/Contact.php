@@ -7,14 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ContactRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Contact
 {
-    public function __construct()
-    {
-        $this->created_at = new \DateTime('@'.strtotime('now'));
-    }
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -76,13 +72,6 @@ class Contact
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTime $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
     public function isDeleted(): ?bool
     {
         return $this->is_deleted;
@@ -93,5 +82,13 @@ class Contact
         $this->is_deleted = $is_deleted;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function convertDates(): void
+    {
+        $this->created_at = new \DateTime('@'.strtotime('now'));
     }
 }

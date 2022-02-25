@@ -33,9 +33,18 @@ class ReservationController extends Controller
      */
     public function index(ReservationRepository $reservationRepository, ResourceCollection $resourceCollection, Request $request): Response
     {
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
         $resourceCollection->setRepository($reservationRepository);
 
-        $resourceCollection->getQuery()->where('r.is_deleted = 0');
+        $resourceCollection
+            ->getQuery()
+            ->where('r.is_deleted = 0')
+            ->andWhere('r.user = :user_id')
+            ->setParameter('user_id', $currentUser->getId());
         $resourceCollection->handleIndexRequest();
 
         return $this->respondOk(
@@ -99,8 +108,13 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation, Request $request): Response
     {
-        if ($reservation->isDeleted()) {
-            throw $this->createNotFoundException('api.reservations.is_deleted');
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
+        if (!$reservation || $reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
+            throw $this->createNotFoundException('api.reservations.not_found');
         }
 
         return $this->respondOk(
@@ -114,8 +128,13 @@ class ReservationController extends Controller
      */
     public function edit(Reservation $reservation, Request $request): Response
     {
-        if ($reservation->isDeleted()) {
-            throw $this->createNotFoundException('api.reservations.is_deleted');
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
+        if ($reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
+            throw $this->createNotFoundException('api.reservations.not_found');
         }
 
         if ($reservation->getStatus() !== 0) {
@@ -142,8 +161,13 @@ class ReservationController extends Controller
      */
     public function delete(Reservation $reservation): Response
     {
-        if ($reservation->isDeleted()) {
-            throw $this->createNotFoundException('api.reservations.is_deleted');
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException('api.current_user.null');
+        }
+
+        if ($reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
+            throw $this->createNotFoundException('api.reservations.not_found');
         }
 
         $reservation->setIsDeleted(1);

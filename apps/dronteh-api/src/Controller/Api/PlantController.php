@@ -63,7 +63,7 @@ class PlantController extends Controller
     public function show(Plant $plant, Request $request): Response
     {
         if ($plant->isDeleted()) {
-            throw $this->createNotFoundException('api.plants.is_deleted');
+            throw $this->createNotFoundException('api.plants.not_found');
         }
 
         return $this->respondOk(
@@ -78,7 +78,7 @@ class PlantController extends Controller
     // public function edit(Plant $plant, Request $request): Response
     // {
     //     if ($plant->isDeleted()) {
-    //         throw $this->createNotFoundException('api.plants.is_deleted');
+    //         throw $this->createNotFoundException('api.plants.not_found');
     //     }
 
     //     $plant = $this->jsonApi()->hydrate(
@@ -102,7 +102,7 @@ class PlantController extends Controller
     // public function delete(Plant $plant): Response
     // {
     //     if ($plant->isDeleted()) {
-    //         throw $this->createNotFoundException('api.plnts.is_deleted');
+    //         throw $this->createNotFoundException('api.plnts.not_found');
     //     }
 
     //     $plant->setIsDeleted(1);

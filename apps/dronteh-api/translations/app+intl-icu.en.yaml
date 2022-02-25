@@ -45,6 +45,8 @@ app:
       "Can't find the the user ID... Please request a new link."
     user_null:
       "Can't find the user... Please request a new link."
+    is_verified:
+      'The user is already verified.'
     errors:
       'The link to verify your email has expired. Please request a new link.':
         'Something went wrong... The link to verify your email has expired. Please request a new link.'

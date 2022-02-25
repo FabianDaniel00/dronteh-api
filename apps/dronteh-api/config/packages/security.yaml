@@ -53,6 +53,7 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/api/users/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
+    - { path: ^/api/users/ask_another_user_verification_email, roles: PUBLIC_ACCESS }
     - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
     - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }

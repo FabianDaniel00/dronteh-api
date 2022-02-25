@@ -57,20 +57,20 @@ class RatingController extends Controller
         );
     }
 
-    /**
-     * @Route("/{id}", name="ratings_show", methods="GET")
-     */
-    public function show(Rating $rating, Request $request): Response
-    {
-        if ($rating->isDeleted()) {
-            throw $this->createNotFoundException('api.ratings.is_deleted');
-        }
+    // /**
+    //  * @Route("/{id}", name="ratings_show", methods="GET")
+    //  */
+    // public function show(Rating $rating, Request $request): Response
+    // {
+    //     if ($rating->isDeleted()) {
+    //         throw $this->createNotFoundException('api.ratings.not_found');
+    //     }
 
-        return $this->respondOk(
-            new RatingDocument(new RatingResourceTransformer($request->getLocale())),
-            $rating
-        );
-    }
+    //     return $this->respondOk(
+    //         new RatingDocument(new RatingResourceTransformer($request->getLocale())),
+    //         $rating
+    //     );
+    // }
 
     // /**
     //  * @Route("/{id}", name="ratings_edit", methods="PATCH")
@@ -78,7 +78,7 @@ class RatingController extends Controller
     // public function edit(Rating $rating): Response
     // {
     //     if ($rating->isDeleted()) {
-    //         throw $this->createNotFoundException('api.ratings.is_deleted');
+    //         throw $this->createNotFoundException('api.ratings.not_found');
     //     }
 
     //     $rating = $this->jsonApi()->hydrate(
@@ -102,7 +102,7 @@ class RatingController extends Controller
     // public function delete(Rating $rating): Response
     // {
     //     if ($rating->isDeleted()) {
-    //         throw $this->createNotFoundException('api.ratings.is_deleted');
+    //         throw $this->createNotFoundException('api.ratings.not_found');
     //     }
 
     //     $rating->setIsDeleted(1);

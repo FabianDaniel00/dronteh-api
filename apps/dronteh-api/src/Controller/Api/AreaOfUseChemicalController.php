@@ -3,14 +3,14 @@
 namespace App\Controller\Api;
 
 // use App\Entity\AreaOfUseChemical;
-// use Doctrine\Persistence\ManagerRegistry;
+// use App\Repository\ChemicalRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\AreaOfUseChemicalRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Paknahad\JsonApiBundle\Controller\Controller;
-use Paknahad\JsonApiBundle\Helper\ResourceCollection;
 // use App\JsonApi\Document\AreaOfUseChemical\AreaOfUseChemicalDocument;
+use Paknahad\JsonApiBundle\Helper\ResourceCollection;
 use App\JsonApi\Transformer\AreaOfUseChemicalResourceTransformer;
 use App\JsonApi\Document\AreaOfUseChemical\AreaOfUseChemicalsDocument;
 // use App\JsonApi\Hydrator\AreaOfUseChemical\UpdateAreaOfUseChemicalHydrator;
@@ -22,7 +22,7 @@ use App\JsonApi\Document\AreaOfUseChemical\AreaOfUseChemicalsDocument;
 class AreaOfUseChemicalController extends Controller
 {
     /**
-     * @Route("/{chemical_id}", name="area_of_use_chemicals_index", methods="GET")
+     * @Route("/chemicals/{chemical_id}", name="area_of_use_chemicals_index", methods="GET")
      */
     public function index(AreaOfUseChemicalRepository $areaOfUseChemicalRepository, ResourceCollection $resourceCollection, Request $request, int $chemical_id): Response
     {
@@ -30,8 +30,10 @@ class AreaOfUseChemicalController extends Controller
 
         $resourceCollection
             ->getQuery()
+            ->join('r.chemical', 'c')
             ->where('r.chemical = :chemical_id')
-            ->setParameter('chemical_id', $chemical_id);
+            ->setParameter('chemical_id', $chemical_id)
+            ->andWhere('c.is_deleted = 0');
         $resourceCollection->handleIndexRequest();
 
         return $this->respondOk(
@@ -64,11 +66,11 @@ class AreaOfUseChemicalController extends Controller
     // /**
     //  * @Route("/{id}", name="area_of_use_chemicals_show", methods="GET")
     //  */
-    // public function show(AreaOfUseChemical $areaOfUseChemical, ManagerRegistry $doctrine, Request $request): Response
+    // public function show(AreaOfUseChemical $areaOfUseChemical, ChemicalRepository $chemicalRepository, Request $request): Response
     // {
-    //     $isChemicalDeleted = $doctrine->getManager()->getRepository(Chemical::class)->find($areaOfUseChemical->getChemical())->isDeleted();
+    //     $isChemicalDeleted = $chemicalRepository->find($areaOfUseChemical->getChemical())->isDeleted();
     //     if($isChemicalDeleted) {
-    //         throw $this->createNotFoundException('api.area_of_chemicals.is_deleted');
+    //         throw $this->createNotFoundException('api.area_of_chemicals.not_found');
     //     }
 
     //     return $this->respondOk(
@@ -80,11 +82,11 @@ class AreaOfUseChemicalController extends Controller
     // /**
     //  * @Route("/{id}", name="area_of_use_chemicals_edit", methods="PATCH")
     //  */
-    // public function edit(AreaOfUseChemical $areaOfUseChemical, Request $request, ManagerRegistry $doctrine): Response
+    // public function edit(AreaOfUseChemical $areaOfUseChemical, Request $request, ChemicalRepository $chemicalRepository): Response
     // {
-    //     $isChemicalDeleted = $doctrine->getManager()->getRepository(Chemical::class)->find($areaOfUseChemical->getChemical())->isDeleted();
+    //     $isChemicalDeleted = $chemicalRepository->find($areaOfUseChemical->getChemical())->isDeleted();
     //     if($isChemicalDeleted) {
-    //         throw $this->createNotFoundException('api.area_of_chemicals.is_deleted');
+    //         throw $this->createNotFoundException('api.area_of_chemicals.not_found');
     //     }
 
     //     $areaOfUseChemical = $this->jsonApi()->hydrate(
@@ -105,11 +107,11 @@ class AreaOfUseChemicalController extends Controller
     // /**
     //  * @Route("/{id}", name="area_of_use_chemicals_delete", methods="DELETE")
     //  */
-    // public function delete(AreaOfUseChemical $areaOfUseChemical, ManagerRegistry $doctrine): Response
+    // public function delete(AreaOfUseChemical $areaOfUseChemical, ChemicalRepository $chemicalRepository): Response
     // {
-    //     $isChemicalDeleted = $doctrine->getManager()->getRepository(Chemical::class)->find($areaOfUseChemical->getChemical())->isDeleted();
+    //     $isChemicalDeleted = $chemicalRepository->find($areaOfUseChemical->getChemical())->isDeleted();
     //     if($isChemicalDeleted) {
-    //         throw $this->createNotFoundException('api.area_of_chemicals.is_deleted');
+    //         throw $this->createNotFoundException('api.area_of_chemicals.not_found');
     //     }
 
     //     $this->entityManager->remove($areaOfUseChemical);

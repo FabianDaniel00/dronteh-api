@@ -83,6 +83,11 @@ class UserResourceTransformer extends AbstractResource
             'locale' => function (User $user) {
                 return $user->getLocale();
             },
+            'last_verification_email_sent' => function (User $user) {
+                $lastVerificationEmailSent = $user->getLastVerificationEmailSent();
+
+                return $lastVerificationEmailSent ? $lastVerificationEmailSent->format(\DATE_ATOM) : null;
+            },
         ];
     }
 
