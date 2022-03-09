@@ -67,9 +67,6 @@ class ReservationResourceTransformer extends AbstractResource
             'created_at' => function (Reservation $reservation) {
                 return $reservation->getCreatedAt()->format(\DATE_ATOM);
             },
-            'is_deleted' => function (Reservation $reservation) {
-                return $reservation->isDeleted();
-            },
             'time' => function (Reservation $reservation) {
                 $time = $reservation->getTime();
 
@@ -88,14 +85,10 @@ class ReservationResourceTransformer extends AbstractResource
                 return $reservation->getUpdatedAt()->format(\DATE_ATOM);
             },
             'reservation_interval_start' => function (Reservation $reservation) {
-                $reservationIntervalStart = $reservation->getReservationIntervalStart();
-
-                return $reservationIntervalStart ? $reservationIntervalStart->format(\DATE_ATOM) : null;
+                return $reservation->getReservationIntervalStart()->format(\DATE_ATOM);
             },
             'reservation_interval_end' => function (Reservation $reservation) {
-                $reservationIntervalEnd = $reservation->getReservationIntervalEnd();
-
-                return $reservationIntervalEnd ? $reservationIntervalEnd->format(\DATE_ATOM) : null;
+                return $reservation->getReservationIntervalEnd()->format(\DATE_ATOM);
             },
         ];
     }

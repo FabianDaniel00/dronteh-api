@@ -4,7 +4,7 @@
 
 <p>{{ 'mails.reset_password.content'|trans }}</p>
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}?locale={{ app.request.getLocale() }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
 
 <p>{{ 'mails.reset_password.expires_in'|trans(resetToken.expirationMessageData) }}</p>
 

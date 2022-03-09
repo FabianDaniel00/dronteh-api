@@ -24,7 +24,7 @@ class Plant
     private $is_deleted = 0;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name_hu;
 
@@ -34,9 +34,9 @@ class Plant
     private $name_en;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $name_sr;
+    private $name_sr_Latn;
 
     public function __construct()
     {
@@ -84,14 +84,14 @@ class Plant
         return $this;
     }
 
-    public function getNameSr(): ?string
+    public function getNameSr_Latn(): ?string
     {
-        return $this->name_sr;
+        return $this->name_sr_Latn;
     }
 
-    public function setNameSr(?string $name_sr): self
+    public function setNameSr_Latn(?string $name_sr_Latn): self
     {
-        $this->name_sr = $name_sr;
+        $this->name_sr_Latn = $name_sr_Latn;
 
         return $this;
     }

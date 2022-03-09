@@ -21,12 +21,6 @@ class UpdateContactHydrator extends AbstractContactHydrator
             'message' => function (Contact $contact, $attribute, $data, $attributeName) {
                 $contact->setMessage($attribute);
             },
-            'created_at' => function (Contact $contact, $attribute, $data, $attributeName) {
-                $contact->setCreatedAt(new \DateTime($attribute));
-            },
-            'is_deleted' => function (Contact $contact, $attribute, $data, $attributeName) {
-                $contact->setIsDeleted($attribute);
-            },
         ];
     }
 }

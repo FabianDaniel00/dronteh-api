@@ -21,11 +21,8 @@ class UpdatePlantHydrator extends AbstractPlantHydrator
             'name_en' => function (Plant $plant, $attribute, $data, $attributeName) {
                 $plant->setNameEn($attribute);
             },
-            'name_sr' => function (Plant $plant, $attribute, $data, $attributeName) {
-                $plant->setNameSr($attribute);
-            },
-            'is_deleted' => function (Plant $plant, $attribute, $data, $attributeName) {
-                $plant->setIsDeleted($attribute);
+            'name_sr_Latn' => function (Plant $plant, $attribute, $data, $attributeName) {
+                $plant->setNameSr_Latn($attribute);
             },
         ];
     }

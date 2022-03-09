@@ -28,10 +28,10 @@ class UpdateReservationHydrator extends AbstractReservationHydrator
                 $reservation->setComment($attribute);
             },
             'reservation_interval_start' => function (Reservation $reservation, $attribute, $data, $attributeName) {
-                $reservation->setReservationIntervalStart($attribute);
+                $reservation->setReservationIntervalStart(new \DateTime($attribute));
             },
             'reservation_interval_end' => function (Reservation $reservation, $attribute, $data, $attributeName) {
-                $reservation->setReservationIntervalEnd($attribute);
+                $reservation->setReservationIntervalEnd(new \DateTime($attribute));
             },
         ];
     }

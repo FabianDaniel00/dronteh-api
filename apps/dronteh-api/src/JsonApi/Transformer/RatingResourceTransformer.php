@@ -61,9 +61,6 @@ class RatingResourceTransformer extends AbstractResource
             'rating' => function (Rating $rating) {
                 return $rating->getRating();
             },
-            'is_deleted' => function (Rating $rating) {
-                return $rating->isDeleted();
-            },
         ];
     }
 

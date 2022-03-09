@@ -1,4 +1,8 @@
 app:
+  base:
+    welcome:
+      'Welcome! | DronTeh'
+
   reset_password:
     request:
       title:
@@ -24,8 +28,8 @@ app:
         'Password Reset Email Sent | DronTeh'
       paragraph1: >-
         {count, plural,
-          one {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count} hour.}
-          other {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count} hours.}
+          one {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count, number} hour.}
+          other {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count, number} hours.}
         }
       paragraph2:
         "If you don't receive an email please check your spam folder or"
@@ -43,10 +47,10 @@ app:
   verify_user_email:
     id_null:
       "Can't find the the user ID... Please request a new link."
-    user_null:
-      "Can't find the user... Please request a new link."
     is_verified:
       'The user is already verified.'
+    user_null:
+      "Can't find the user... Please request a new link."
     errors:
       'The link to verify your email has expired. Please request a new link.':
         'Something went wrong... The link to verify your email has expired. Please request a new link.'
@@ -59,3 +63,25 @@ app:
         'Your email has been successfully verificated!'
       click:
         'Click here to login'
+
+  error_page:
+    title: >-
+        {responseCode, select,
+          403 {Access denied | DronTeh}
+          404 {404 Not found | DronTeh}
+          other {Internal Server error | DronTeh}
+        }
+    header: >-
+        {responseCode, select,
+          403 {Access denied}
+          404 {404 Not found}
+          other {Internal Server error}
+        }
+    message: >-
+        {responseCode, select,
+          403 {Access denied, you do not have permission to access on this server. You can}
+          404 {404 This page is not found. You can}
+          other {Something went wrong. {message} You can}
+        }
+    home:
+      'return to the homepage'

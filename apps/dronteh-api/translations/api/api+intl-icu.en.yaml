@@ -1,0 +1,55 @@
+api:
+  not_valid_date:
+    'Not valid date type'
+
+  current_user.null:
+    "Can't find the current user"
+
+  users:
+    edit:
+    not_found:
+      "Can't find this user"
+    is_verified:
+      'This user is already verified'
+    ask_another_user_verification_email:
+      threshold: >-
+        {difference, plural,
+          one {Sorry, you have to wait {difference, number} more minute to resend the verification email.}
+          other {Sorry, you have to wait {difference, number} more minutes to resend the verification email.}
+        }
+
+  reservations:
+    not_found:
+      "Can't find this reservation"
+    time_null:
+      "The time can't be null or blank"
+
+    edit:
+      status:
+        "Can't modify this reservation because it's not active"
+      less_difference: >-
+        {day, plural,
+          one {There must be minimum {day, number} day difference between the 2 dates.}
+          other {There must be minimum {day, number} days difference between the 2 dates.}
+        }
+      time: >-
+        {day, plural,
+          one {Can't modify the reservation {day, number} day before the action.}
+          other {Can't modify the reservation {day, number} days before the action.}
+        }
+
+    notification:
+      email_error:
+        'Something went wrong during sending the email'
+
+  plants:
+    not_found:
+      "Can't find this plant"
+
+  drone_data_per_reservations:
+    not_found:
+      "Can't find this drone data"
+
+  chemicals:
+    not_found:
+      "Can't find this chemical"

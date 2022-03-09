@@ -1,0 +1,104 @@
+admin:
+  logout:
+    'Logout'
+
+  login:
+    form:
+      email:
+        'Email'
+
+  menu:
+    items:
+      users:
+        'Users'
+
+    section:
+      users:
+        'Users'
+      logout:
+        'Logout'
+
+  list:
+    users:
+      title:
+        'Users | DronTeh Admin'
+      id:
+        'ID'
+      email:
+        'Email'
+      password:
+        'Password'
+      firstname:
+        'First name'
+      lastname:
+        'Last name'
+      tel:
+        'Tel'
+      created_at:
+        'Created at'
+      updated_at:
+        'Updated at'
+      role:
+        'Role'
+      is_verified:
+        'Is verified'
+      is_deleted:
+        'Is deleted'
+      locale:
+        'Language'
+      locales:
+        en:
+          'English'
+        hu:
+          'Hungarian'
+        sr_Latn:
+          'Serbian'
+      last_verification_email_sent:
+        'Verification email sent'
+
+      help:
+        role:
+          "'ROLE_USER' as user or 'ROLE_ADMIN' as administrator"
+        is_deleted:
+          'This is for delete the user but not from the database'
+
+  title:
+    detail:
+      '{entity_label_singular} #{entity_id} | {entity_as_string}'
+    edit:
+      'Editing {entity_label_singular} #{entity_id} | {entity_as_string}'
+
+  index:
+    users:
+      help:
+        "The 'Is deleted' field delete the user but not from the database. For filters, the role 'ROLE_USER' is the user and 'ROLE_ADMIN' is the administrator."
+
+  edit:
+    save_and_continue:
+      'Save and continue editing'
+    save_and_view_detail:
+      'Save and view details'
+
+  new:
+    save_and_view_detail:
+      'Create and view details'
+
+  singular:
+    users:
+      'User'
+
+  plural:
+    users:
+      'Users'
+
+  flash:
+    entity:
+      persisted:
+        success:
+          'Successfully created {entity}.'
+      updated:
+        success:
+          'Successfully updated {entity}.'
+      deleted:
+        success:
+          'Successfully deleted {entity}.'

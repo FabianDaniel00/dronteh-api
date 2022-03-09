@@ -17,12 +17,12 @@ class UserChecker implements UserCheckerInterface
 
         if ($user->isDeleted()) {
             // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('api.users.not_found');
+            throw new CustomUserMessageAccountStatusException('Account is disabled.');
         }
 
         if (!$user->isVerified()) {
             // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('api.users.verify_email');
+            throw new CustomUserMessageAccountStatusException('You need to validate your email first to login.');
         }
     }
 

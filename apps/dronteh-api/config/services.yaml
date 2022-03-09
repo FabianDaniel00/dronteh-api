@@ -7,8 +7,9 @@ parameters:
   client_side_host: "%env(CLIENT_SIDE_HOST)%"
   sender_email: "%env(SENDER_EMAIL)%"
   csrf_token_id: "%env(CSRF_TOKEN_ID)%"
-  app.supported_locales: ['en', 'hu', 'sr']
-  app.supported_roles: [['ROLE_USER'], ['ROLE_ADMIN']]
+  app.supported_locales: 'en|hu|sr_Latn'
+  app.default_locale: 'en'
+  app.supported_roles: ['ROLE_USER', 'ROLE_ADMIN']
 
 services:
   # default configuration for services in *this* file

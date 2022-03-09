@@ -27,9 +27,6 @@ class CreateDroneDataPerReservationHydrator extends AbstractDroneDataPerReservat
             'water_quantity' => function (DroneDataPerReservation $droneDataPerReservation, $attribute, $data, $attributeName) {
                 $droneDataPerReservation->setWaterQuantity($attribute);
             },
-            'is_deleted' => function (DroneDataPerReservation $droneDataPerReservation, $attribute, $data, $attributeName) {
-                $droneDataPerReservation->setIsDeleted($attribute);
-            },
         ];
     }
 }

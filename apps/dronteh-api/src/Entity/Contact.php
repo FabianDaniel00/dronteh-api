@@ -72,6 +72,13 @@ class Contact
         return $this->created_at;
     }
 
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
     public function isDeleted(): ?bool
     {
         return $this->is_deleted;

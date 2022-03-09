@@ -7,6 +7,13 @@ api:
   type: annotation
   prefix: /api
 
+admin:
+  resource: ../../src/Controller/Admin/
+  type: annotation
+  prefix: /{_locale}/admin
+  requirements:
+    _locale: '%app.supported_locales%'
+
 kernel:
   resource: ../../src/Kernel.php
   type: annotation

@@ -56,9 +56,9 @@ class Reservation
     private $time;
 
     /**
-     * @ORM\Column(type="smallint", options={"default": 0})
+     * @ORM\Column(type="smallint", options={"default": 1})
      */
-    private $status = 0;
+    private $status = 1;
 
     /**
      * @ORM\Column(type="boolean")
@@ -82,12 +82,12 @@ class Reservation
     private $updated_at;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
      */
     private $reservation_interval_start;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
      */
     private $reservation_interval_end;
 
@@ -149,6 +149,13 @@ class Reservation
         return $this->created_at;
     }
 
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
     public function isDeleted(): ?bool
     {
         return $this->is_deleted;
@@ -166,7 +173,7 @@ class Reservation
         return $this->time;
     }
 
-    public function setTime(?string $time): self
+    public function setTime(\DateTime $time): self
     {
         $this->time = $time;
 
@@ -176,6 +183,13 @@ class Reservation
     public function getStatus(): ?int
     {
         return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 
     public function getToBePresent(): ?bool
@@ -214,9 +228,16 @@ class Reservation
         return $this;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTime $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
     }
 
     public function getReservationIntervalStart(): ?\DateTime
@@ -224,7 +245,7 @@ class Reservation
         return $this->reservation_interval_start;
     }
 
-    public function setReservationIntervalStart(?string $reservation_interval_start): self
+    public function setReservationIntervalStart(\DateTime $reservation_interval_start): self
     {
         $this->reservation_interval_start = $reservation_interval_start;
 
@@ -236,7 +257,7 @@ class Reservation
         return $this->reservation_interval_end;
     }
 
-    public function setReservationIntervalEnd(?string $reservation_interval_end): self
+    public function setReservationIntervalEnd(\DateTime $reservation_interval_end): self
     {
         $this->reservation_interval_end = $reservation_interval_end;
 
@@ -250,8 +271,6 @@ class Reservation
     {
         $this->created_at = new \DateTime('@'.strtotime('now'));
         $this->updated_at = new \DateTime('@'.strtotime('now'));
-        $this->reservation_interval_start = new \DateTime($this->reservation_interval_start);
-        $this->reservation_interval_end = new \DateTime($this->reservation_interval_end);
     }
 
     /**
@@ -260,16 +279,5 @@ class Reservation
     public function updatedTimestamps(): void
     {
         $this->updated_at = new \DateTime('@'.strtotime('now'));
-        if ($this->reservation_interval_start) $this->reservation_interval_start = new \DateTime($this->reservation_interval_start);
-        if ($this->reservation_interval_end) $this->reservation_interval_end = new \DateTime($this->reservation_interval_end);
-        if ($this->time) $this->time = new \DateTime($this->time);
-    }
-
-    public function isMinDifferenceBetweenTwoDates()
-    {
-        $reservation_interval_start = new \DateTime('@'.strtotime($this->reservation_interval_start));
-        $reservation_interval_end = new \DateTime('@'.strtotime($this->reservation_interval_end));
-
-        return $reservation_interval_start->modify('+1 week') <= $reservation_interval_end;
     }
 }

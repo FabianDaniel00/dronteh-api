@@ -1,5 +1,6 @@
 security:
   enable_authenticator_manager: true
+  # ROLE_USER, ROLE_ADMIN
   role_hierarchy:
     ROLE_ADMIN: ROLE_USER
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
@@ -11,7 +12,7 @@ security:
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
     # used to reload user from session & other features (e.g. switch_user)
-    api_user_provider:
+    app_user_provider:
       entity:
         class: App\Entity\User
         property: email
@@ -23,10 +24,10 @@ security:
     login:
       pattern: ^/api/login
       stateless: true
-      provider: api_user_provider
+      provider: app_user_provider
       user_checker: App\Security\UserChecker
       json_login:
-        check_path: api_login_check # or api_login_check as defined in config/routes.yaml
+        check_path: api_login_check
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
@@ -39,9 +40,22 @@ security:
     api:
       pattern: ^/api
       stateless: true
-      provider: api_user_provider
+      provider: app_user_provider
       user_checker: App\Security\UserChecker
       jwt: ~
+
+    admin:
+      pattern: ^/(%app.supported_locales%)/admin
+      provider: app_user_provider
+      custom_authenticator: App\Security\AdminAuthenticator
+      user_checker: App\Security\UserChecker
+      logout:
+        path: admin_logout
+        # where to redirect after logout
+        target: admin_login
+      remember_me:
+        secret: '%kernel.secret%' # required
+        lifetime: 604800 # 1 week in seconds
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall
@@ -52,15 +66,23 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/api/users/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
-    - { path: ^/api/users/ask_another_user_verification_email, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users/ask_another_user_verification_email, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
-    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [GET, PATCH, DELETE] }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS, methods: [POST] }
     - { path: ^/api/contacts, roles: PUBLIC_ACCESS, methods: [POST] }
-    - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS }
-    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
+    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
+    - { path: ^/api/reservations/(\d+)/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')", methods: [POST] }
+    - { path: ^/api/reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH, DELETE] }
+    - { path: ^/api/ratings, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
+    - { path: ^/api/ratings, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api/plants, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api/drone_data_per_reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
+    - { path: ^/api/chemicals, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api/area_of_use_chemicals/chemicals, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
+
+    - { path: ^/(%app.supported_locales%)/admin/login, roles: PUBLIC_ACCESS, methods: [GET, POST] }
+    - { path: ^/(%app.supported_locales%)/admin, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }

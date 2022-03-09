@@ -8,6 +8,6 @@
         {{ 'app.reset_password.check_email.paragraph1'|trans(resetToken.expirationMessageData) }}
     </p>
     <p>
-        {{ 'app.reset_password.check_email.paragraph2'|trans }} <a href="{{ path('app_forgot_password_request') }}?locale={{ app.request.getLocale() }}">{{ 'app.reset_password.check_email.try_again'|trans(resetToken.expirationMessageData) }}</a>.
+        {{ 'app.reset_password.check_email.paragraph2'|trans }} <a href="{{ path('app_forgot_password_request') }}">{{ 'app.reset_password.check_email.try_again'|trans(resetToken.expirationMessageData) }}</a>.
     </p>
 {% endblock %}

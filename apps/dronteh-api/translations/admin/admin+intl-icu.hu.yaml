@@ -1,0 +1,104 @@
+admin:
+  logout:
+    'Kilépés'
+
+  login:
+    form:
+      email:
+        'E-mail'
+
+  menu:
+    items:
+      users:
+        'Felhasználók'
+
+    section:
+      users:
+        'Felhasználók'
+      logout:
+          'Kilépés'
+
+  list:
+    users:
+      title:
+        'Felhasználók | DronTeh Admin'
+      id:
+        'ID'
+      email:
+        'E-mail'
+      password:
+        'Jelszó'
+      firstname:
+        'Keresztnév'
+      lastname:
+        'Vezetéknév'
+      tel:
+        'Tel'
+      created_at:
+        'Létrehozva'
+      updated_at:
+        'Módosítva'
+      role:
+        'Jogosultság'
+      is_verified:
+        'Ellenőrizve'
+      is_deleted:
+        'Törölve'
+      locale:
+        'Nyelv'
+      locales:
+        en:
+          'Angol'
+        hu:
+          'Magyar'
+        sr_Latn:
+          'Szerb'
+      last_verification_email_sent:
+        'Ellenőrző e-mail elküldve'
+
+      help:
+        role:
+          "'ROLE_USER' mint felhasználó vagy 'ROLE_ADMIN' mint adminisztrátor"
+        is_deleted:
+          'Ez arra van hogy töröljük a felhasználót de nem az adatbázisból'
+
+  title:
+    detail:
+      '{entity_label_singular} #{entity_id} | {entity_as_string}'
+    edit:
+      '{entity_label_singular} szerkesztése #{entity_id} | {entity_as_string}'
+
+  index:
+    users:
+      help:
+        "A 'Törölve' mező törli a felhasználót de nem az adatbázisból. A szűrőknél a jogosultság 'ROLE_USER' a felhasználó, a 'ROLE_ADMIN' az adminisztrátor."
+
+  edit:
+    save_and_continue:
+      'Mentés és szerkesztés folytatása'
+    save_and_view_detail:
+      'Mentés és részletek megtekintése'
+
+  new:
+    save_and_view_detail:
+      'Létrehozás és részletek megtekintése'
+
+  singular:
+    users:
+      'Felhasználó'
+
+  plural:
+    users:
+      'Felhasználók'
+
+  flash:
+    entity:
+      persisted:
+        success:
+          'Sikeresen létrehozva: {entity}.'
+      updated:
+        success:
+          'Sikeresen frissítve: {entity}.'
+      deleted:
+        success:
+          'Sikeresen törölve: {entity}.'

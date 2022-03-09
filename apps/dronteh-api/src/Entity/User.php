@@ -10,22 +10,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="api.users.new.constraint.unique")
+ * @UniqueEntity(fields={"email"}, message="validators.users.constraint.unique")
  * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private $captcha;
+    private string $captcha;
 
-    private static $supportedLocales;
-
-    private static $supportedRoles;
-
-    public function __construct(string $captcha, array $supportedLocales, array $supportedRoles)
+    public function __construct(string $captcha = '')
     {
         $this->captcha = $captcha;
-        self::$supportedLocales = $supportedLocales;
-        self::$supportedRoles = $supportedRoles;
     }
 
     /**
@@ -41,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json", options={"default": "ROLE_USER"})
+     * @ORM\Column(type="json", options={"default": "[ROLE_USER]"})
      */
     private $roles = ['ROLE_USER'];
 
@@ -62,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20)
      */
     private $tel;
 
@@ -92,13 +86,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $locale;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $last_verification_email_sent;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -137,10 +138,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (!$roles) $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -207,7 +214,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tel;
     }
 
-    public function setTel(?string $tel): self
+    public function setTel(string $tel): self
     {
         $this->tel = $tel;
 
@@ -219,9 +226,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->created_at;
     }
 
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTime $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
     }
 
     public function isVerified(): bool
@@ -248,11 +269,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCaptcha(): ?string
-    {
-        return $this->captcha;
-    }
-
     public function getLocale(): ?string
     {
         return $this->locale;
@@ -270,21 +286,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->last_verification_email_sent;
     }
 
-    public function setLastVerificationEmailSent(?\DateTime $last_verification_email_sent): self
+    public function setLastVerificationEmailSent(\DateTime $last_verification_email_sent): self
     {
         $this->last_verification_email_sent = $last_verification_email_sent;
 
         return $this;
     }
 
-    public static function getSupportedLocales(): array
+    public function getIsRole(): ?bool
     {
-        return self::$supportedLocales;
-    }
-
-    public static function getSupportedRoles(): array
-    {
-        return self::$supportedRoles;
+        return !empty(array_intersect($this->getRoles(), ['ROLE_USER', 'ROLE_ADMIN']));
     }
 
     /**
@@ -303,5 +314,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function updatedTimestamps(): void
     {
         $this->updated_at = new \DateTime('@'.strtotime('now'));
+    }
+
+    public function __toString()
+    {
+        return $this->firstname.' '.$this->lastname;
     }
 }

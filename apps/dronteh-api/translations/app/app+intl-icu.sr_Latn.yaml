@@ -1,4 +1,8 @@
 app:
+  base:
+    welcome:
+      'Dobrodošli! | DronTeh'
+
   reset_password:
     request:
       title:
@@ -24,8 +28,8 @@ app:
         'Poruka e-mail za resetovanje lozinke je poslata | DronTeh'
       paragraph1: >-
         {count, plural,
-          one {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count} sat.}
-          other {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count} sati.}
+          one {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count, number} sat.}
+          other {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count, number} sati.}
         }
       paragraph2:
         'Ako ne dobijete e-mailu, proverite svoj spam folder ili'
@@ -43,10 +47,10 @@ app:
   verify_user_email:
     id_null:
       'Ne mogu da pronađem korisnički ID... Zahtevajte novu vezu.'
-    user_null:
-      'Ne mogu da pronađem korisnika... Zahtevajte novu vezu.'
     is_verified:
       'Korisnik je već verifikovan.'
+    user_null:
+      'Ne mogu da pronađem korisnika... Zahtevajte novu vezu.'
     errors:
       'The link to verify your email has expired. Please request a new link.':
         'Nešto je pošlo naopako... Veza za verifikaciju vaše e-mail je istekla. Zatražite novu vezu.'
@@ -59,3 +63,25 @@ app:
         'Vaša e-maila je uspešno verifikovana!'
       click:
         'Kliknite ovde da se ulogujete'
+
+  error_page:
+    title: >-
+        {responseCode, select,
+          403 {Pristup zabranjen | DronTeh}
+          404 {404 Nije pronađeno | DronTeh}
+          other {Interna greška servera | DronTeh}
+        }
+    header: >-
+        {responseCode, select,
+          403 {Pristup zabranjen}
+          404 {404 Nije pronađeno}
+          other {Interna greška servera}
+        }
+    message: >-
+        {responseCode, select,
+          403 {Pristup odbijen, nemate dozvolu za pristup ovom serveru. Možete se}
+          404 {404 This page is not found. Možete se}
+          other {Something went wrong. {message} Možete se}
+        }
+    home:
+      'vratiti na početnu stranicu'

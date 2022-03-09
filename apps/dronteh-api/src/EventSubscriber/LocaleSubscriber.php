@@ -2,31 +2,48 @@
 
 namespace App\EventSubscriber;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
-    private $params;
+    private ParameterBagInterface $params;
+    private TokenStorageInterface $tokenStorage;
 
-    public function __construct(ParameterBagInterface $params) {
+    public function __construct(ParameterBagInterface $params, TokenStorageInterface $tokenStorage) {
         $this->params = $params;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
 
-        $locale = $request->query->get('locale');
-        if ($locale && in_array($locale, $this->params->get('app.supported_locales'))) {
-            return $request->setLocale($locale);
+        $locales = [
+            explode('/', $request->getPathInfo())[1],
+            $request->query->get('locale'),
+            $request->headers->get('locale'),
+        ];
+
+        foreach ($locales as $locale) {
+            if ($locale && in_array($locale, explode('|', $this->params->get('app.supported_locales')))) {
+                if ($request->hasPreviousSession()) {
+                    $request->getSession()->set('_locale', $locale);
+                }
+
+                return $request->setLocale($locale);
+            }
         }
 
-        $locale = $request->headers->get('locale');
-        if ($locale && in_array($locale, $this->params->get('app.supported_locales'))) {
-            return $request->setLocale($locale);
+        if ($request->hasPreviousSession()) {
+            return $request->setLocale($request->getSession()->get('_locale', $this->params->get('app.default_locale')));
+        }
+
+        if ($this->tokenStorage->getToken() && $currentUser = $this->tokenStorage->getToken()->getUser()) {
+            return $request->setLocale($currentUser->getLocale());
         }
     }
 
@@ -34,7 +51,7 @@ class LocaleSubscriber implements EventSubscriberInterface
     {
         return [
             // must be registered before (i.e. with a higher priority than) the default Locale listener
-            KernelEvents::REQUEST => [['onKernelRequest', 20]],
+            KernelEvents::REQUEST => [['onKernelRequest', 40]],
         ];
     }
 }

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'app.error_page.title'|trans({'%responseCode%': responseCode}, 'app', locale) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'app.error_page.header'|trans({'%responseCode%': responseCode}, 'app', locale) }}</h1>
+
+    <p>
+        {{ 'app.error_page.message'|trans({'%message%': message, '%responseCode%': responseCode}, 'app', locale) }} <a href="{{ client_side_host }}">{{ 'app.error_page.home'|trans({'%responseCode%': responseCode}, 'app', locale) }}</a>.
+    </p>
+{% endblock %}

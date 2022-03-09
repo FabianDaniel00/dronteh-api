@@ -18,17 +18,14 @@ class UpdateChemicalHydrator extends AbstractChemicalHydrator
             'price_per_liter' => function (Chemical $chemical, $attribute, $data, $attributeName) {
                 $chemical->setPricePerLiter($attribute);
             },
-            'is_deleted' => function (Chemical $chemical, $attribute, $data, $attributeName) {
-                $chemical->setIsDeleted($attribute);
-            },
             'name_hu' => function (Chemical $chemical, $attribute, $data, $attributeName) {
                 $chemical->setNameHu($attribute);
             },
             'name_en' => function (Chemical $chemical, $attribute, $data, $attributeName) {
                 $chemical->setNameEn($attribute);
             },
-            'name_sr' => function (Chemical $chemical, $attribute, $data, $attributeName) {
-                $chemical->setNameSr($attribute);
+            'name_sr_Latn' => function (Chemical $chemical, $attribute, $data, $attributeName) {
+                $chemical->setNameSr_Latn($attribute);
             },
         ];
     }

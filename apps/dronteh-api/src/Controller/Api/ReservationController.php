@@ -31,11 +31,11 @@ class ReservationController extends Controller
     /**
      * @Route("/", name="reservations_index", methods="GET")
      */
-    public function index(ReservationRepository $reservationRepository, ResourceCollection $resourceCollection, Request $request): Response
+    public function index(ReservationRepository $reservationRepository, ResourceCollection $resourceCollection, Request $request, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         $resourceCollection->setRepository($reservationRepository);
@@ -60,13 +60,20 @@ class ReservationController extends Controller
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         $reservation = $this->jsonApi()->hydrate(
             new CreateReservationHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
             new Reservation()
         );
+
+        $differenceBetweenInterval = 7; //days
+        if ($reservation->getReservationIntervalStart()->modify('+'.$differenceBetweenInterval.' days') > $reservation->getReservationIntervalEnd()) {
+            throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.less_difference', ['%day%' => $differenceBetweenInterval], 'api'));
+        }
+
+        $reservation->setUser($currentUser);
 
         $this->validate($reservation);
 
@@ -87,14 +94,14 @@ class ReservationController extends Controller
                 'reservation' => $reservation,
                 'locale' => $request->getLocale(),
                 'new_reservation' => true,
-                'time_interval_start' => date('Y-m-d', strtotime($reservation->getReservationIntervalStart()->format(\DATE_ATOM))),
-                'time_interval_end' => date('Y-m-d', strtotime($reservation->getReservationIntervalEnd()->format(\DATE_ATOM))),
+                'time_interval_start' => $reservation->getReservationIntervalStart(),
+                'time_interval_end' => $reservation->getReservationIntervalEnd(),
             ]);
 
         try {
             $mailer->send($email);
         } catch(TransportExceptionInterface $e) {
-            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'api.reservations.notification.email_error');
+            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, $translator->trans('api.reservations.notification.email_error', [], 'api'));
         }
 
         return $this->respondOk(
@@ -106,15 +113,15 @@ class ReservationController extends Controller
     /**
      * @Route("/{id}", name="reservations_show", methods="GET")
      */
-    public function show(Reservation $reservation, Request $request): Response
+    public function show(Reservation $reservation, Request $request, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         if (!$reservation || $reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
-            throw $this->createNotFoundException('api.reservations.not_found');
+            throw $this->createNotFoundException($translator->trans('api.reservations.not_found', [], 'api'));
         }
 
         return $this->respondOk(
@@ -126,19 +133,24 @@ class ReservationController extends Controller
     /**
      * @Route("/{id}", name="reservations_edit", methods="PATCH")
      */
-    public function edit(Reservation $reservation, Request $request): Response
+    public function edit(Reservation $reservation, Request $request, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         if ($reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
-            throw $this->createNotFoundException('api.reservations.not_found');
+            throw $this->createNotFoundException($translator->trans('api.reservations.not_found', [], 'api'));
         }
 
-        if ($reservation->getStatus() !== 0) {
-            throw $this->createNotFoundException('api.reservations.edit.status_0');
+        if ($reservation->getStatus() !== 1) { //active
+            throw $this->createNotFoundException($translator->trans('api.reservations.edit.status', [], 'api'));
+        }
+
+        $valueBeforeAction = 3; // days
+        if ($reservation->getTime() && $reservation->getTime()->modify('-'.$valueBeforeAction.' days') < new \DateTime('@'.strtotime('now')) ) {
+            throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.time', ['%day%' => $valueBeforeAction], 'api'));
         }
 
         $reservation = $this->jsonApi()->hydrate(
@@ -159,15 +171,15 @@ class ReservationController extends Controller
     /**
      * @Route("/{id}", name="reservations_delete", methods="DELETE")
      */
-    public function delete(Reservation $reservation): Response
+    public function delete(Reservation $reservation, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         if ($reservation->isDeleted() || $reservation->getUser()->getId() !== $currentUser->getId()) {
-            throw $this->createNotFoundException('api.reservations.not_found');
+            throw $this->createNotFoundException($translator->trans('api.reservations.not_found', [], 'api'));
         }
 
         $reservation->setIsDeleted(1);
@@ -177,31 +189,24 @@ class ReservationController extends Controller
     }
 
     /**
-     * @Route("/send_notification", name="send_reservation_notification", methods="POST")
+     * @Route("/{id}/send_notification", name="send_reservation_notification", methods="POST", requirements={"id"="\d+"})
      */
-    public function sendNotification(Request $request, ReservationRepository $reservationRepository, MailerInterface $mailer, TranslatorInterface $translator): Response
+    public function sendNotification(Request $request, ReservationRepository $reservationRepository, MailerInterface $mailer, TranslatorInterface $translator, int $id): Response
     {
         $requestData = json_decode($request->getContent(), true);
         $requestData = $requestData['data'];
 
-        $id = $requestData['reservation_id'];
-        if($id === null) {
-            throw new BadRequestHttpException('api.reservations.notification.id_null');
-        }
-
-        $time = $requestData['time'];
+        $time = new \DateTime($requestData['time']);
         if($time === null || $time === '') {
-            throw new BadRequestHttpException('api.reservations.notification.message_null');
+            throw new BadRequestHttpException($translator->trans('api.reservations.notification.time_null', [], 'api'));
         }
 
         $reservation = $reservationRepository->find($id);
         if($reservation === null) {
-            return $this->createNotFoundException('api.reservations.notification.reservation_null');
+            throw $this->createNotFoundException($translator->trans('api.reservations.not_found', [], 'api'));
         }
 
         $reservation->setTime($time);
-
-        $this->validate($reservation);
 
         $this->entityManager->flush();
 
@@ -220,7 +225,7 @@ class ReservationController extends Controller
             // pass variables (name => value) to the template
             ->context([
                 'name' => $userReservation->getFirstname().' '.$userReservation->getLastname(),
-                'time' => date('Y-m-d H:i:s', strtotime($time)),
+                'time' => $time,
                 'reservation' => $reservation,
                 'locale' => $locale,
                 'new_reservation' => false,
@@ -229,7 +234,7 @@ class ReservationController extends Controller
         try {
             $mailer->send($email);
         } catch(TransportExceptionInterface $e) {
-            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'api.reservations.notification.email_error');
+            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, $translator->trans('api.reservations.notification.email_error', [], 'api'));
         }
 
         return $this->respondNoContent();

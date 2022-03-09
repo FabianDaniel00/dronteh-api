@@ -60,9 +60,6 @@ class PlantResourceTransformer extends AbstractResource
             'name' => function (Plant $plant) {
                 return $plant->{'getName'.ucfirst($this->locale)}();
             },
-            'is_deleted' => function (Plant $plant) {
-                return $plant->isDeleted();
-            },
         ];
     }
 

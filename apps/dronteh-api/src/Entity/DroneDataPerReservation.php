@@ -136,6 +136,13 @@ class DroneDataPerReservation
         return $this->created_at;
     }
 
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
     /**
      * @ORM\PrePersist
      */

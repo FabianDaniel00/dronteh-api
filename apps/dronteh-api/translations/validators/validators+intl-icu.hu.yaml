@@ -1,4 +1,4 @@
-forms:
+validators:
   reset_password_request:
     email:
       not_blank:
@@ -22,3 +22,16 @@ forms:
           'Jelszó megerősítése'
       invalid_message:
         'A jelszómezőknek egyeznie kell.'
+
+  users:
+    constraint:
+      unique:
+        'Ez az e-mail cím már foglalt'
+      tel:
+        phone_number:
+          'Ez nem egy érvényes telefonszám'
+      captcha:
+        'A captcha nem érvényes'
+      role:
+        invalid:
+          'Az Ön által adott Jogosultság érvénytelen'

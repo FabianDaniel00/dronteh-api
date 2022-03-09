@@ -11,6 +11,7 @@ use Paknahad\JsonApiBundle\Controller\Controller;
 use App\JsonApi\Document\Chemical\ChemicalDocument;
 use App\JsonApi\Document\Chemical\ChemicalsDocument;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\JsonApi\Transformer\ChemicalResourceTransformer;
 // use App\JsonApi\Hydrator\Chemical\CreateChemicalHydrator;
 // use App\JsonApi\Hydrator\Chemical\UpdateChemicalHydrator;
@@ -60,10 +61,10 @@ class ChemicalController extends Controller
     /**
      * @Route("/{id}", name="chemicals_show", methods="GET")
      */
-    public function show(Chemical $chemical, Request $request): Response
+    public function show(Chemical $chemical, Request $request, TranslatorInterface $translator): Response
     {
         if ($chemical->isDeleted()) {
-            throw $this->createNotFoundException('api.chemicals.not_found');
+            throw $this->createNotFoundException($translator->trans('api.chemicals.not_found', [], 'api'));
         }
 
         return $this->respondOk(

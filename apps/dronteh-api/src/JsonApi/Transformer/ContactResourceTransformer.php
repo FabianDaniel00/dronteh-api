@@ -59,9 +59,6 @@ class ContactResourceTransformer extends AbstractResource
             'created_at' => function (Contact $contact) {
                 return $contact->getCreatedAt()->format(\DATE_ATOM);
             },
-            'is_deleted' => function (Contact $contact) {
-                return $contact->isDeleted();
-            },
         ];
     }
 

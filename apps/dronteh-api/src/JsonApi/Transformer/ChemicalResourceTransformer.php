@@ -60,9 +60,6 @@ class ChemicalResourceTransformer extends AbstractResource
             'price_per_liter' => function (Chemical $chemical) {
                 return $chemical->getPricePerLiter();
             },
-            'is_deleted' => function (Chemical $chemical) {
-                return $chemical->isDeleted();
-            },
             'name' => function (Chemical $chemical) {
                 return $chemical->{'getName'.ucfirst($this->locale)}();
             },

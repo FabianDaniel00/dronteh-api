@@ -1,4 +1,4 @@
-forms:
+validators:
   reset_password_request:
     email:
       not_blank:
@@ -22,3 +22,16 @@ forms:
           'Potvrdi lozinku...'
       invalid_message:
         'Polja za lozinku moraju se podudarati.'
+
+  users:
+    constraint:
+      unique:
+        'Ovaj e-mail je već u upotrebi'
+      tel:
+        phone_number:
+          'Ovo nije ispravan broj telefona'
+      captcha:
+        'Captcha nije važeća'
+      role:
+        invalid:
+          'Uloga koju ste dali je nevažeća'

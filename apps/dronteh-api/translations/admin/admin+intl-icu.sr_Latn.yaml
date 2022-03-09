@@ -1,0 +1,13 @@
+admin:
+  logout:
+    'Odjaviti se'
+
+  login:
+    form:
+      email:
+        'E-mail'
+
+  menu:
+    items:
+      users:
+        'Korisnika'

@@ -39,6 +39,10 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');" \
     && mv composer /usr/local/bin/composer
 
+RUN apt-get install git unzip wait-for-it wget libicu-dev -y && \
+    docker-php-ext-install intl pdo_mysql && \
+    echo 'extension=intl.so' > /usr/local/etc/php/conf.d/docker-php-ext-intl.ini
+
 WORKDIR /usr/src/app
 
 #COPY apps/symfony-app /usr/src/app

@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Paknahad\JsonApiBundle\Controller\Controller;
 use App\Repository\DroneDataPerReservationRepository;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use App\JsonApi\Transformer\DroneDataPerReservationResourceTransformer;
 use App\JsonApi\Document\DroneDataPerReservation\DroneDataPerReservationDocument;
@@ -25,11 +26,11 @@ class DroneDataPerReservationController extends Controller
     /**
      * @Route("/", name="drone_data_per_reservations_index", methods="GET")
      */
-    public function index(DroneDataPerReservationRepository $droneDataPerReservationRepository, ResourceCollection $resourceCollection, Request $request): Response
+    public function index(DroneDataPerReservationRepository $droneDataPerReservationRepository, ResourceCollection $resourceCollection, Request $request, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         $resourceCollection->setRepository($droneDataPerReservationRepository);
@@ -73,16 +74,16 @@ class DroneDataPerReservationController extends Controller
     /**
      * @Route("/{id}", name="drone_data_per_reservations_show", methods="GET")
      */
-    public function show(DroneDataPerReservation $droneDataPerReservation, ReservationRepository $reservationRepository, Request $request): Response
+    public function show(DroneDataPerReservation $droneDataPerReservation, ReservationRepository $reservationRepository, Request $request, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         $isReservationDeleted = $reservationRepository->find($droneDataPerReservation->getReservation())->isDeleted();
         if($isReservationDeleted || $droneDataPerReservation->isDeleted() || $droneDataPerReservation->getReservation()->getUser()->getId() !== $currentUser->getId()) {
-            throw $this->createNotFoundException('api.drone_data_per_reservations.not_found');
+            throw $this->createNotFoundException($translator->trans('api.drone_data_per_reservations.not_found', [], 'api'));
         }
 
         return $this->respondOk(

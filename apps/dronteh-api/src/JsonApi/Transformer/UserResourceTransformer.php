@@ -56,9 +56,6 @@ class UserResourceTransformer extends AbstractResource
             'roles' => function (User $user) {
                 return $user->getRoles();
             },
-            'password' => function (User $user) {
-                return $user->getPassword();
-            },
             'firstname' => function (User $user) {
                 return $user->getFirstname();
             },
@@ -77,16 +74,11 @@ class UserResourceTransformer extends AbstractResource
             'isVerified' => function (User $user) {
                 return $user->isVerified();
             },
-            'is_deleted' => function (User $user) {
-                return $user->isDeleted();
-            },
             'locale' => function (User $user) {
                 return $user->getLocale();
             },
             'last_verification_email_sent' => function (User $user) {
-                $lastVerificationEmailSent = $user->getLastVerificationEmailSent();
-
-                return $lastVerificationEmailSent ? $lastVerificationEmailSent->format(\DATE_ATOM) : null;
+                return $user->getLastVerificationEmailSent()->format(\DATE_ATOM);
             },
         ];
     }

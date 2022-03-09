@@ -14,6 +14,7 @@ use Paknahad\JsonApiBundle\Controller\Controller;
 // use App\JsonApi\Hydrator\Plant\UpdatePlantHydrator;
 use App\JsonApi\Transformer\PlantResourceTransformer;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/plants")
@@ -60,10 +61,10 @@ class PlantController extends Controller
     /**
      * @Route("/{id}", name="plants_show", methods="GET")
      */
-    public function show(Plant $plant, Request $request): Response
+    public function show(Plant $plant, Request $request, TranslatorInterface $translator): Response
     {
         if ($plant->isDeleted()) {
-            throw $this->createNotFoundException('api.plants.not_found');
+            throw $this->createNotFoundException($translator->trans('api.plants.not_found', [], 'admin'));
         }
 
         return $this->respondOk(

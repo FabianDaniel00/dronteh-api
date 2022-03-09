@@ -70,9 +70,6 @@ class DroneDataPerReservationResourceTransformer extends AbstractResource
             'water_quantity' => function (DroneDataPerReservation $droneDataPerReservation) {
                 return $droneDataPerReservation->getWaterQuantity();
             },
-            'is_deleted' => function (DroneDataPerReservation $droneDataPerReservation) {
-                return $droneDataPerReservation->isDeleted();
-            },
             'created_at' => function (DroneDataPerReservation $droneDataPerReservation) {
                 return $droneDataPerReservation->getCreatedAt()->format(\DATE_ATOM);
             },

@@ -14,14 +14,10 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class VerifyUserEmailController extends AbstractController
 {
     /**
-     * @Route("/verify/email/{_locale}", name="app_users_verify_email", methods="GET")
+     * @Route("/{_locale}/verify/email", name="app_users_verify_email", methods="GET", requirements={"_locale" = "%app.supported_locales%"})
      */
-    public function verifyUserEmail(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier, TranslatorInterface $translator, string $_locale): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier, TranslatorInterface $translator): Response
     {
-        if ($_locale && in_array($_locale, $this->getParameter('app.supported_locales'))) {
-            $request->setLocale($_locale);
-        }
-
         $id = $request->get('id');
 
         if (null === $id) {
@@ -47,7 +43,7 @@ class VerifyUserEmailController extends AbstractController
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         return new Response(
-            $translator->trans('app.verify_user_email.success.message', [], 'app').' <a href="'.$this->getParameter('client_side_host').'/auth?success_verification=true&locale='.$request->getLocale().'">'.$translator->trans('app.verify_user_email.success.click', [], 'app').'</a>.'
+            $translator->trans('app.verify_user_email.success.message', [], 'app').' <a href="'.$this->getParameter('client_side_host').'/'.$request->getLocale().'/auth?success_verification=true">'.$translator->trans('app.verify_user_email.success.click', [], 'app').'</a>.'
         );
     }
 }

@@ -15,8 +15,8 @@ mails:
       'E-mail címem megerősítése'
     expires_in: >-
       {count, plural,
-        one {Ez a link le fog járni {count} napon belül.}
-        other {Ez a link le fog járni {count} napon belül.}
+        one {Ez a link le fog járni {count, number} napon belül.}
+        other {Ez a link le fog járni {count, number} napon belül.}
       }
 
   reset_password:
@@ -30,8 +30,8 @@ mails:
       'Jelszava visszaállításához kérjük, látogasson el az alábbi linkre:'
     expires_in: >-
       {count, plural,
-        one {Ez a link lejár {count} órán belül.}
-        other {Ez a link lejár {count} órán belül.}
+        one {Ez a link lejár {count, number} órán belül.}
+        other {Ez a link lejár {count, number} órán belül.}
       }
 
   reservation_notification:
@@ -42,9 +42,9 @@ mails:
     header:
       'Helló {name}! DronTeh Foglalás.'
     time:
-      'Foglalásának pontos dátuma és időpontja "{time}". Lásd a részleteket alább:'
+      'Foglalásának pontos dátuma és időpontja "{time, date} - {time, time, short}". Lásd a részleteket alább:'
     time_interval:
-      'Foglalása függőben van. Majd e-mailben értesítjük önt a pontos dátumról és időröl ami "{time_interval_start} és {time_interval_end}" között van. Lásd a részleteket alább:'
+      'Foglalása függőben van. Majd e-mailben értesítjük önt a pontos dátumról és időröl ami "{time_interval_start, date} és {time_interval_end, date}" között van. Lásd a részleteket alább:'
     details:
       parcel_number:
         'Parcella szám: {parcel_number}'
@@ -53,19 +53,21 @@ mails:
       chemical:
         'A vegyszer amit használni fogunk: {chemical}'
       time:
-        'A permetezés pontos dátuma és időpontja "{time}"'
+        'A permetezés pontos dátuma és időpontja "{time, date} - {time, time, short}"'
       to_be_present: >-
         {to_be_present, select,
           true {Ott lesz, amikor a permetezés történik}
           false {Nem lesz ott, amikor a permetezés történik}
+          other {Nincs információ}
         }
       plant:
-        "A növény amit permetezni fogunk az/a {plant}"
+        "A növény amit permetezni fogunk: {plant}"
       status: >-
         {status, select,
-          -1 {A foglalás nem aktív}
-          0 {A foglalás függőben}
-          1 {A foglalás folyamatban}
+          0 {A foglalás nem aktív}
+          1 {A foglalás függőben}
+          2 {A foglalás folyamatban}
+          other {Nincs információ}
         }
       comment: >-
         "Hozzászólás: {comment}"

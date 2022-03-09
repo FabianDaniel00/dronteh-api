@@ -15,8 +15,8 @@ mails:
       'Confirm my E-mail'
     expires_in: >-
       {count, plural,
-        one {This link will expire in {count} day.}
-        other {This link will expire in {count} days.}
+        one {This link will expire in {count, number} day.}
+        other {This link will expire in {count, number} days.}
       }
 
   reset_password:
@@ -30,8 +30,8 @@ mails:
       'To reset your password, please visit the following link:'
     expires_in: >-
       {count, plural,
-        one {This link will expire in {count} hour.}
-        other {This link will expire in {count} hours.}
+        one {This link will expire in {count, number} hour.}
+        other {This link will expire in {count, number} hours.}
       }
 
   reservation_notification:
@@ -42,9 +42,9 @@ mails:
     header:
       'Hi {name}! DronTeh Reservation.'
     time:
-      'Your accurate date and time for your reservation is "{time}". See the details below:'
+      'Your accurate date and time for your reservation is "{time, date} - {time, time, short}". See the details below:'
     time_interval:
-      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start} and {time_interval_end}". See the details below:'
+      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start, date} and {time_interval_end, date}". See the details below:'
     details:
       parcel_number:
         'Parcel number: {parcel_number}'
@@ -53,19 +53,21 @@ mails:
       chemical:
         'Chemical is {chemical}'
       time:
-        'The accurate time of the spraying is "{time}"'
+        'The accurate time of the spraying is "{time, date} - {time, time, short}"'
       to_be_present: >-
         {to_be_present, select,
           true {You will be there when the spray happening}
           false {You will't be there when the spray happening}
+          other {No information}
         }
       plant:
-        "Plant what we're going to spray is {plant}"
+        "Plant what we're going to spray: {plant}"
       status: >-
         {status, select,
-          -1 {The reservation is non-active}
-          0 {The reservation is pending}
-          1 {The reservation is in process}
+          0 {The reservation is non-active}
+          1 {The reservation is pending}
+          2 {The reservation is in process}
+          other {No information}
         }
       comment:
         "Comment: '{comment}'"

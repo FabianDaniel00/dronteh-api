@@ -1,4 +1,8 @@
 app:
+  base:
+    welcome:
+      'Üdvözöljük! | DronTeh'
+
   reset_password:
     request:
       title:
@@ -24,8 +28,8 @@ app:
         'Jelszó visszaállítási e-mail elküldve | DronTeh'
       paragraph1: >-
         {count, plural,
-          one {Ha létezik az ön e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count} órán belül.}
-          other {Ha létezik az 0n e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count} órán belül.}
+          one {Ha létezik az ön e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count, number} órán belül.}
+          other {Ha létezik az 0n e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count, number} órán belül.}
         }
       paragraph2:
         "Ha nem kapott e-mailt, kérjük, ellenőrizze a spam mappáját vagy"
@@ -59,3 +63,25 @@ app:
         'Az e-mail-címét sikeresen ellenőriztük!'
       click:
         'Kattints ide a bejelentkezéshez'
+
+  error_page:
+    title: >-
+        {responseCode, select,
+          403 {Hozzáférés megtagadva | DronTeh}
+          404 {404 nem található | DronTeh}
+          other {Belső Szerverhiba | DronTeh}
+        }
+    header: >-
+        {responseCode, select,
+          403 {Hozzáférés megtagadva}
+          404 {404 nem található}
+          other {Belső Szerverhiba}
+        }
+    message: >-
+        {responseCode, select,
+          403 {Hozzáférés megtagadva, nincs hozzáférési jogosultsága ezen a szerveren.}
+          404 {404 Ez az oldal nem található.}
+          other {Valami elromlott. {message}}
+        }
+    home:
+      'Vissza a kezdőlapra'

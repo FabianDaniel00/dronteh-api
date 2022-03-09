@@ -15,11 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\JsonApi\Hydrator\User\CreateUserHydrator;
 use App\JsonApi\Hydrator\User\UpdateUserHydrator;
 use Paknahad\JsonApiBundle\Controller\Controller;
-use App\JsonApi\Transformer\UserResourceTransformer;
+use Symfony\Component\HttpKernel\KernelInterface;
 // use Paknahad\JsonApiBundle\Helper\ResourceCollection;
+use App\JsonApi\Transformer\UserResourceTransformer;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 /**
  * @Route("/users")
@@ -45,15 +48,16 @@ class UserController extends Controller
     /**
      * @Route("/", name="api_users_new", methods="POST")
      */
-    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EmailVerifier $emailVerifier, TranslatorInterface $translator): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EmailVerifier $emailVerifier, TranslatorInterface $translator, KernelInterface $kernel): Response
     {
-        if (!$this->isCsrfTokenValid($this->getParameter('csrf_token_id'), $request->headers->get('x-csrf-token'))) {
-            // throw new AccessDeniedHttpException('api.users.new.invlaid_csrf_token');
+        if ($kernel->getEnvironment() !== 'dev' && !$this->isCsrfTokenValid($this->getParameter('csrf_token_id'), $request->headers->get('x-csrf-token'))) {
+            // throw new AccessDeniedHttpException($translator->trans('api.users.new.invlaid_csrf_token', [], 'api'));
+            throw new InvalidCsrfTokenException();
         }
 
         $user = $this->jsonApi()->hydrate(
             new CreateUserHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
-            new User($request->headers->get('x-captcha'), $this->getParameter('app.supported_locales'), $this->getParameter('app.supported_roles'))
+            new User($request->headers->get('x-captcha'), $this->getParameter('app.supported_locales'))
         );
 
         $this->validate($user);
@@ -103,11 +107,11 @@ class UserController extends Controller
     /**
      * @Route("/{id}", name="api_users_edit", methods="PATCH")
      */
-    public function edit(User $user): Response
+    public function edit(User $user, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         if ($user->isDeleted() || $user->getId() !== $currentUser->getId()) {
@@ -132,15 +136,15 @@ class UserController extends Controller
     /**
      * @Route("/{id}", name="api_users_delete", methods="DELETE")
      */
-    public function delete(User $user): Response
+    public function delete(User $user, TranslatorInterface $translator): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('api.current_user.null');
+            throw new AccessDeniedHttpException($translator->trans('api.current_user.null', [], 'api'));
         }
 
         if ($user->isDeleted() || $user->getId() !== $currentUser->getId()) {
-            throw $this->createNotFoundException('api.users.not_found');
+            throw $this->createNotFoundException($translator->trans('api.users.not_found', [], 'api'));
         }
 
         $user->setIsDeleted(1);
@@ -156,16 +160,21 @@ class UserController extends Controller
     {
         $user = $this->entityManager->getRepository(User::class)->find($user_id);
 
-        if ($user->isDeleted()) {
-            throw $this->createNotFoundException('api.users.not_found');
+        if ($user === null || $user->isDeleted()) {
+            throw $this->createNotFoundException($translator->trans('api.users.not_found', [], 'api'));
         }
 
         if ($user->isVerified()) {
-            throw new AccessDeniedHttpException('api.users.is_verified');
+            throw new AccessDeniedHttpException($translator->trans('api.users.is_verified', [], 'api'));
         }
 
-        if ($user->getLastVerificationEmailSent()->modify('+10 minutes') > new \DateTime('@'.strtotime('now'))) {
-            throw new AccessDeniedHttpException('api.users.ask_another_user_verification_email.treshold');
+        $threshhold = 10; //minutes
+
+        $now = new \DateTime('@'.strtotime('now'));
+        $lastVerificationEmailSent = $user->getLastVerificationEmailSent() ? strtotime($user->getLastVerificationEmailSent()->format('Y-m-d H:i:s')) : strtotime($now->modify('+'.$threshhold.' minutes')->format('Y-m-d H:i:s'));
+        $difference = round(abs(strtotime($now->format('Y-m-d H:i:s')) - $lastVerificationEmailSent) / 60);
+        if ($difference < $threshhold) {
+            throw new AccessDeniedHttpException($translator->trans('api.users.ask_another_user_verification_email.threshold', ['%difference' => $threshhold - $difference], 'api'));
         }
 
         $emailVerifier->sendEmailConfirmation('app_users_verify_email', $user,
@@ -178,6 +187,9 @@ class UserController extends Controller
                     'name' => $user->getFirstname().' '.$user->getLastname(),
                 ])
         );
+
+        $user->setLastVerificationEmailSent(new \DateTime('@'.strtotime('now')));
+        $this->entityManager->flush();
 
         return $this->respondNoContent();
     }
