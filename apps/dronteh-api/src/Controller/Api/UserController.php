@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 // use Paknahad\JsonApiBundle\Helper\ResourceCollection;
 use App\JsonApi\Transformer\UserResourceTransformer;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -69,19 +68,10 @@ class UserController extends Controller
             )
         );
 
+        $this->sendVerificationEmail($emailVerifier, $user, $translator, $user->getLocale());
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-
-        $emailVerifier->sendEmailConfirmation('app_users_verify_email', $user,
-            (new TemplatedEmail())
-                ->from(new Address($this->getParameter('sender_email'), $translator->trans('mails.register_confirmation.name', [], 'mails')))
-                ->to($user->getEmail())
-                ->subject($translator->trans('mails.register_confirmation.subject', [], 'mails'))
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-                ->context([
-                    'name' => $user->getFirstname().' '.$user->getLastname(),
-                ])
-        );
 
         return $this->respondOk(
             new UserDocument(new UserResourceTransformer()),
@@ -177,20 +167,25 @@ class UserController extends Controller
             throw new AccessDeniedHttpException($translator->trans('api.users.ask_another_user_verification_email.threshold', ['%difference' => $threshhold - $difference], 'api'));
         }
 
-        $emailVerifier->sendEmailConfirmation('app_users_verify_email', $user,
-            (new TemplatedEmail())
-                ->from(new Address($this->getParameter('sender_email'), $translator->trans('mails.register_confirmation.name', [], 'mails')))
-                ->to($user->getEmail())
-                ->subject($translator->trans('mails.register_confirmation.subject', [], 'mails'))
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-                ->context([
-                    'name' => $user->getFirstname().' '.$user->getLastname(),
-                ])
-        );
+        $this->sendVerificationEmail($emailVerifier, $user, $translator, $user->getLocale());
 
         $user->setLastVerificationEmailSent(new \DateTime('@'.strtotime('now')));
         $this->entityManager->flush();
 
         return $this->respondNoContent();
+    }
+
+    private function sendVerificationEmail(EmailVerifier $emailVerifier, User $user, TranslatorInterface $translator, string $locale): void {
+        $emailVerifier->sendEmailConfirmation('app_users_verify_email', $user,
+            (new TemplatedEmail())
+                ->from(new Address($this->getParameter('sender_email'), $translator->trans('mails.register_confirmation.name', [], 'mails', $locale)))
+                ->to($user->getEmail())
+                ->subject($translator->trans('mails.register_confirmation.subject', [], 'mails', $locale))
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+                ->context([
+                    'name' => $user->getFirstname().' '.$user->getLastname(),
+                    'locale' => $locale,
+                ])
+        );
     }
 }

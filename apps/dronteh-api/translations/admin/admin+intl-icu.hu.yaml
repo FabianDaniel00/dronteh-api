@@ -18,6 +18,14 @@ admin:
       logout:
           'Kilépés'
 
+  locales:
+    en:
+      'Angol'
+    hu:
+      'Magyar'
+    sr_Latn:
+      'Szerb'
+
   list:
     users:
       title:
@@ -46,13 +54,6 @@ admin:
         'Törölve'
       locale:
         'Nyelv'
-      locales:
-        en:
-          'Angol'
-        hu:
-          'Magyar'
-        sr_Latn:
-          'Szerb'
       last_verification_email_sent:
         'Ellenőrző e-mail elküldve'
 
@@ -78,6 +79,8 @@ admin:
       'Mentés és szerkesztés folytatása'
     save_and_view_detail:
       'Mentés és részletek megtekintése'
+    undelete:
+      'Törlés visszavonása'
 
   new:
     save_and_view_detail:

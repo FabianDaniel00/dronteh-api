@@ -18,6 +18,14 @@ admin:
       logout:
         'Logout'
 
+  locales:
+    en:
+      'English'
+    hu:
+      'Hungarian'
+    sr_Latn:
+      'Serbian'
+
   list:
     users:
       title:
@@ -46,13 +54,6 @@ admin:
         'Is deleted'
       locale:
         'Language'
-      locales:
-        en:
-          'English'
-        hu:
-          'Hungarian'
-        sr_Latn:
-          'Serbian'
       last_verification_email_sent:
         'Verification email sent'
 
@@ -78,6 +79,8 @@ admin:
       'Save and continue editing'
     save_and_view_detail:
       'Save and view details'
+    undelete:
+      'Undelete'
 
   new:
     save_and_view_detail:

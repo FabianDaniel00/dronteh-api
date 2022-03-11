@@ -293,9 +293,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsRole(): ?bool
+    public function hasRole(): bool
     {
-        return !empty(array_intersect($this->getRoles(), ['ROLE_USER', 'ROLE_ADMIN']));
+        return $this->roles && !empty(array_intersect($this->getRoles(), ['ROLE_USER', 'ROLE_ADMIN']));
     }
 
     /**

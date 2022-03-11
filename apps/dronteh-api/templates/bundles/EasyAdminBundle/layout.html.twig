@@ -1,0 +1,113 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block responsive_header %}
+    <button id="navigation-toggler" type="button" aria-label="Toggle navigation">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div id="responsive-header-logo" class="text-truncate">
+        {% block responsive_header_logo %}
+            <a class="responsive-logo" title="{{ ea.dashboardTitle|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
+                {{ ea.dashboardTitle|raw }}
+            </a>
+        {% endblock responsive_header_logo %}
+    </div>
+
+    <div class="responsive-locale-switcher">
+        <div class="dropdown user-menu-wrapper {{ is_granted(impersonator_permission) ? 'user-is-impersonated' }}">
+            <a class="user-details" type="button" data-bs-toggle="dropdown" data-bs-offset="0,5" aria-expanded="false">
+                {# to make the site design consistent, always display the user avatar in responsive header
+                    and hide the user name (because there's no space left) regardless of the user config #}
+                {% if ea.userMenu.avatarDisplayed %}
+                    {{ user_menu_avatar }}
+                {% else %}
+                    <i class="user-avatar fa fa-fw {{ ea.user is not null ? 'fa-user' : 'fa-user-times' }}"></i>
+                {% endif %}
+            </a>
+
+            {{ user_menu_dropdown }}
+        </div>
+
+        <div class="vr"></div>
+
+        <div class="locale-switcher">
+            <ul type="none">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown-language" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
+                        {% set flagCode = flagCode(locale) %}
+
+                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="20em">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-language">
+                        <div>
+                            {% set queryParams = app.request.requestUri|split('/admin/?')[1] %}
+
+                            {% for supportedLocale in supportedLocales|split('|') %}
+                                {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
+                                {% set flagCode = flagCode(supportedLocale) %}
+
+                                <li>
+                                    <a class="dropdown-item" href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30em">
+                                        {{ supportedLocaleTrans|trans }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </div>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock responsive_header %}
+
+
+{% block header_custom_menu %}
+    <div class="dropdown user-menu-wrapper {{ is_granted(impersonator_permission) ? 'user-is-impersonated' }}">
+        <a class="user-details" type="button" data-bs-toggle="dropdown" data-bs-offset="0,5" aria-expanded="false">
+            {{ user_menu_avatar }}
+            {% if ea.userMenu.isNameDisplayed %}
+                <span class="user-name">{{ ea.userMenu.name }}</span>
+            {% endif %}
+        </a>
+
+        {{ user_menu_dropdown }}
+    </div>
+
+    <div class="vr"></div>
+
+    <div class="locale-switcher">
+        <ul type="none">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown-language" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
+                    {% set flagCode = flagCode(locale) %}
+
+                    <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="20em">
+
+                    {% set localeTrans = 'admin.locales.'~app.request.attributes.get('_route_params')['_locale'] %}
+                    {{ localeTrans|trans }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-language">
+                    <div>
+                        {% set queryParams = app.request.requestUri|split('/admin/?')[1] %}
+
+                        {% for supportedLocale in supportedLocales|split('|') %}
+                            {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
+                            {% set flagCode = flagCode(supportedLocale) %}
+
+                            <li>
+                                <a class="dropdown-item" href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                                    <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30em">
+                                    {{ supportedLocaleTrans|trans }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </li>
+        </ul>
+    </div>
+{% endblock header_custom_menu %}

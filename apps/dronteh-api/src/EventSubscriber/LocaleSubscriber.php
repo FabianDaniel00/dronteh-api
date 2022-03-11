@@ -24,6 +24,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
         $locales = [
             explode('/', $request->getPathInfo())[1],
+            $request->attributes->get('_locale'),
             $request->query->get('locale'),
             $request->headers->get('locale'),
         ];

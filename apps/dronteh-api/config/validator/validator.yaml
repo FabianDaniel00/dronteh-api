@@ -26,8 +26,8 @@ App\Entity\User:
       - Choice: { choices: [true, false, 1, 0] }
 
   getters:
-    isRole:
-      - IsTrue: { message: 'validators.users.constraint.role.invalid' }
+    role:
+      - 'IsTrue': { message: 'validators.users.constraint.role.invalid' }
 
 
 App\Entity\Reservation:

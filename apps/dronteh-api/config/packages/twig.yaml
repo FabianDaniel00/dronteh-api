@@ -1,7 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
-        client_side_host: '%client_side_host%'
+        clientSideHost: '%client_side_host%'
+        supportedLocales: '%app.supported_locales%'
 
 when@test:
     twig:
