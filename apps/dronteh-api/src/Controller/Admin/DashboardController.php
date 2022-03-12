@@ -86,13 +86,15 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::section('admin.menu.section.users'),
-            MenuItem::linkToCrud('admin.menu.items.users', 'fas fa-users', User::class),
+            MenuItem::section('admin.plural.user'),
+            MenuItem::linkToCrud('admin.plural.user', 'fas fa-users', User::class)
+                ->setQueryParameter('filters[is_deleted][comparison]', '0')
+            ,
 
             MenuItem::section(),
             MenuItem::section(),
-            MenuItem::section('admin.menu.section.logout'),
-            MenuItem::linkToLogout('admin.logout', 'fas fa-sign-out-alt'),
+            MenuItem::section('__ea__user.sign_out'),
+            MenuItem::linkToLogout('__ea__user.sign_out', 'fas fa-sign-out-alt'),
         ];
     }
 

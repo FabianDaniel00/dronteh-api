@@ -1,22 +1,8 @@
 admin:
-  logout:
-    'Logout'
-
   login:
     form:
       email:
         'Email'
-
-  menu:
-    items:
-      users:
-        'Users'
-
-    section:
-      users:
-        'Users'
-      logout:
-        'Logout'
 
   locales:
     en:
@@ -28,8 +14,6 @@ admin:
 
   list:
     users:
-      title:
-        'Users | DronTeh Admin'
       id:
         'ID'
       email:
@@ -48,6 +32,11 @@ admin:
         'Updated at'
       role:
         'Role'
+      roles:
+        user:
+          'User'
+        admin:
+          'Administrator'
       is_verified:
         'Is verified'
       is_deleted:
@@ -64,6 +53,8 @@ admin:
           'This is for delete the user but not from the database'
 
   title:
+    index:
+      '{entity_label_plural} | DronTeh Admin'
     detail:
       '{entity_label_singular} #{entity_id} | {entity_as_string}'
     edit:
@@ -87,21 +78,21 @@ admin:
       'Create and view details'
 
   singular:
-    users:
+    user:
       'User'
 
   plural:
-    users:
+    user:
       'Users'
 
   flash:
     entity:
       persisted:
         success:
-          'Successfully created {entity}.'
+          'The {entity} was successfully created.'
       updated:
         success:
-          'Successfully updated {entity}.'
+          'The {entity} was successfully updated.'
       deleted:
         success:
-          'Successfully deleted {entity}.'
+          'The {entity} was successfully deleted.'

@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use Symfony\Component\Translation\TranslatableMessage;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
@@ -16,11 +17,13 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 {
     private SessionInterface $session;
     private UserPasswordHasherInterface $userPasswordHasher;
+    private TranslatorInterface $translator;
 
-    public function __construct(SessionInterface $session, UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(SessionInterface $session, UserPasswordHasherInterface $userPasswordHasher, TranslatorInterface $translator)
     {
         $this->session = $session;
         $this->userPasswordHasher = $userPasswordHasher;
+        $this->translator = $translator;
     }
 
     public static function getSubscribedEvents()
@@ -70,6 +73,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     }
 
     private function putFlash($entity, string $transData) {
-        $this->session->getFlashBag()->add('success', new TranslatableMessage($transData, ['%entity%' => (string) $entity], 'admin'));
+        $entityName = explode('\\', get_class($entity));
+        $entityName = strtolower($entityName[count($entityName) - 1]);
+
+        $this->session->getFlashBag()->add('success', new TranslatableMessage($transData, [
+            '%entity%' => $this->translator->trans('admin.singular.'.$entityName, [], 'admin')
+        ], 'admin'));
     }
 }

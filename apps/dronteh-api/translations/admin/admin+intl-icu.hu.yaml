@@ -1,22 +1,8 @@
 admin:
-  logout:
-    'Kilépés'
-
   login:
     form:
       email:
         'E-mail'
-
-  menu:
-    items:
-      users:
-        'Felhasználók'
-
-    section:
-      users:
-        'Felhasználók'
-      logout:
-          'Kilépés'
 
   locales:
     en:
@@ -28,8 +14,6 @@ admin:
 
   list:
     users:
-      title:
-        'Felhasználók | DronTeh Admin'
       id:
         'ID'
       email:
@@ -48,6 +32,11 @@ admin:
         'Módosítva'
       role:
         'Jogosultság'
+      roles:
+        user:
+          'Felhasználó'
+        admin:
+          'Adminisztrátor'
       is_verified:
         'Ellenőrizve'
       is_deleted:
@@ -64,6 +53,8 @@ admin:
           'Ez arra van hogy töröljük a felhasználót de nem az adatbázisból'
 
   title:
+    index:
+      '{entity_label_plural} | DronTeh Admin'
     detail:
       '{entity_label_singular} #{entity_id} | {entity_as_string}'
     edit:
@@ -87,21 +78,21 @@ admin:
       'Létrehozás és részletek megtekintése'
 
   singular:
-    users:
+    user:
       'Felhasználó'
 
   plural:
-    users:
+    user:
       'Felhasználók'
 
   flash:
     entity:
       persisted:
         success:
-          'Sikeresen létrehozva: {entity}.'
+          'A/Az {entity} sikeresen léterhozva.'
       updated:
         success:
-          'Sikeresen frissítve: {entity}.'
+          'A/Az {entity} sikeresen frissítve.'
       deleted:
         success:
-          'Sikeresen törölve: {entity}.'
+          'A/Az {entity} sikeresen törölve.'

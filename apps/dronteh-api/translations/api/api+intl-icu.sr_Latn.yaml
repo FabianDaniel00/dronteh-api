@@ -1,0 +1,55 @@
+api:
+  not_valid_date:
+    'Nije važeći tip datuma'
+
+  current_user.null:
+    'Ne mogu da pronađem trenutnog korisnika'
+
+  users:
+    edit:
+    not_found:
+      'Ne mogu da pronađem ovog korisnika'
+    is_verified:
+      'Ovaj korisnik je već verifikovan'
+    ask_another_user_verification_email:
+      threshold: >-
+        {difference, plural,
+          one {Žao nam je, morate da sačekate još {difference, number} minut da ponovo pošaljete e-poruku za verifikaciju.}
+          other {Žao nam je, morate da sačekate još {difference, number} minuta da ponovo pošaljete e-poruku za verifikaciju.}
+        }
+
+  reservations:
+    not_found:
+      'Ne mogu da pronađem ovu rezervaciju'
+    time_null:
+      'Vreme ne može biti null ili prazno'
+
+    edit:
+      status:
+        'Nije moguće izmeniti ovu rezervaciju jer nije aktivna'
+      less_difference: >-
+        {day, plural,
+          one {Mora postojati minimalna razlika od {day, number} dan između 2 datuma.}
+          other {Mora postojati razlika od najmanje {day, number} dana između 2 datuma.}
+        }
+      time: >-
+        {day, plural,
+          one {Nije moguće izmeniti rezervaciju {day, number} dan pre akcije.}
+          other {Nije moguće izmeniti rezervaciju {day, number} dana pre akcije.}
+        }
+
+    notification:
+      email_error:
+        'Nešto nije u redu tokom slanja e-mail'
+
+  plants:
+    not_found:
+      'Ne mogu da nađem ovu biljku'
+
+  drone_data_per_reservations:
+    not_found:
+      'Ne mogu da pronađem ove podatke o dronu'
+
+  chemicals:
+    not_found:
+      'Ne mogu da pronađem ovu hemikaliju'

@@ -64,7 +64,10 @@ class UserCrudController extends AbstractCrudController
             TextField::new('lastname')->setLabel('admin.list.users.lastname')->setColumns(3),
             FormField::addRow(),
             TelephoneField::new('tel')->setLabel('admin.list.users.tel'),
-            ArrayField::new('roles')->setLabel('admin.list.users.role')->setHelp('admin.list.users.help.role'),
+            ArrayField::new('roles')
+                ->setTemplatePath('bundles/EasyAdminBundle/crud/field/array.html.twig')
+                ->setLabel('admin.list.users.role')
+                ->setHelp('admin.list.users.help.role'),
             ChoiceField::new('locale')->setLabel('admin.list.users.locale')->setChoices($locales),
             DateTimeField::new('created_at')->setLabel('admin.list.users.created_at')->hideOnForm(),
             DateTimeField::new('updated_at')->setLabel('admin.list.users.updated_at')->hideOnForm(),
@@ -76,10 +79,10 @@ class UserCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('admin.singular.users')
-            ->setEntityLabelInPlural('admin.plural.users')
+            ->setEntityLabelInSingular('admin.singular.user')
+            ->setEntityLabelInPlural('admin.plural.user')
 
-            ->setPageTitle(Crud::PAGE_INDEX, 'admin.list.users.title')
+            ->setPageTitle(Crud::PAGE_INDEX, 'admin.title.index')
             ->setPageTitle(Crud::PAGE_DETAIL, 'admin.title.detail')
             ->setPageTitle(Crud::PAGE_EDIT, 'admin.title.edit')
 
@@ -89,12 +92,21 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFilters(Filters $filters): Filters
     {
+        $supportedRoles = $this->getParameter('app.supported_roles');
+        $locales = [];
+        foreach ($supportedRoles as $supportedRole) {
+            $locales[$this->translator->trans('admin.list.users.roles.'.strtolower(explode('ROLE_', $supportedRole)[1]), [], 'admin')] = $supportedRole;
+        }
+
         return $filters
             ->add(BooleanFilter::new('is_deleted')->setLabel($this->translator->trans('admin.list.users.is_deleted', [], 'admin')))
             ->add(BooleanFilter::new('isVerified')->setLabel($this->translator->trans('admin.list.users.is_verified', [], 'admin')))
             ->add(DateTimeFilter::new('created_at')->setLabel($this->translator->trans('admin.list.users.created_at', [], 'admin')))
             ->add(DateTimeFilter::new('updated_at')->setLabel($this->translator->trans('admin.list.users.updated_at', [], 'admin')))
-            ->add(ArrayFilter::new('roles')->setLabel($this->translator->trans('admin.list.users.role', [], 'admin')))
+            ->add(ArrayFilter::new('roles')
+                ->setLabel($this->translator->trans('admin.list.users.role', [], 'admin'))
+                ->setChoices($locales)
+            )
         ;
     }
 

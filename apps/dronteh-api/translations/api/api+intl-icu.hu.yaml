@@ -1,0 +1,55 @@
+api:
+  not_valid_date:
+    'Érvénytelen dátumtípus'
+
+  current_user.null:
+    'Az aktuális felhasználó nem található'
+
+  users:
+    edit:
+    not_found:
+      'Ez a felhasználó nem található'
+    is_verified:
+      'Ez a felhasználó már ellenőrizve van'
+    ask_another_user_verification_email:
+      threshold: >-
+        {difference, plural,
+          one {Sajnáljuk, még {difference, number} percet kell várnia az ellenőrző e-mail újraküldésére.}
+          other {Sajnáljuk, még {difference, number} percet kell várnia az ellenőrző e-mail újraküldésére.}
+        }
+
+  reservations:
+    not_found:
+      'Nem található ez a foglalás'
+    time_null:
+      'Az idő nem lehet null vagy üres'
+
+    edit:
+      status:
+        'Ez a foglalás nem módosítható, mert nem aktív'
+      less_difference: >-
+        {day, plural,
+          one {A 2 dátum között legalább {day, number} nap eltérésnek kell lennie.}
+          other {A 2 dátum között legalább {day, number} nap eltérésnek kell lennie.}
+        }
+      time: >-
+        {day, plural,
+          one {A foglalás nem módosítható {day, number} nappal a művelet előtt.}
+          other {A foglalás nem módosítható {day, number} nappal a művelet előtt.}
+        }
+
+    notification:
+      email_error:
+        'Valami hiba történt az e-mail küldése közben'
+
+  plants:
+    not_found:
+      'Nem található ez a növény'
+
+  drone_data_per_reservations:
+    not_found:
+      'Nem található ez a drón adat'
+
+  chemicals:
+    not_found:
+      'Nem található ez a vegyszer'

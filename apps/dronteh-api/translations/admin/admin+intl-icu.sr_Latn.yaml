@@ -1,13 +1,98 @@
 admin:
-  logout:
-    'Odjaviti se'
-
   login:
     form:
       email:
         'E-mail'
 
-  menu:
-    items:
-      users:
-        'Korisnika'
+  locales:
+    en:
+      'Engleski'
+    hu:
+      'Mađarski'
+    sr_Latn:
+      'Srpski'
+
+  list:
+    users:
+      id:
+        'ID'
+      email:
+        'E-mail'
+      password:
+        'Lozinka'
+      firstname:
+        'Ime'
+      lastname:
+        'Prezime'
+      tel:
+        'Tel'
+      created_at:
+        'Kreirano'
+      updated_at:
+        'Ažurirano u'
+      role:
+        'Uloga'
+      roles:
+        user:
+          'Korisnik'
+        admin:
+          'Administrator'
+      is_verified:
+        'Verifikovano je'
+      is_deleted:
+        'Izbrisano je'
+      locale:
+        'Jezik'
+      last_verification_email_sent:
+        'E-mail za verifikaciju je poslata'
+
+      help:
+        role:
+          "'ROLE_USER' kao korisnik ili 'ROLE_ADMIN' kao administrator"
+        is_deleted:
+          'Ovo je za brisanje korisnika, ali ne i iz baze podataka'
+
+  title:
+    index:
+      '{entity_label_plural} | DronTeh Admin'
+    detail:
+      '{entity_label_singular} #{entity_id} | {entity_as_string}'
+    edit:
+      'Uređivanje {entity_label_singular} #{entity_id} | {entity_as_string}'
+
+  index:
+    users:
+      help:
+        "Polje 'Izbrisano je' briše korisnika, ali ne i iz baze podataka. Za filtere, uloga 'ROLE_USER' je korisnik, a 'ROLE_ADMIN' je administrator."
+
+  buttons:
+    save_and_continue:
+      'Sačuvajte i nastavite sa uređivanjem'
+    save_and_view_detail:
+      'Sačuvajte i pogledajte detalje'
+    undelete:
+      'Poništi brisanje'
+
+  new:
+    save_and_view_detail:
+      'Kreirajte i pogledajte detalje'
+
+  singular:
+    user:
+      'Korisnik'
+
+  plural:
+    user:
+      'Korisnici'
+
+  flash:
+    entity:
+      persisted:
+        success:
+          '{entity} je uspešno napravljen.'
+      updated:
+        success:
+          '{entity} je uspešno ažuriran.'
+      deleted:
+        success:
+          '{entity} je uspešno izbrisan.'
