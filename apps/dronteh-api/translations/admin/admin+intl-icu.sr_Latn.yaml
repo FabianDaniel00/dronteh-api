@@ -12,10 +12,28 @@ admin:
     sr_Latn:
       'Srpski'
 
+  'null':
+    'Prazan'
+  not_null:
+    'Nije prazno'
+
   list:
+    id:
+      'ID'
+    created_at:
+      'Kreirano'
+    updated_at:
+      'Ažurirano u'
+    is_deleted:
+      'Izbrisano je'
+    not_updated:
+      '-nije izmenjeno-'
+
+    help:
+      is_deleted:
+        'Ovo je za brisanje, ali ne i iz baze podataka'
+
     users:
-      id:
-        'ID'
       email:
         'E-mail'
       password:
@@ -26,21 +44,17 @@ admin:
         'Prezime'
       tel:
         'Tel'
-      created_at:
-        'Kreirano'
-      updated_at:
-        'Ažurirano u'
       role:
-        'Uloga'
+        'Uloge'
       roles:
         user:
           'Korisnik'
         admin:
           'Administrator'
+        super_admin:
+          'Super administrator'
       is_verified:
         'Verifikovano je'
-      is_deleted:
-        'Izbrisano je'
       locale:
         'Jezik'
       last_verification_email_sent:
@@ -48,9 +62,40 @@ admin:
 
       help:
         role:
-          "'ROLE_USER' kao korisnik ili 'ROLE_ADMIN' kao administrator"
-        is_deleted:
-          'Ovo je za brisanje korisnika, ali ne i iz baze podataka'
+          "'ROLE_USER' kao korisnik, 'ROLE_ADMIN' kao administrator, 'ROLE_SUPER_ADMIN' koji može da dodeli ko treba da bude administrator"
+
+    reservations:
+      parcel_number:
+        'Parcela broj'
+      land_area:
+        'Površina zemljišta [m2]'
+      status:
+        'Status'
+      statuses:
+        '0':
+          'Nerešen'
+        '1':
+          'Active'
+        '2':
+          'Neaktivan'
+      to_be_present:
+        'Da bude prisutna'
+      time:
+        'Vreme rezervacije'
+      reservation_interval_start:
+       'Početak intervala'
+      reservation_interval_end:
+       'Kraj intervala'
+      comment:
+        'Komentar'
+
+      help:
+        status:
+          "Aktivan je kada rezervacija ima tačno vreme. Neaktivan je kada je rezervacija završena."
+
+      label:
+        has_time:
+          'Vreme je već dogovoreno za ovu rezervaciju.'
 
   title:
     index:
@@ -63,7 +108,7 @@ admin:
   index:
     users:
       help:
-        "Polje 'Izbrisano je' briše korisnika, ali ne i iz baze podataka. Za filtere, uloga 'ROLE_USER' je korisnik, a 'ROLE_ADMIN' je administrator."
+        "Polje 'Izbrisano je' briše korisnika, ali ne i iz baze podataka."
 
   buttons:
     save_and_continue:
@@ -72,6 +117,12 @@ admin:
       'Sačuvajte i pogledajte detalje'
     undelete:
       'Poništi brisanje'
+    new_password:
+      'Nova lozinka'
+    my_profile:
+      'Moj profil'
+    set_time:
+      'Odrediti vreme'
 
   new:
     save_and_view_detail:
@@ -80,19 +131,59 @@ admin:
   singular:
     user:
       'Korisnik'
+    reservation:
+      'Rezervacija'
+    chemical:
+      'Hemijski'
+    plant:
+      'Biljka'
 
   plural:
     user:
       'Korisnici'
+    reservation:
+      'Rezervacije'
+    chemical:
+      'Hemikalije'
+    plant:
+      'Biljke'
 
   flash:
     entity:
       persisted:
         success:
-          '{entity} je uspešno napravljen.'
+          '<b>{entity_name} "{entity}"</b> je uspešno napravljen.'
       updated:
         success:
-          '{entity} je uspešno ažuriran.'
+          '<b>{entity_name} "{entity}"</b> je uspešno ažuriran.'
       deleted:
         success:
-          '{entity} je uspešno izbrisan.'
+          '<b>{entity_name} "{entity}"</b> je uspešno izbrisan.'
+      undeleted:
+        success:
+          '<b>{entity_name} "{entity}"</b> brisanje je uspešno opozvano'
+
+    reservations:
+      set_time:
+        success:
+          'Uspešno podešeno vreme za <b>{reservation}</b> rezervaciju i obaveštenje je poslato.'
+        error:
+          '<b>baveštenje nije poslato već je vreme podešeno za rezervaciju {reservation}.</b>'
+        time_between_interval:
+          'Vreme mora da bude između "<b>{interval_start, date}</b>" i "<b>{interval_end, date}</b>"'
+
+  modal:
+    can_undelete:
+      'Postoji opoziv za ovu operaciju.'
+
+    set_time:
+      title:
+        'Podesite vreme za rezervaciju'
+      content:
+        'Ovde možete podesiti vreme za rezervaciju i poslati obaveštenje korisniku.'
+      send:
+        'Podesite vreme i pošaljite obaveštenje'
+
+    undelete:
+      title:
+        'Da li zaista želite da poništite brisanje ove stavke?'

@@ -22,14 +22,14 @@ class LocaleSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $locales = [
+        $localeSuggestions = [
             explode('/', $request->getPathInfo())[1],
             $request->attributes->get('_locale'),
             $request->query->get('locale'),
             $request->headers->get('locale'),
         ];
 
-        foreach ($locales as $locale) {
+        foreach ($localeSuggestions as $locale) {
             if ($locale && in_array($locale, explode('|', $this->params->get('app.supported_locales')))) {
                 if ($request->hasPreviousSession()) {
                     $request->getSession()->set('_locale', $locale);

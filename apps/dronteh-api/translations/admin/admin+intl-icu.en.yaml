@@ -12,10 +12,28 @@ admin:
     sr_Latn:
       'Serbian'
 
+  'null':
+    'Empty'
+  not_null:
+    'Not empty'
+
   list:
+    id:
+      'ID'
+    created_at:
+      'Created at'
+    updated_at:
+      'Updated at'
+    is_deleted:
+      'Is deleted'
+    not_updated:
+      '-was not updated-'
+
+    help:
+      is_deleted:
+        'This is for delete, but not from the database'
+
     users:
-      id:
-        'ID'
       email:
         'Email'
       password:
@@ -26,21 +44,17 @@ admin:
         'Last name'
       tel:
         'Tel'
-      created_at:
-        'Created at'
-      updated_at:
-        'Updated at'
       role:
-        'Role'
+        'Roles'
       roles:
         user:
           'User'
         admin:
           'Administrator'
+        super_admin:
+          'Super administrator'
       is_verified:
         'Is verified'
-      is_deleted:
-        'Is deleted'
       locale:
         'Language'
       last_verification_email_sent:
@@ -48,9 +62,40 @@ admin:
 
       help:
         role:
-          "'ROLE_USER' as user or 'ROLE_ADMIN' as administrator"
-        is_deleted:
-          'This is for delete the user but not from the database'
+          "'ROLE_USER' as user, 'ROLE_ADMIN' as administrator, 'ROLE_SUPER_ADMIN' who can assign who should be the administrator"
+
+    reservations:
+      parcel_number:
+        'Parcel number'
+      land_area:
+        'Land area [m2]'
+      status:
+        'Status'
+      statuses:
+        '0':
+          'Pending'
+        '1':
+          'Active'
+        '2':
+          'Non-active'
+      to_be_present:
+        'To be present'
+      time:
+        'Time of the reservation'
+      reservation_interval_start:
+       'Interval start'
+      reservation_interval_end:
+       'Interval end'
+      comment:
+        'Comment'
+
+      help:
+        status:
+          "Active is when reservation has accurate time. Non-active is when reservation is finished"
+
+      label:
+        has_time:
+          'The time is already setted for this reservation.'
 
   title:
     index:
@@ -63,15 +108,21 @@ admin:
   index:
     users:
       help:
-        "The 'Is deleted' field delete the user but not from the database. For filters, the role 'ROLE_USER' is the user and 'ROLE_ADMIN' is the administrator."
+        "The 'Is deleted' field delete the user but not from the database."
 
-  edit:
+  buttons:
     save_and_continue:
       'Save and continue editing'
     save_and_view_detail:
       'Save and view details'
     undelete:
       'Undelete'
+    new_password:
+      'New password'
+    my_profile:
+      'My profile'
+    set_time:
+      'Set time'
 
   new:
     save_and_view_detail:
@@ -80,19 +131,59 @@ admin:
   singular:
     user:
       'User'
+    reservation:
+      'Reservation'
+    chemical:
+      'Chemical'
+    plant:
+      'Plant'
 
   plural:
     user:
       'Users'
+    reservation:
+      'Reservations'
+    chemical:
+      'Chemicals'
+    plant:
+      'Plants'
 
   flash:
     entity:
       persisted:
         success:
-          'The {entity} was successfully created.'
+          '<b>{entity_name} "{entity}"</b> was successfully created.'
       updated:
         success:
-          'The {entity} was successfully updated.'
+          '<b>{entity_name} "{entity}"</b> was successfully updated.'
       deleted:
         success:
-          'The {entity} was successfully deleted.'
+          '<b>{entity_name} "{entity}"</b> was successfully deleted.'
+      undeleted:
+        success:
+          '<b>{entity_name} "{entity}"</b> was successfully undeleted.'
+
+    reservations:
+      set_time:
+        success:
+          'Successfully setted time for <b>{reservation}</b> reservation and notification sent.'
+        error:
+          '<b>The notification was not sent but the time setted for reservation {reservation}.</b>'
+        time_between_interval:
+          'The time must be between "<b>{interval_start, date}</b>" and "<b>{interval_end, date}</b>"'
+
+  modal:
+    can_undelete:
+      'There is undo for this operation.'
+
+    set_time:
+      title:
+        'Set time for reservation'
+      content:
+        'Here you can set the time for the reservation and send notification to the user.'
+      send:
+        'Set time and send notification'
+
+    undelete:
+      title:
+        'Do you really want to undelete this item?'

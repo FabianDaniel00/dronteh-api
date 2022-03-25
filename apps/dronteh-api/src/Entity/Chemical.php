@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ChemicalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Locale;
 
 /**
  * @ORM\Entity(repositoryClass=ChemicalRepository::class)
@@ -28,7 +29,7 @@ class Chemical
     private $is_deleted = 0;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name_hu;
 
@@ -38,7 +39,7 @@ class Chemical
     private $name_en;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name_sr_Latn;
 
@@ -107,15 +108,20 @@ class Chemical
         return $this;
     }
 
-    public function getNameSr_Latn(): ?string
+    public function getNameSrLatn(): ?string
     {
         return $this->name_sr_Latn;
     }
 
-    public function setNameSr_Latn(?string $name_sr_Latn): self
+    public function setNameSrLatn(?string $name_sr_Latn): self
     {
         $this->name_sr_Latn = $name_sr_Latn;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->{'name_'.Locale::getDefault()};
     }
 }

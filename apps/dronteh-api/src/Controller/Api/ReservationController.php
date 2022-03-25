@@ -19,7 +19,6 @@ use App\JsonApi\Document\Reservation\ReservationsDocument;
 use App\JsonApi\Transformer\ReservationResourceTransformer;
 use App\JsonApi\Hydrator\Reservation\CreateReservationHydrator;
 use App\JsonApi\Hydrator\Reservation\UpdateReservationHydrator;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -68,12 +67,9 @@ class ReservationController extends Controller
             new Reservation()
         );
 
-        $differenceBetweenInterval = 7; //days
-        if ($reservation->getReservationIntervalStart()->modify('+'.$differenceBetweenInterval.' days') > $reservation->getReservationIntervalEnd()) {
-            throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.less_difference', ['%day%' => $differenceBetweenInterval], 'api'));
-        }
-
         $reservation->setUser($currentUser);
+
+        $this->checkIntervalDifference(7, $reservation, $translator);
 
         $this->validate($reservation);
 
@@ -153,6 +149,8 @@ class ReservationController extends Controller
             throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.time', ['%day%' => $valueBeforeAction], 'api'));
         }
 
+        $this->checkIntervalDifference(7, $reservation, $translator);
+
         $reservation = $this->jsonApi()->hydrate(
             new UpdateReservationHydrator($this->entityManager, $this->jsonApi()->getExceptionFactory()),
             $reservation
@@ -188,55 +186,13 @@ class ReservationController extends Controller
         return $this->respondNoContent();
     }
 
-    /**
-     * @Route("/{id}/send_notification", name="send_reservation_notification", methods="POST", requirements={"id"="\d+"})
-     */
-    public function sendNotification(Request $request, ReservationRepository $reservationRepository, MailerInterface $mailer, TranslatorInterface $translator, int $id): Response
-    {
-        $requestData = json_decode($request->getContent(), true);
-        $requestData = $requestData['data'];
-
-        $time = new \DateTime($requestData['time']);
-        if($time === null || $time === '') {
-            throw new BadRequestHttpException($translator->trans('api.reservations.notification.time_null', [], 'api'));
+    private function checkIntervalDifference(int $differenceBetweenInterval, Reservation $reservation, TranslatorInterface $translator): void {
+        if ($reservation->getReservationIntervalStart()->modify('+'.$differenceBetweenInterval.' days') > $reservation->getReservationIntervalEnd()) {
+            throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.less_difference', ['%day%' => $differenceBetweenInterval], 'api'));
         }
 
-        $reservation = $reservationRepository->find($id);
-        if($reservation === null) {
-            throw $this->createNotFoundException($translator->trans('api.reservations.not_found', [], 'api'));
+        if ($reservation->getReservationIntervalStart() < new \DateTime('now') ) {
+            throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, $translator->trans('api.reservations.edit.start_interval', [], 'api'));
         }
-
-        $reservation->setTime($time);
-
-        $this->entityManager->flush();
-
-        $userReservation = $reservation->getUser();
-
-        $locale = $userReservation->getLocale();
-
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->getParameter('sender_email'), $translator->trans('mails.reservation_notification.name', [], 'mails', $locale)))
-            ->to(new Address($userReservation->getEmail()))
-            ->subject($translator->trans('mails.reservation_notification.subject', ['%parcel_number%' => $reservation->getParcelNumber()], 'mails', $locale))
-
-            // path of the Twig template to render
-            ->htmlTemplate('reservation/reservation_notification.html.twig')
-
-            // pass variables (name => value) to the template
-            ->context([
-                'name' => $userReservation->getFirstname().' '.$userReservation->getLastname(),
-                'time' => $time,
-                'reservation' => $reservation,
-                'locale' => $locale,
-                'new_reservation' => false,
-            ]);
-
-        try {
-            $mailer->send($email);
-        } catch(TransportExceptionInterface $e) {
-            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, $translator->trans('api.reservations.notification.email_error', [], 'api'));
-        }
-
-        return $this->respondNoContent();
     }
 }

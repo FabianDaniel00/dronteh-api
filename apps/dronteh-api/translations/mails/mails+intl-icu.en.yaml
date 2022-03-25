@@ -42,32 +42,32 @@ mails:
     header:
       'Hi {name}! DronTeh Reservation.'
     time:
-      'Your accurate date and time for your reservation is "{time, date} - {time, time, short}". See the details below:'
+      'Your accurate date and time for your reservation is "<b>{time, date} - {time, time, short}</b>". See the details below:'
     time_interval:
-      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "{time_interval_start, date} and {time_interval_end, date}". See the details below:'
+      'Your reservation is pending. We will notify you about the accurate date and time via e-mail which is between "<b>{time_interval_start, date} and {time_interval_end, date}</b>". See the details below:'
     details:
       parcel_number:
-        'Parcel number: {parcel_number}'
+        'Parcel number: <b>{parcel_number}</b>'
       land_area:
-        'Area of the land is {land_area}'
+        'Area of the land is <b>{land_area}</b>'
       chemical:
-        'Chemical is {chemical}'
+        'Chemical is <b>{chemical}</b>'
       time:
-        'The accurate time of the spraying is "{time, date} - {time, time, short}"'
+        'The accurate time of the spraying is "<b>{time, date} - {time, time, short}</b>"'
       to_be_present: >-
         {to_be_present, select,
-          true {You will be there when the spray happening}
-          false {You will't be there when the spray happening}
-          other {No information}
+          1 {You <b>will be there</b> when the spray happening}
+          0 {You <b>will't be there</b> when the spray happening}
+          other {You will be there: <b>no information</b>}
         }
       plant:
-        "Plant what we're going to spray: {plant}"
+        "Plant what we're going to spray: <b>{plant}</b>"
       status: >-
         {status, select,
-          0 {The reservation is non-active}
-          1 {The reservation is pending}
-          2 {The reservation is in process}
-          other {No information}
+          0 {The reservation is <b>pending</b>}
+          1 {The reservation is <b>active</b>}
+          2 {The reservation is <b>non-active</b>}
+          other {Status: <b>no information</b>}
         }
       comment:
         "Comment: '{comment}'"

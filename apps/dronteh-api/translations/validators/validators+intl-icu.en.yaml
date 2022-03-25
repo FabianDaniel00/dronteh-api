@@ -2,15 +2,15 @@ validators:
   reset_password_request:
     email:
       not_blank:
-        'Please enter your e-mail'
+        'Please enter your e-mail.'
 
   change_password:
     plain_password:
       first_options:
         not_blank:
-          'Please enter a password'
+          'Please enter a password.'
         length:
-          'Your password should be at least {limit} characters'
+          'Your password should be at least {limit} characters.'
         label:
           'New password'
         placeholder:
@@ -26,12 +26,16 @@ validators:
   users:
     constraint:
       unique:
-        'This email is already in use'
+        'This email is already in use.'
       tel:
         phone_number:
-          'This is not a valid phone number'
+          'This is not a valid phone number.'
       captcha:
-        'The captcha is not valid'
-      role:
-        invalid:
-          'The role you give is invalid'
+        'The captcha is not valid.'
+      role: >-
+        {count, plural,
+          one {'{string, string}' role is invalid.}
+          other {'{string, string}' roles are invalid.}
+        }
+      locale:
+        "The '{string}' is not supported language."z

@@ -2,15 +2,15 @@ validators:
   reset_password_request:
     email:
       not_blank:
-        'Unesite svoju e-mail'
+        'Unesite svoju e-mail.'
 
   change_password:
     plain_password:
       first_options:
         not_blank:
-          'Molimo unesite lozinku'
+          'Molimo unesite lozinku.'
         length:
-          'Vaša lozinka treba da ima najmanje {limit} znakova'
+          'Vaša lozinka treba da ima najmanje {limit} znakova.'
         label:
           'Nova lozinka'
         placeholder:
@@ -26,12 +26,16 @@ validators:
   users:
     constraint:
       unique:
-        'Ovaj e-mail je već u upotrebi'
+        'Ovaj e-mail je već u upotrebi.'
       tel:
         phone_number:
-          'Ovo nije ispravan broj telefona'
+          'Ovo nije ispravan broj telefona.'
       captcha:
-        'Captcha nije važeća'
-      role:
-        invalid:
-          'Uloga koju ste dali je nevažeća'
+        'Captcha nije važeća.'
+      role: >-
+        {count, plural,
+          one {Uloga '{string, string}' je nevažeća.}
+          other {Uloge '{string, string}' su nevažeće.}
+        }
+      locale:
+        "'{string}' nije podržan jezik."

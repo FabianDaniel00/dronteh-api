@@ -42,34 +42,34 @@ mails:
     header:
       'Helló {name}! DronTeh Foglalás.'
     time:
-      'Foglalásának pontos dátuma és időpontja "{time, date} - {time, time, short}". Lásd a részleteket alább:'
+      'Foglalásának pontos dátuma és időpontja "<b>{time, date} - {time, time, short}</b>". Lásd a részleteket alább:'
     time_interval:
-      'Foglalása függőben van. Majd e-mailben értesítjük önt a pontos dátumról és időröl ami "{time_interval_start, date} és {time_interval_end, date}" között van. Lásd a részleteket alább:'
+      'Foglalása függőben van. Majd e-mailben értesítjük önt a pontos dátumról és időröl ami "<b>{time_interval_start, date} és {time_interval_end, date}</b>" között van. Lásd a részleteket alább:'
     details:
       parcel_number:
-        'Parcella szám: {parcel_number}'
+        'Parcella szám: <b>{parcel_number}</b>'
       land_area:
-        'A föld területe {land_area}'
+        'A föld területe <b>{land_area}</b>'
       chemical:
-        'A vegyszer amit használni fogunk: {chemical}'
+        'A vegyszer amit használni fogunk: <b>{chemical}</b>'
       time:
-        'A permetezés pontos dátuma és időpontja "{time, date} - {time, time, short}"'
+        'A permetezés pontos dátuma és időpontja "<b>{time, date} - {time, time, short}</b>"'
       to_be_present: >-
         {to_be_present, select,
-          true {Ott lesz, amikor a permetezés történik}
-          false {Nem lesz ott, amikor a permetezés történik}
-          other {Nincs információ}
+          1 {<b>Ott lesz</b>, amikor a permetezés történik}
+          0 {<b>Nem lesz ott</b>, amikor a permetezés történik}
+          other {Ott lesz: <b>nincs információ</b>}
         }
       plant:
-        "A növény amit permetezni fogunk: {plant}"
+        "A növény amit permetezni fogunk: <b>{plant}</b>"
       status: >-
         {status, select,
-          0 {A foglalás nem aktív}
-          1 {A foglalás függőben}
-          2 {A foglalás folyamatban}
-          other {Nincs információ}
+          0 {A foglalás <b>függőben</b>}
+          1 {A foglalás <b>aktív</b>}
+          2 {A foglalás <b>nem aktív</b>}
+          other {Állapot: <b>nincs információ</b>}
         }
       comment: >-
-        "Hozzászólás: {comment}"
+        "Hozzászólás: '{comment}'"
       no_comment:
         'hozzászólás: -Nincs megjegyzés-'

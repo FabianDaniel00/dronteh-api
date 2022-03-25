@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PlantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Locale;
 
 /**
  * @ORM\Entity(repositoryClass=PlantRepository::class)
@@ -84,15 +85,20 @@ class Plant
         return $this;
     }
 
-    public function getNameSr_Latn(): ?string
+    public function getNameSrLatn(): ?string
     {
         return $this->name_sr_Latn;
     }
 
-    public function setNameSr_Latn(?string $name_sr_Latn): self
+    public function setNameSrLatn(?string $name_sr_Latn): self
     {
         $this->name_sr_Latn = $name_sr_Latn;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->{'name_'.Locale::getDefault()};
     }
 }

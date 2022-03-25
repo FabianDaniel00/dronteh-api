@@ -12,10 +12,28 @@ admin:
     sr_Latn:
       'Szerb'
 
+  'null':
+    'Üres'
+  not_null:
+    'Nem üres'
+
   list:
+    id:
+      'ID'
+    created_at:
+      'Létrehozva'
+    updated_at:
+      'Módosítva'
+    is_deleted:
+      'Törölve'
+    not_updated:
+      '-nem volt módosítva-'
+
+    help:
+      is_deleted:
+        'Ez arra van hogy töröljük, de nem az adatbázisból'
+
     users:
-      id:
-        'ID'
       email:
         'E-mail'
       password:
@@ -26,21 +44,17 @@ admin:
         'Vezetéknév'
       tel:
         'Tel'
-      created_at:
-        'Létrehozva'
-      updated_at:
-        'Módosítva'
       role:
-        'Jogosultság'
+        'Jogosultságok'
       roles:
         user:
           'Felhasználó'
         admin:
           'Adminisztrátor'
+        super_admin:
+          'Szuper adminisztrátor'
       is_verified:
         'Ellenőrizve'
-      is_deleted:
-        'Törölve'
       locale:
         'Nyelv'
       last_verification_email_sent:
@@ -48,9 +62,40 @@ admin:
 
       help:
         role:
-          "'ROLE_USER' mint felhasználó vagy 'ROLE_ADMIN' mint adminisztrátor"
-        is_deleted:
-          'Ez arra van hogy töröljük a felhasználót de nem az adatbázisból'
+          "'ROLE_USER' mint felhasználó, 'ROLE_ADMIN' mint adminisztrátor, 'ROLE_SUPER_ADMIN', aki hozzárendelheti, hogy ki legyen az adminisztrátor"
+
+    reservations:
+      parcel_number:
+        'Parcella szám'
+      land_area:
+        'Terület [m2]'
+      status:
+        'Állapot'
+      statuses:
+        '0':
+          'Függőben lévő'
+        '1':
+          'Aktív'
+        '2':
+          'Nem aktív'
+      to_be_present:
+        'Jelen lenni'
+      time:
+        'A foglalás időpontja'
+      reservation_interval_start:
+       'Intervallum kezdete'
+      reservation_interval_end:
+       'Intervallum vége'
+      comment:
+        'Komment'
+
+      help:
+        status:
+          "Aktív, ha van a foglalásnak pontos időpontja. Nem aktív, ha a foglalás befejeződött."
+
+      label:
+        has_time:
+          'Erre a foglalásra már van idő beállítva.'
 
   title:
     index:
@@ -63,15 +108,21 @@ admin:
   index:
     users:
       help:
-        "A 'Törölve' mező törli a felhasználót de nem az adatbázisból. A szűrőknél a jogosultság 'ROLE_USER' a felhasználó, a 'ROLE_ADMIN' az adminisztrátor."
+        "A 'Törölve' mező törli a felhasználót de nem az adatbázisból."
 
-  edit:
+  buttons:
     save_and_continue:
       'Mentés és szerkesztés folytatása'
     save_and_view_detail:
       'Mentés és részletek megtekintése'
     undelete:
       'Törlés visszavonása'
+    new_password:
+      'Új jelszó'
+    my_profile:
+      'Fiókom'
+    set_time:
+      'Idő beállítása'
 
   new:
     save_and_view_detail:
@@ -80,19 +131,59 @@ admin:
   singular:
     user:
       'Felhasználó'
+    reservation:
+      'Foglalás'
+    chemical:
+      'Vegyszer'
+    plant:
+      'Növény'
 
   plural:
     user:
       'Felhasználók'
+    reservation:
+      'Foglalások'
+    chemical:
+      'Vegyszerek'
+    plant:
+      'Növények'
 
   flash:
     entity:
       persisted:
         success:
-          'A/Az {entity} sikeresen léterhozva.'
+          '<b>{entity_name} "{entity}"</b> sikeresen léterhozva.'
       updated:
         success:
-          'A/Az {entity} sikeresen frissítve.'
+          '<b>{entity_name} "{entity}"</b> sikeresen frissítve.'
       deleted:
         success:
-          'A/Az {entity} sikeresen törölve.'
+          '<b>{entity_name} "{entity}"</b> sikeresen törölve.'
+      undeleted:
+        success:
+          '<b>{entity_name} "{entity}"</b> törlése sikeresen visszavonva.'
+
+    reservations:
+      set_time:
+        success:
+          'Sikeresen beállított időpont a(z) <b>{reservation}</b> foglaláshoz, és az értesítés elküldve.'
+        error:
+          '<b>Az értesítést nem lett elküldve, de a {reservation} foglaláshoz sikeresen be lett állítva az időpont.</b>'
+        time_between_interval:
+          'Az idő "<b>{interval_start, date}</b>" és "<b>{interval_end, date}</b>" között kell legyen'
+
+  modal:
+    can_undelete:
+      'Ez a művelet visszavonható.'
+
+    set_time:
+      title:
+        'Állítsa be a foglalás időpontját'
+      content:
+        'Itt állíthatja be a foglalás időpontját és értesítést küldhet a felhasználónak.'
+      send:
+        'Idő beállítása és értesítés küldése'
+
+    undelete:
+      title:
+        'Biztos benne, hogy visszavonja a törlést erre az elemre?'

@@ -3,11 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -15,31 +14,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ArrayFilter;
+use App\Controller\Admin\AbstractUndeleteCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
-class UserCrudController extends AbstractCrudController
+class UserCrudController extends AbstractUndeleteCrudController
 {
-    private AdminUrlGenerator $adminUrlGenerator;
     private TranslatorInterface $translator;
-    private ManagerRegistry $doctrine;
 
-    public function __construct(AdminUrlGenerator $adminUrlGenerator, TranslatorInterface $translator, ManagerRegistry $doctrine)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->adminUrlGenerator = $adminUrlGenerator;
         $this->translator = $translator;
-        $this->doctrine = $doctrine;
     }
 
     public static function getEntityFqcn(): string
@@ -50,29 +41,44 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $supportedLocales = explode('|', $this->getParameter('app.supported_locales'));
-        $locales = [null => $this->getParameter('app.default_locale')];
+        $locales = [];
         foreach ($supportedLocales as $supportedLocale) {
             $locales['admin.locales.'.$supportedLocale] = $supportedLocale;
         }
 
+        $rolesField = ArrayField::new('roles', 'admin.list.users.role')
+            ->setTemplatePath('@EasyAdmin/crud/field/roles-array.html.twig')
+        ;
+        $createdAt = DateTimeField::new('created_at', 'admin.list.created_at');
+        $updatedAt = DateTimeField::new('updated_at', 'admin.list.updated_at');
+
+        if ($pageName === Crud::PAGE_EDIT) {
+            $createdAt->addCssClass('d-none');
+            $updatedAt->addCssClass('d-none');
+        } else {
+            $createdAt->hideWhenCreating();
+            $updatedAt->hideWhenCreating();
+        }
+
+        if (!in_array('ROLE_SUPER_ADMIN', $this->getUser()->getRoles())) $rolesField->hideOnForm();
+
+        if ($pageName !== Crud::PAGE_DETAIL) $rolesField->setHelp('admin.list.users.help.role');
+
         return [
-            IdField::new('id')->setLabel('admin.list.users.id')->hideOnForm(),
-            EmailField::new('email')->setLabel('admin.list.users.email'),
-            TextField::new('password')->setFormType(PasswordType::class)->setLabel('admin.list.users.password')->onlyWhenCreating(),
-            HiddenField::new('password')->setLabel('admin.list.users.password')->onlyWhenUpdating(),
-            TextField::new('firstname')->setLabel('admin.list.users.firstname')->setColumns(3),
-            TextField::new('lastname')->setLabel('admin.list.users.lastname')->setColumns(3),
+            IdField::new('id', 'admin.list.id')->hideOnForm(),
+            EmailField::new('email', 'admin.list.users.email'),
+            TextField::new('password', 'admin.list.users.password')->setFormType(PasswordType::class)->onlyWhenCreating(),
+            HiddenField::new('password', 'admin.list.users.password')->onlyWhenUpdating(),
+            TextField::new('firstname', 'admin.list.users.firstname')->setColumns(4),
+            TextField::new('lastname', 'admin.list.users.lastname')->setColumns(4),
             FormField::addRow(),
-            TelephoneField::new('tel')->setLabel('admin.list.users.tel'),
-            ArrayField::new('roles')
-                ->setTemplatePath('bundles/EasyAdminBundle/crud/field/array.html.twig')
-                ->setLabel('admin.list.users.role')
-                ->setHelp('admin.list.users.help.role'),
-            ChoiceField::new('locale')->setLabel('admin.list.users.locale')->setChoices($locales),
-            DateTimeField::new('created_at')->setLabel('admin.list.users.created_at')->hideOnForm(),
-            DateTimeField::new('updated_at')->setLabel('admin.list.users.updated_at')->hideOnForm(),
-            BooleanField::new('isVerified')->setLabel('admin.list.users.is_verified')->renderAsSwitch(false)->hideOnForm(),
-            BooleanField::new('is_deleted')->setLabel('admin.list.users.is_deleted')->setHelp('admin.list.users.help.is_deleted')->hideOnForm(),
+            TelephoneField::new('tel', 'admin.list.users.tel'),
+            $rolesField,
+            ChoiceField::new('locale', 'admin.list.users.locale')->setChoices($locales),
+            $createdAt,
+            $updatedAt,
+            BooleanField::new('isVerified', 'admin.list.users.is_verified')->renderAsSwitch(false)->hideOnForm(),
+            BooleanField::new('is_deleted', 'admin.list.is_deleted')->renderAsSwitch(false)->setHelp('admin.list.help.is_deleted')->hideOnForm(),
         ];
     }
 
@@ -82,11 +88,34 @@ class UserCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('admin.singular.user')
             ->setEntityLabelInPlural('admin.plural.user')
 
-            ->setPageTitle(Crud::PAGE_INDEX, 'admin.title.index')
-            ->setPageTitle(Crud::PAGE_DETAIL, 'admin.title.detail')
-            ->setPageTitle(Crud::PAGE_EDIT, 'admin.title.edit')
-
             ->setHelp(Crud::PAGE_INDEX, $this->translator->trans('admin.index.users.help', [], 'admin'))
+        ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $newPassword = Action::new('newPassword', 'admin.buttons.new_password', 'fas fa-lock')
+            ->linkToRoute('app_forgot_password_request')
+            ->setHtmlAttributes(['target' => '_blank'])
+            ->displayIf(function ($entity) {
+                return $entity->getId() === $this->getUser()->getId();
+            })
+        ;
+
+        return $actions
+            ->add(Crud::PAGE_EDIT, $newPassword)
+
+            ->reorder(Crud::PAGE_EDIT, [
+                Action::INDEX,
+                Action::NEW,
+                'newPassword',
+                Action::DELETE,
+                'undelete',
+                Action::DETAIL,
+                Action::SAVE_AND_CONTINUE,
+                'saveAndViewDetail',
+                Action::SAVE_AND_RETURN,
+            ])
         ;
     }
 
@@ -99,64 +128,14 @@ class UserCrudController extends AbstractCrudController
         }
 
         return $filters
-            ->add(BooleanFilter::new('is_deleted')->setLabel($this->translator->trans('admin.list.users.is_deleted', [], 'admin')))
-            ->add(BooleanFilter::new('isVerified')->setLabel($this->translator->trans('admin.list.users.is_verified', [], 'admin')))
-            ->add(DateTimeFilter::new('created_at')->setLabel($this->translator->trans('admin.list.users.created_at', [], 'admin')))
-            ->add(DateTimeFilter::new('updated_at')->setLabel($this->translator->trans('admin.list.users.updated_at', [], 'admin')))
-            ->add(ArrayFilter::new('roles')
-                ->setLabel($this->translator->trans('admin.list.users.role', [], 'admin'))
+            ->add(BooleanFilter::new('isVerified', $this->translator->trans('admin.list.users.is_verified', [], 'admin')))
+            ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
+            ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
+            ->add(ArrayFilter::new('roles', $this->translator->trans('admin.list.users.role', [], 'admin'))
                 ->setChoices($locales)
+                ->canSelectMultiple()
             )
+            ->add(BooleanFilter::new('is_deleted', $this->translator->trans('admin.list.is_deleted', [], 'admin')))
         ;
-    }
-
-    protected function getRedirectResponseAfterSave(AdminContext $context, string $action): RedirectResponse
-    {
-        $submitButtonName = $context->getRequest()->request->all()['ea']['newForm']['btn'];
-
-        if ('saveAndViewDetail' === $submitButtonName) {
-            $url = $this->adminUrlGenerator
-                ->setAction(Action::DETAIL)
-                ->setEntityId($context->getEntity()->getPrimaryKeyValue())
-                ->generateUrl();
-
-            return $this->redirect($url);
-        }
-
-        return parent::getRedirectResponseAfterSave($context, $action);
-    }
-
-    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        $entityInstance->setIsDeleted(1);
-        $entityManager->flush();
-    }
-
-    public function undelete(AdminContext $context): RedirectResponse
-    {
-        $entity = $context->getEntity()->getInstance();
-
-        $entity->setIsDeleted(0);
-        $this->doctrine->getManager()->flush();
-
-        return $this->redirect($this->adminUrlGenerator
-            ->setAction(Action::EDIT)
-            ->generateUrl()
-        );
-    }
-
-    public function batchUndelete(BatchActionDto $batchActionDto): RedirectResponse
-    {
-        $entityFqcn = $batchActionDto->getEntityFqcn();
-
-        $entityManager = $this->doctrine->getManagerForClass($batchActionDto->getEntityFqcn());
-        foreach ($batchActionDto->getEntityIds() as $id) {
-            $entity = $entityManager->find($entityFqcn, $id);
-            $entity->setIsDeleted(0);
-        }
-
-        $entityManager->flush();
-
-        return $this->redirect($batchActionDto->getReferrerUrl());
     }
 }

@@ -2,22 +2,22 @@
 
 <p>
     {% if new_reservation %}
-        {{ 'mails.reservation_notification.time_interval'|trans({'%time_interval_start%': time_interval_start, '%time_interval_end%': time_interval_end}, 'mails', locale) }}
+        {{ 'mails.reservation_notification.time_interval'|trans({'%time_interval_start%': time_interval_start, '%time_interval_end%': time_interval_end}, 'mails', locale)|raw }}
     {% else %}
-        {{ 'mails.reservation_notification.time'|trans({'%time%': time}, 'mails', locale) }}
+        {{ 'mails.reservation_notification.time'|trans({'%time%': time}, 'mails', locale)|raw }}
     {% endif %}
 </p>
 
 <ul>
-    <li>{{ 'mails.reservation_notification.details.parcel_number'|trans({'%parcel_number%': reservation.getParcelNumber()}, 'mails', locale) }}</li>
-    <li>{{ 'mails.reservation_notification.details.land_area'|trans({'%land_area%': reservation.getLandArea()}, 'mails', locale) }} m<sup>2</sup></li>
-    <li>{{ 'mails.reservation_notification.details.chemical'|trans({'%chemical%': attribute(reservation.getChemical(), 'getName'~locale|capitalize)}, 'mails', locale) }}</li>
+    <li>{{ 'mails.reservation_notification.details.parcel_number'|trans({'%parcel_number%': reservation.getParcelNumber()}, 'mails', locale)|raw }}</li>
+    <li>{{ 'mails.reservation_notification.details.land_area'|trans({'%land_area%': reservation.getLandArea()}, 'mails', locale)|raw }} m<sup>2</sup></li>
+    <li>{{ 'mails.reservation_notification.details.chemical'|trans({'%chemical%': attribute(reservation.getChemical(), 'getName'~locale|capitalize|replace({'_': ''}))}, 'mails', locale)|raw }}</li>
     {% if not new_reservation %}
-        <li>{{ 'mails.reservation_notification.details.time'|trans({'%time%': time}, 'mails', locale) }}</li>
+        <li>{{ 'mails.reservation_notification.details.time'|trans({'%time%': time}, 'mails', locale)|raw }}</li>
     {% endif %}
-    <li>{{ 'mails.reservation_notification.details.to_be_present'|trans({'%to_be_present%': reservation.getToBePresent()}, 'mails', locale) }}</li>
-    <li>{{ 'mails.reservation_notification.details.plant'|trans({'%plant%': attribute(reservation.getPlant(), 'getName'~locale|capitalize)}, 'mails', locale) }}</li>
-    <li>{{ 'mails.reservation_notification.details.status'|trans({'%status%': reservation.getStatus()}, 'mails', locale) }}</li>
+    <li>{{ 'mails.reservation_notification.details.to_be_present'|trans({'%to_be_present%': reservation.getToBePresent()}, 'mails', locale)|raw }}</li>
+    <li>{{ 'mails.reservation_notification.details.plant'|trans({'%plant%': attribute(reservation.getPlant(), 'getName'~locale|capitalize|replace({'_': ''}))}, 'mails', locale)|raw }}</li>
+    <li>{{ 'mails.reservation_notification.details.status'|trans({'%status%': reservation.getStatus()}, 'mails', locale)|raw }}</li>
     <li>
         {% if reservation.getComment() %}
             {{ 'mails.reservation_notification.details.comment'|trans({'%comment%': reservation.getComment()}, 'mails', locale) }}

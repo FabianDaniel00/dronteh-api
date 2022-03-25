@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Entity\Reservation;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -19,11 +20,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
-    private AdminUrlGenerator $routeBuilder;
+    private AdminUrlGenerator $adminUrlGenerator;
 
-    public function __construct(AdminUrlGenerator $routeBuilder)
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
     {
-        $this->routeBuilder = $routeBuilder;
+        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     /**
@@ -31,7 +32,8 @@ class DashboardController extends AbstractDashboardController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser() && in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+        $currentUser = $this->getUser();
+        if ($currentUser && count(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $currentUser->getRoles()))) {
             return $this->redirectToRoute('admin_dashboard');
         }
 
@@ -66,7 +68,7 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        return $this->redirect($this->routeBuilder->setController(UserCrudController::class)
+        return $this->redirect($this->adminUrlGenerator->setController(UserCrudController::class)
             ->set('filters[is_deleted][comparison]', '0')
             ->generateUrl()
         );
@@ -80,6 +82,17 @@ class DashboardController extends AbstractDashboardController
             ->setTranslationDomain('admin')
 
             ->renderContentMaximized()
+
+            ->setFaviconPath('public/build/images/favicon.png')
+        ;
+    }
+
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->setPageTitle(Crud::PAGE_INDEX, 'admin.title.index')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'admin.title.detail')
+            ->setPageTitle(Crud::PAGE_EDIT, 'admin.title.edit')
         ;
     }
 
@@ -88,6 +101,11 @@ class DashboardController extends AbstractDashboardController
         return [
             MenuItem::section('admin.plural.user'),
             MenuItem::linkToCrud('admin.plural.user', 'fas fa-users', User::class)
+                ->setQueryParameter('filters[is_deleted][comparison]', '0')
+            ,
+
+            MenuItem::section('admin.plural.reservation'),
+            MenuItem::linkToCrud('admin.plural.reservation', 'fa fa-ticket', Reservation::class)
                 ->setQueryParameter('filters[is_deleted][comparison]', '0')
             ,
 
@@ -100,26 +118,48 @@ class DashboardController extends AbstractDashboardController
 
     public function configureUserMenu(UserInterface $user): UserMenu
     {
+        $urlToProfile = $this->adminUrlGenerator
+            ->setController(UserCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($user->getId())
+        ;
+
         return parent::configureUserMenu($user)
             ->setGravatarEmail($user->getEmail())
+
+            ->addMenuItems([
+                MenuItem::linkToUrl('admin.buttons.my_profile', 'fas fa-user-circle', $urlToProfile),
+            ]);
         ;
     }
 
     public function configureAssets(): Assets
     {
-        return Assets::new()->addCssFile('../../assets/css/admin.css');
+        return Assets::new()
+            ->addWebpackEncoreEntry('admin')
+        ;
     }
 
     public function configureActions(): Actions
     {
-        $saveAndViewDetail = Action::new('saveAndViewDetail', 'admin.edit.save_and_view_detail', 'fas fa-eye')
+        $saveAndViewDetail = Action::new('saveAndViewDetail', 'admin.buttons.save_and_view_detail', 'fas fa-eye')
             ->displayAsButton()
-            ->setHtmlAttributes(['name' => 'ea[newForm][btn]', 'value' => 'saveAndViewDetail'])
-            ->linkToCrudAction(Action::SAVE_AND_CONTINUE)
+            ->setCssClass('action-saveAndViewDetail btn btn-success')
+            ->setHtmlAttributes([
+                'name' => 'ea[newForm][btn]',
+                'value' => 'saveAndViewDetail',
+            ])
+            ->linkToCrudAction(Action::SAVE_AND_RETURN)
         ;
 
-        $undelete = Action::new('undelete', 'admin.edit.undelete', 'fas fa-undo')
-            ->setHtmlAttributes(['name' => 'ea[newForm][btn]', 'value' => 'undelete'])
+        $undelete = Action::new('undelete', 'admin.buttons.undelete', 'fas fa-undo text-warning')
+            ->setHtmlAttributes([
+                'name' => 'ea[newForm][btn]',
+                'value' => 'undelete',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#modal-undelete',
+            ])
+            ->addCssClass('action-undelete text-warning')
             ->linkToCrudAction('undelete')
             ->displayIf(static function ($entity) {
                 return method_exists($entity, 'setIsDeleted') && $entity->isDeleted();
@@ -129,20 +169,24 @@ class DashboardController extends AbstractDashboardController
         return Actions::new()
             // add actions
             ->addBatchAction(Action::BATCH_DELETE)
-            ->addBatchAction(Action::new('batchUndelete', 'admin.edit.undelete', 'fas fa-undo')
+            ->addBatchAction(Action::new('batchUndelete', 'admin.buttons.undelete', 'fas fa-undo')
                 ->linkToCrudAction('batchUndelete')
-                ->addCssClass('btn btn-secondary')
+                ->addCssClass('btn text-info')
             )
 
             ->add(Crud::PAGE_INDEX, Action::NEW)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, Action::EDIT)
+            ->add(Crud::PAGE_INDEX, $undelete)
+            ->add(Crud::PAGE_INDEX, Action::DELETE)
 
+            ->add(Crud::PAGE_DETAIL, Action::NEW)
             ->add(Crud::PAGE_DETAIL, Action::INDEX)
             ->add(Crud::PAGE_DETAIL, Action::EDIT)
             ->add(Crud::PAGE_DETAIL, Action::DELETE)
             ->add(Crud::PAGE_DETAIL, $undelete)
 
+            ->add(Crud::PAGE_EDIT, Action::NEW)
             ->add(Crud::PAGE_EDIT, Action::INDEX)
             ->add(Crud::PAGE_EDIT, Action::DELETE)
             ->add(Crud::PAGE_EDIT, $undelete)
@@ -157,9 +201,19 @@ class DashboardController extends AbstractDashboardController
             ->add(Crud::PAGE_NEW, Action::SAVE_AND_RETURN)
 
             //reorder actions
+            ->reorder(Crud::PAGE_INDEX, [Action::EDIT, Action::DETAIL, 'undelete', 'delete'])
             ->reorder(Crud::PAGE_NEW, [Action::INDEX, Action::SAVE_AND_ADD_ANOTHER, 'saveAndViewDetail', Action::SAVE_AND_RETURN])
-            ->reorder(Crud::PAGE_DETAIL, [Action::INDEX, Action::EDIT, Action::DELETE, 'undelete'])
-            ->reorder(Crud::PAGE_EDIT, [Action::INDEX, Action::DELETE, 'undelete', Action::DETAIL, Action::SAVE_AND_CONTINUE, 'saveAndViewDetail', Action::SAVE_AND_RETURN])
+            ->reorder(Crud::PAGE_DETAIL, [Action::INDEX, Action::NEW, Action::EDIT, Action::DELETE, 'undelete'])
+            ->reorder(Crud::PAGE_EDIT, [
+                Action::INDEX,
+                Action::NEW,
+                Action::DELETE,
+                'undelete',
+                Action::DETAIL,
+                Action::SAVE_AND_CONTINUE,
+                'saveAndViewDetail',
+                Action::SAVE_AND_RETURN,
+            ])
 
             //update actions
             ->update(Crud::PAGE_NEW, Action::INDEX,
@@ -167,7 +221,7 @@ class DashboardController extends AbstractDashboardController
             ->update(Crud::PAGE_NEW, Action::SAVE_AND_RETURN,
                 fn (Action $action) => $action->setIcon('fas fa-plus'))
             ->update(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER,
-                fn (Action $action) => $action->setIcon('fas fa-plus-square'))
+                fn (Action $action) => $action->setIcon('fas fa-plus-square')->setCssClass('action-saveAndAddAnother btn btn-warning'))
 
             ->update(Crud::PAGE_INDEX, Action::BATCH_DELETE,
                 fn (Action $action) => $action->setIcon('fa fa-trash-o'))
@@ -177,6 +231,13 @@ class DashboardController extends AbstractDashboardController
                 fn (Action $action) => $action->setIcon('fas fa-eye'))
             ->update(Crud::PAGE_INDEX, Action::EDIT,
                 fn (Action $action) => $action->setIcon('far fa-edit'))
+            ->update(Crud::PAGE_INDEX, Action::DELETE,
+                fn (Action $action) => $action
+                    ->setIcon('fa fa-trash-o text-danger')
+                    ->displayIf(static function ($entity) {
+                        return !method_exists($entity, 'setIsDeleted') || !$entity->isDeleted();
+                    })
+            )
 
             ->update(Crud::PAGE_DETAIL, Action::INDEX,
                 fn (Action $action) => $action->setIcon('fas fa-angle-left'))
@@ -186,20 +247,24 @@ class DashboardController extends AbstractDashboardController
                 fn (Action $action) => $action->displayIf(static function ($entity) {
                     return !method_exists($entity, 'setIsDeleted') || !$entity->isDeleted();
                 }))
+            ->update(Crud::PAGE_DETAIL, 'undelete',
+                fn (Action $action) => $action->addCssClass('btn'))
 
             ->update(Crud::PAGE_EDIT, Action::INDEX,
                 fn (Action $action) => $action->setIcon('fas fa-angle-left'))
             ->update(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE,
-                fn (Action $action) => $action->setLabel('admin.edit.save_and_continue'))
+                fn (Action $action) => $action->setLabel('admin.buttons.save_and_continue'))
             ->update(Crud::PAGE_EDIT, Action::SAVE_AND_RETURN,
                 fn (Action $action) => $action->setIcon('fas fa-save'))
             ->update(Crud::PAGE_EDIT, Action::DETAIL,
-                fn (Action $action) => $action->setIcon('fas fa-eye'))
+                fn (Action $action) => $action->setIcon('fas fa-eye')->setCssClass('action-detail btn btn-info'))
             ->update(Crud::PAGE_EDIT, Action::DELETE,
                 fn (Action $action) => $action->displayIf(static function ($entity) {
                     return !method_exists($entity, 'setIsDeleted') || !$entity->isDeleted();
                 })
             )
+            ->update(Crud::PAGE_EDIT, 'undelete',
+                fn (Action $action) => $action->addCssClass('btn'))
         ;
     }
 }

@@ -58,7 +58,7 @@ class PlantResourceTransformer extends AbstractResource
     {
         return [
             'name' => function (Plant $plant) {
-                return $plant->{'getName'.ucfirst($this->locale)}();
+                return $plant->{'getName'.ucfirst(str_replace('_', '', $this->locale))}();
             },
         ];
     }

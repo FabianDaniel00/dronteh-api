@@ -2,11 +2,11 @@ api:
   not_valid_date:
     'Nije važeći tip datuma'
 
-  current_user.null:
-    'Ne mogu da pronađem trenutnog korisnika'
+  current_user:
+    'null':
+      'Ne mogu da pronađem trenutnog korisnika'
 
   users:
-    edit:
     not_found:
       'Ne mogu da pronađem ovog korisnika'
     is_verified:
@@ -32,6 +32,8 @@ api:
           one {Mora postojati minimalna razlika od {day, number} dan između 2 datuma.}
           other {Mora postojati razlika od najmanje {day, number} dana između 2 datuma.}
         }
+      start_interval:
+        'Početak intervala bi trebalo da bude veći od današnjeg datuma'
       time: >-
         {day, plural,
           one {Nije moguće izmeniti rezervaciju {day, number} dan pre akcije.}

@@ -1,29 +1,76 @@
 {% extends '@!EasyAdmin/crud/edit.html.twig' %}
+{% trans_default_domain 'admin' %}
 
-{% block delete_form %}
-    <form method="post" id="delete-form" style="display: none">
-        <input type="hidden" name="token" value="{{ csrf_token('ea-delete') }}" />
-    </form>
+{% block main %}
+    <div class="edit-wrapper">
+        {% set timeField = null %}
 
-    <div id="modal-delete" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4>{{ 'delete_modal.title'|trans([], 'EasyAdminBundle') }}</h4>
-                    <p>{{ 'delete_modal.content'|trans([], 'EasyAdminBundle') }}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
-                        <i class="fas fa-times"></i>
-                        <span class="btn-label">{{ 'action.cancel'|trans([], 'EasyAdminBundle') }}</span>
-                    </button>
+        <div class="timestamp-wrapper">
+            {% for field in entity.fields %}
+                {% set propertyName = field.getProperty() %}
+                {% set fieldValue = field.getValue() %}
 
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-danger" id="modal-delete-button" form="delete-form">
-                        <i class="action-icon fa fa-fw fa-trash-o"></i>
-                        <span class="btn-label">{{ 'action.delete'|trans([], 'EasyAdminBundle') }}</span>
-                    </button>
-                </div>
-            </div>
+                {% if propertyName == 'created_at' %}
+                    {% set createdAt = fieldValue %}
+
+                    <div>
+                        <span>{{ 'admin.list.created_at'|trans }}: </span>
+                        {{ include('@EasyAdmin/crud/field/datetime.html.twig', { field, entity }, with_context = false) }}
+                    </div>
+                {% elseif propertyName == 'updated_at' %}
+                    <div>
+                        <span>{{ 'admin.list.updated_at'|trans }}: </span>
+                        {{ createdAt < fieldValue ? include('@EasyAdmin/crud/field/datetime.html.twig', { field, entity }, with_context = false) : 'admin.list.not_updated'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if entity.getName() == 'Reservation' and propertyName == 'time' %}
+                    {% set timeField = 'not_set' %}
+
+                    {% if fieldValue %}
+                        {% set timeField = field %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
         </div>
-    </div>
-{% endblock delete_form %}
+
+        <div class="edit-form">
+            {% if timeField %}
+                <div class="reservation-time form-group">
+                    <legend>{{ 'admin.list.reservations.time'|trans }}</legend>
+                    <div class="form-control set-time-reservation">
+                        {% if timeField and timeField != 'not_set' %}
+                            {{ include('@EasyAdmin/crud/field/datetime.html.twig', { field: timeField, entity }, with_context = false) }}
+                        {% elseif timeField == 'not_set' %}
+                            {{ include('@EasyAdmin/label/null.html.twig', {}, with_context = false) }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% block edit_form %}
+                {{ form(edit_form) }}
+            {% endblock edit_form %}
+        <div>
+    <div>
+
+    {% set entityInstance = entity.getInstance() %}
+    {% set can_undelete = entityInstance.setIsDeleted() is defined %}
+
+    {% block delete_form %}
+        {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', { can_undelete }, with_context = false) }}
+    {% endblock delete_form %}
+
+    {% if can_undelete and entityInstance.isDeleted() %}
+        {% block undelete_form %}
+            {{ include('@EasyAdmin/crud/includes/_undelete_form.html.twig', {}, with_context = false) }}
+        {% endblock undelete_form %}
+    {% endif %}
+
+    {% if entity.getName() == 'Reservation' %}
+        {% block set_time_form %}
+            {{ include('@EasyAdmin/crud/includes/_set_time_form.html.twig', { set_time_form, entity }, with_context = false) }}
+        {% endblock set_time_form %}
+    {% endif %}
+{% endblock %}
+

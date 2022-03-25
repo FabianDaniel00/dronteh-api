@@ -1,0 +1,31 @@
+{% trans_default_domain 'admin' %}
+
+{% set entity_id = entity.getPrimaryKeyValue %}
+
+<div id="modal-set-time-{{ entity_id }}" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'admin.modal.set_time.title'|trans }}</h4>
+                <p>{{ 'admin.modal.set_time.content'|trans }}</p>
+                {% set reservation = entity.getInstance() %}
+                <p>
+                    {{ 'admin.flash.reservations.set_time.time_between_interval'|trans({'%interval_start%': reservation.getReservationIntervalStart(), '%interval_end%': reservation.getReservationIntervalEnd()})|raw }}
+                </p>
+
+                {{ form(set_time_form, {'attr': {'id': 'set-time-form-'~entity_id, 'action': ea_url().setAction('setTime').setEntityId(entity_id).removeReferrer.generateUrl()}}) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    <span class="btn-label">{{ 'action.cancel'|trans([], 'EasyAdminBundle') }}</span>
+                </button>
+
+                <button type="submit" class="btn btn-success" form="set-time-form-{{ entity_id }}">
+                    <i class="fas fa-paper-plane"></i>
+                    <span class="btn-label">{{ 'admin.modal.set_time.send'|trans }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

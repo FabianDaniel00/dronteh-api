@@ -2,11 +2,11 @@ api:
   not_valid_date:
     'Érvénytelen dátumtípus'
 
-  current_user.null:
-    'Az aktuális felhasználó nem található'
+  current_user:
+    'null':
+      'Az aktuális felhasználó nem található'
 
   users:
-    edit:
     not_found:
       'Ez a felhasználó nem található'
     is_verified:
@@ -32,6 +32,8 @@ api:
           one {A 2 dátum között legalább {day, number} nap eltérésnek kell lennie.}
           other {A 2 dátum között legalább {day, number} nap eltérésnek kell lennie.}
         }
+      start_interval:
+        'Az intervallum kezdete nagyobb kell legyen a mai dátumnál'
       time: >-
         {day, plural,
           one {A foglalás nem módosítható {day, number} nappal a művelet előtt.}

@@ -2,11 +2,11 @@ api:
   not_valid_date:
     'Not valid date type'
 
-  current_user.null:
-    "Can't find the current user"
+  current_user:
+    'null':
+      "Can't find the current user"
 
   users:
-    edit:
     not_found:
       "Can't find this user"
     is_verified:
@@ -32,6 +32,8 @@ api:
           one {There must be minimum {day, number} day difference between the 2 dates.}
           other {There must be minimum {day, number} days difference between the 2 dates.}
         }
+      start_interval:
+        "The start of the interval should be greater than today's date"
       time: >-
         {day, plural,
           one {Can't modify the reservation {day, number} day before the action.}

@@ -36,38 +36,38 @@ mails:
 
   reservation_notification:
     name:
-      'DronTeh Reservation'
+      'DronTeh Rezervacija'
     subject:
-      '#{parcel_number} | DronTeh Reservation'
+      '#{parcel_number} | DronTeh Rezervacija'
     header:
-      'Zdravo {name}! DronTeh Reservation.'
+      'Zdravo {name}! DronTeh Rezervacija.'
     time:
-      'Vaš tačan datum i vreme za vašu rezervaciju je "{time, date} - {time, time, short}". Pogledajte detalje u nastavku:'
+      'Vaš tačan datum i vreme za vašu rezervaciju je "<b>{time, date} - {time, time, short}</b>". Pogledajte detalje u nastavku:'
     time_interval:
-      'Vaša rezervacija je na čekanju. Obavestićemo vas o tačnom datumu i vremenu putem e-mail koja je između "{time_interval_start, date} i {time_interval_end, date}". Pogledajte detalje u nastavku:'
+      'Vaša rezervacija je na čekanju. Obavestićemo vas o tačnom datumu i vremenu putem e-mail koja je između "<b>{time_interval_start, date} i {time_interval_end, date}</b>". Pogledajte detalje u nastavku:'
     details:
       parcel_number:
-        'Parcela broj: {parcel_number}'
+        'Parcela broj: <b>{parcel_number}</b>'
       land_area:
-        'Površina zemljišta je {land_area}'
+        'Površina zemljišta je <b>{land_area}</b>'
       chemical:
-        'Hemikalija je {chemical}'
+        'Hemikalija je <b>{chemical}</b>'
       time:
-        'Tačno vreme prskanja je "{time, date} - {time, time, short}"'
+        'Tačno vreme prskanja je "<b>{time, date} - {time, time, short}</b>"'
       to_be_present: >-
         {to_be_present, select,
-          true {Bićete tamo kada se sprej desi}
-          false {Nećete biti tamo kada se sprej desi}
-          other {Nema podataka}
+          1 {<b>Bićete tamo</b> kada se sprej desi}
+          0 {<b>Nećete biti tamo</b> kada se sprej desi}
+          other {Biće tamo: <b>nema podataka</b>}
         }
       plant:
-        "Posadite ono što ćemo prskati: {plant}"
+        "Posadite ono što ćemo prskati: <b>{plant}</b>"
       status: >-
         {status, select,
-          0 {Rezervacija je neaktivna}
-          1 {Rezervacija je na čekanju}
-          2 {Rezervacija je u toku}
-          other {Nema podataka}
+          0 {Rezervacija je <b>na čekanju</b>}
+          1 {Rezervacija je <b>aktivna</b>}
+          2 {Rezervacija je <b>neaktivna</b>}
+          other {Status: <b>nema podataka</b>}
         }
       comment:
         "Komentar: '{comment}'"

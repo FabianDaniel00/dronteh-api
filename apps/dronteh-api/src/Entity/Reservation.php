@@ -58,12 +58,12 @@ class Reservation
     /**
      * @ORM\Column(type="smallint", options={"default": 1})
      */
-    private $status = 1;
+    private $status = 0;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $to_be_present;
+    private $to_be_present = 1;
 
     /**
      * @ORM\Column(type="string", length=5000, nullable=true)
@@ -173,7 +173,7 @@ class Reservation
         return $this->time;
     }
 
-    public function setTime(\DateTime $time): self
+    public function setTime(?\DateTime $time): self
     {
         $this->time = $time;
 
@@ -279,5 +279,10 @@ class Reservation
     public function updatedTimestamps(): void
     {
         $this->updated_at = new \DateTime('@'.strtotime('now'));
+    }
+
+    public function __toString(): string
+    {
+        return '#'.$this->parcel_number;
     }
 }

@@ -45,7 +45,7 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
 
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        if ($user && !in_array('ROLE_ADMIN', $user->getRoles())) {
+        if ($user && !count(array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles()))) {
             throw new CustomUserMessageAuthenticationException($this->translator->trans('Invalid credentials.', [], 'security'));
         }
 

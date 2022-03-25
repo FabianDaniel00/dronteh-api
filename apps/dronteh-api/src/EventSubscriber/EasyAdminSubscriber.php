@@ -73,11 +73,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     }
 
     private function putFlash($entity, string $transData) {
-        $entityName = explode('\\', get_class($entity));
-        $entityName = strtolower($entityName[count($entityName) - 1]);
+        $entityName = strtolower(basename(str_replace('\\', '/', get_class($entity))));
 
         $this->session->getFlashBag()->add('success', new TranslatableMessage($transData, [
-            '%entity%' => $this->translator->trans('admin.singular.'.$entityName, [], 'admin')
+            '%entity_name%' => $this->translator->trans('admin.singular.'.$entityName, [], 'admin'),
+            '%entity%' => (string) $entity
         ], 'admin'));
     }
 }

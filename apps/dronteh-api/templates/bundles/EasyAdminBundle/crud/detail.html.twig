@@ -1,29 +1,47 @@
 {% extends '@!EasyAdmin/crud/detail.html.twig' %}
 
-{% block delete_form %}
-    <form method="post" id="delete-form" style="display: none">
-        <input type="hidden" name="token" value="{{ csrf_token('ea-delete') }}" />
-    </form>
+{% block main %}
+    {% block detail_fields %}
+        {% set form_panel_is_already_open = false %}
+        {% for field in entity.fields %}
+            {% set is_form_field_panel = 'field-form_panel' in field.cssClass %}
 
-    <div id="modal-delete" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4>{{ 'delete_modal.title'|trans([], 'EasyAdminBundle') }}</h4>
-                    <p>{{ 'delete_modal.content'|trans([], 'EasyAdminBundle') }}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
-                        <i class="fas fa-times"></i>
-                        <span class="btn-label">{{ 'action.cancel'|trans([], 'EasyAdminBundle') }}</span>
-                    </button>
+            {% if is_form_field_panel or (loop.first and not is_form_field_panel) %}
+                {% if form_panel_is_already_open %}
+                    {{ _self.close_form_field_panel() }}
+                    {% set form_panel_is_already_open = false %}
+                {% endif %}
 
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-danger" id="modal-delete-button" form="delete-form">
-                        <i class="action-icon fa fa-fw fa-trash-o"></i>
-                        <span class="btn-label">{{ 'action.delete'|trans([], 'EasyAdminBundle') }}</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock delete_form %}
+                {{ _self.open_form_field_panel(is_form_field_panel ? field : null) }}
+                {% set form_panel_is_already_open = true %}
+            {% endif %}
+
+            {% block detail_field %}
+                {% if not is_form_field_panel %}
+                    {{ _self.render_field(entity, field) }}
+                {% endif %}
+            {% endblock %}
+        {% endfor %}
+
+        {{ _self.close_form_field_panel() }}
+    {% endblock %}
+
+    {% set entityInstance = entity.getInstance() %}
+    {% set can_undelete = entityInstance.setIsDeleted() is defined %}
+
+    {% block delete_form %}
+        {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', { can_undelete }, with_context = false) }}
+    {% endblock delete_form %}
+
+    {% if can_undelete and entityInstance.isDeleted() %}
+        {% block undelete_form %}
+            {{ include('@EasyAdmin/crud/includes/_undelete_form.html.twig', {}, with_context = false) }}
+        {% endblock undelete_form %}
+    {% endif %}
+
+    {% if entity.getName() == 'Reservation' %}
+        {% block set_time_form %}
+            {{ include('@EasyAdmin/crud/includes/_set_time_form.html.twig', { set_time_form, entity }, with_context = false) }}
+        {% endblock set_time_form %}
+    {% endif %}
+{% endblock %}

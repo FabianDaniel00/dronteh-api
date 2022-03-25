@@ -1,7 +1,7 @@
 security:
   enable_authenticator_manager: true
-  # ROLE_USER, ROLE_ADMIN
   role_hierarchy:
+    ROLE_SUPER_ADMIN: ROLE_ADMIN
     ROLE_ADMIN: ROLE_USER
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
   password_hashers:
@@ -74,7 +74,7 @@ security:
     - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api/reservations/(\d+)/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')", methods: [POST] }
+    - { path: ^/api/reservations/(\d+)/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')", methods: [POST] }
     - { path: ^/api/reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH, DELETE] }
     - { path: ^/api/ratings, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
     - { path: ^/api/ratings, roles: PUBLIC_ACCESS, methods: [GET] }
@@ -82,7 +82,7 @@ security:
     - { path: ^/api/drone_data_per_reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api/chemicals, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/area_of_use_chemicals/chemicals, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
+    - { path: ^/api, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')" }
 
     - { path: ^/(%app.supported_locales%)/admin/login, roles: PUBLIC_ACCESS, methods: [GET, POST] }
-    - { path: ^/(%app.supported_locales%)/admin, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN')" }
+    - { path: ^/(%app.supported_locales%)/admin, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')" }

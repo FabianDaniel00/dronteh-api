@@ -1,0 +1,29 @@
+<form method="post" id="delete-form" style="display: none">
+    <input type="hidden" name="token" value="{{ csrf_token('ea-delete') }}" />
+</form>
+
+<div id="modal-delete" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'delete_modal.title'|trans([], 'EasyAdminBundle') }}</h4>
+                {% if can_undelete %}
+                    <p>{{ 'admin.modal.can_undelete'|trans([], 'admin') }}</p>
+                {% else %}
+                    <p>{{ 'delete_modal.content'|trans([], 'EasyAdminBundle') }}</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    <span class="btn-label">{{ 'action.cancel'|trans([], 'EasyAdminBundle') }}</span>
+                </button>
+
+                <button type="button" data-bs-dismiss="modal" class="btn btn-danger" id="modal-delete-button">
+                    <i class="action-icon fa fa-fw fa-trash-o"></i>
+                    <span class="btn-label">{{ 'action.delete'|trans([], 'EasyAdminBundle') }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

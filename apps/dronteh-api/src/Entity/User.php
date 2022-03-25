@@ -145,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = array_unique($roles);
 
         return $this;
     }
@@ -293,11 +293,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function hasRole(): bool
-    {
-        return $this->roles && !empty(array_intersect($this->getRoles(), ['ROLE_USER', 'ROLE_ADMIN']));
-    }
-
     /**
      * @ORM\PrePersist
      */
@@ -316,7 +311,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updated_at = new \DateTime('@'.strtotime('now'));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->firstname.' '.$this->lastname;
     }

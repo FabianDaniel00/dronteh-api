@@ -1,0 +1,19 @@
+{% trans_default_domain 'admin' %}
+
+{% set fields = [] %}
+
+{% for item in field.value %}
+    {% set fields = fields|merge([('admin.list.users.roles.'~item|split('ROLE_')[1]|lower)|trans]) %}
+{% endfor %}
+
+{% if ea.crud.currentAction == 'detail' %}
+    <ul>
+        {% for item in fields %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% elseif ea.crud.currentAction == 'index' %}
+    {{ fields|join(', ') }}
+{% else %}
+    {{ field.formattedValue }}
+{% endif %}

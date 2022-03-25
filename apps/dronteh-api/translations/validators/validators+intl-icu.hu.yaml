@@ -2,15 +2,15 @@ validators:
   reset_password_request:
     email:
       not_blank:
-        'Kérjük adja meg e-mail címét'
+        'Kérjük adja meg e-mail címét.'
 
   change_password:
     plain_password:
       first_options:
         not_blank:
-          'Adjon meg egy jelszót'
+          'Adjon meg egy jelszót.'
         length:
-          'A jelszónak legalább {limit} karakterből kell állnia'
+          'A jelszónak legalább {limit} karakterből kell állnia.'
         label:
           'Új jelszó'
         placeholder:
@@ -19,19 +19,23 @@ validators:
         label:
           'Új jelszó megerősítése'
         placeholder:
-          'Jelszó megerősítése'
+          'Jelszó megerősítése...'
       invalid_message:
         'A jelszómezőknek egyeznie kell.'
 
   users:
     constraint:
       unique:
-        'Ez az e-mail cím már foglalt'
+        'Ez az e-mail cím már foglalt.'
       tel:
         phone_number:
-          'Ez nem egy érvényes telefonszám'
+          'Ez nem egy érvényes telefonszám.'
       captcha:
-        'A captcha nem érvényes'
-      role:
-        invalid:
-          'Az Ön által adott Jogosultság érvénytelen'
+        'A captcha nem érvényes.'
+      role: >-
+        {count, plural,
+          one {'{string, string}' jogosultság érvénytelen.}
+          other {'{string, string}' jogosultságok érvénytelenek.}
+        }
+      locale:
+        "A(z) '{string}' nem támogatott nyelv."

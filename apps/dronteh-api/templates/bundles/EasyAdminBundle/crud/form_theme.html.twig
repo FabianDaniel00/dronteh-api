@@ -1,0 +1,23 @@
+{% extends '@!EasyAdmin/crud/form_theme.html.twig' %}
+
+{% block ea_numeric_filter_widget %}
+    <div class="form-widget-compound">
+        {{ form_row(form.comparison) }}
+        <div id="wrapper_{{ form.value.vars.id }}" {% if form.comparison.vars.value == 'is null' %}style="display: none"{% endif %}>
+            {{ form_row(form.value) }}
+        </div>
+        <div id="wrapper_{{ form.value2.vars.id }}" {% if form.comparison.vars.value != 'between' %}style="display: none"{% endif %}>
+            {{ form_row(form.value2) }}
+        </div>
+        <script>
+            document.querySelector('#{{ form.comparison.vars.id }}').addEventListener('change', (event) => {
+                const input = document.querySelector('#wrapper_{{ form.value.vars.id }}');
+                input.style.display = event.currentTarget.value !== 'is null' ? '' : 'none';
+
+                const input2 = document.querySelector('#wrapper_{{ form.value2.vars.id }}');
+                input2.style.display = event.currentTarget.value === 'between' ? '' : 'none';
+            });
+        </script>
+    </div>
+    {{- form_errors(form) -}}
+{% endblock ea_numeric_filter_widget %}

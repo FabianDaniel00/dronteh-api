@@ -1,0 +1,187 @@
+// :root {
+//     --body-bg: var(--gray-800);
+// }
+body {
+    overflow-x: hidden;
+}
+
+* {
+    transition: .3s;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    -o-transition: .3s;
+}
+
+.wrapper .main-content {
+    padding-bottom: 3rem;
+}
+
+.main-content .table.datagrid thead {
+    position: sticky;
+}
+
+#flash-messages {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    opacity: 0.8;
+}
+
+.table-wrapper {
+    position: relative;
+    .table-container {
+        overflow-x: auto;
+        max-width: calc(100vw - 317px);
+        tbody {
+            td {
+                &.actions.actions-as-dropdown {
+                    padding: 100% 15px;
+                    display: flex;
+                    align-items: center;
+                    .table-wrapper {
+                        position: absolute;
+                        right: 10px;
+                    }
+                }
+            }
+            tr {
+                a.dropdown-toggle {
+                    opacity: 0;
+                }
+                &:hover a.dropdown-toggle {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+.page-actions {
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: flex-end !important;
+    >* {
+        margin-left: 0 !important;
+    }
+}
+
+.pager {
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-custom-menu {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5em;
+    .vr {
+        height: 2.5em;
+    }
+}
+
+.locale-switcher {
+    .dropdown-menu>div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+    }
+    a {
+        display: flex;
+        align-items: center;
+        img {
+            margin-right: 0.5em;
+        }
+    }
+    >ul,
+    .dropdown-language,
+    .dropdown-toggle {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.responsive-header {
+    display: none;
+}
+
+.responsive-locale-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.form-group .form-widget #filters_roles_value {
+    height: fit-content;
+    max-height: 200px;
+}
+
+.form-inline.form-control.set-time {
+    max-width: 15em;
+}
+
+.timestamp-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: rgb(100, 100, 100);
+    font-size: 0.8rem;
+    width: -webkit-fill-available;
+}
+
+.edit-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.reservation-time {
+    legend {
+        color: var(--form-label-color);
+        font-size: var(--font-size-base);
+        font-weight: 500;
+    }
+    .form-control {
+        max-width: 20em;
+        padding: 3px 7px 4px;
+    }
+}
+
+.set-time-reservation {
+    cursor: text;
+}
+
+@media only screen and (max-width: 991.98px) {
+    .navbar-custom-menu {
+        display: none !important;
+    }
+    .responsive-header {
+        display: flex;
+    }
+    .table-wrapper {
+        .table-container {
+            max-width: 100%;
+            tbody {
+                td {
+                    &.actions.actions-as-dropdown {
+                        display: block;
+                        .table-wrapper {
+                            position: static;
+                        }
+                    }
+                }
+                tr {
+                    a.dropdown-toggle {
+                        display: block;
+                        opacity: 1;
+                        text-align: center;
+                        border-color: var(--dropdown-toggle-border-color);
+                    }
+                }
+            }
+        }
+    }
+    .edit-wrapper {
+        flex-direction: column;
+        gap: 2em;
+    }
+}

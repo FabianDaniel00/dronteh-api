@@ -38,7 +38,7 @@
                         {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
                         {% set flagCode = flagCode(locale) %}
 
-                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="20em">
+                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="20px">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-language">
                         <div>
@@ -50,7 +50,7 @@
 
                                 <li>
                                     <a class="dropdown-item" href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
-                                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30em">
+                                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px">
                                         {{ supportedLocaleTrans|trans }}
                                     </a>
                                 </li>
