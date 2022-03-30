@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -48,6 +47,7 @@ class UserCrudController extends AbstractUndeleteCrudController
 
         $rolesField = ArrayField::new('roles', 'admin.list.users.role')
             ->setTemplatePath('@EasyAdmin/crud/field/roles-array.html.twig')
+            ->setPermission('ROLE_SUPER_ADMIN')
         ;
         $createdAt = DateTimeField::new('created_at', 'admin.list.created_at');
         $updatedAt = DateTimeField::new('updated_at', 'admin.list.updated_at');
@@ -64,8 +64,7 @@ class UserCrudController extends AbstractUndeleteCrudController
 
         if ($pageName !== Crud::PAGE_DETAIL) $rolesField->setHelp('admin.list.users.help.role');
 
-        return [
-            IdField::new('id', 'admin.list.id')->hideOnForm(),
+        return array_merge(parent::configureFields($pageName), [
             EmailField::new('email', 'admin.list.users.email'),
             TextField::new('password', 'admin.list.users.password')->setFormType(PasswordType::class)->onlyWhenCreating(),
             HiddenField::new('password', 'admin.list.users.password')->onlyWhenUpdating(),
@@ -78,8 +77,7 @@ class UserCrudController extends AbstractUndeleteCrudController
             $createdAt,
             $updatedAt,
             BooleanField::new('isVerified', 'admin.list.users.is_verified')->renderAsSwitch(false)->hideOnForm(),
-            BooleanField::new('is_deleted', 'admin.list.is_deleted')->renderAsSwitch(false)->setHelp('admin.list.help.is_deleted')->hideOnForm(),
-        ];
+        ]);
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -127,15 +125,14 @@ class UserCrudController extends AbstractUndeleteCrudController
             $locales[$this->translator->trans('admin.list.users.roles.'.strtolower(explode('ROLE_', $supportedRole)[1]), [], 'admin')] = $supportedRole;
         }
 
-        return $filters
+        return parent::configureFilters($filters)
             ->add(BooleanFilter::new('isVerified', $this->translator->trans('admin.list.users.is_verified', [], 'admin')))
-            ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
-            ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
             ->add(ArrayFilter::new('roles', $this->translator->trans('admin.list.users.role', [], 'admin'))
                 ->setChoices($locales)
                 ->canSelectMultiple()
             )
-            ->add(BooleanFilter::new('is_deleted', $this->translator->trans('admin.list.is_deleted', [], 'admin')))
+            ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
+            ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
         ;
     }
 }

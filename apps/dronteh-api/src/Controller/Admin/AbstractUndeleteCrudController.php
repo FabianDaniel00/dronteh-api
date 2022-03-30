@@ -4,13 +4,17 @@ namespace App\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use Symfony\Component\Translation\TranslatableMessage;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use App\Controller\Admin\AbstractRedirectCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
@@ -20,6 +24,57 @@ use EasyCorp\Bundle\EasyAdminBundle\Exception\InsufficientEntityPermissionExcept
 
 abstract class AbstractUndeleteCrudController extends AbstractRedirectCrudController
 {
+    public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
+    {
+        $pageName = $responseParameters->get('pageName');
+        $entityInstances = [];
+
+        if (Crud::PAGE_DETAIL === $pageName || Crud::PAGE_EDIT === $pageName) {
+            $entityInstances[] = $responseParameters->get('entity');
+        } else if (Crud::PAGE_INDEX === $pageName) {
+            $entityInstances = $responseParameters->get('entities');
+        }
+
+        foreach($entityInstances as $entity) {
+            $entityInstance = $entity->getInstance();
+
+            foreach($entity->getActions() as $action) {
+                if ($action->getName() === 'undelete') {
+                    $action->addHtmlAttributes([
+                        'formaction' => $this->container->get(AdminUrlGenerator::class)->setAction('undelete')->setEntityId($entityInstance->getId())->removeReferrer()->generateUrl(),
+                    ]);
+                }
+            }
+        }
+
+        return $responseParameters;
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        $isDeleted = BooleanField::new('is_deleted', 'admin.list.is_deleted')
+            ->renderAsSwitch(false)
+            ->addCssClass('is-deleted-label')
+            ->hideOnIndex()
+            ->hideWhenCreating()
+        ;
+
+        if ($pageName === Crud::PAGE_EDIT) {
+            $isDeleted->addCssClass('d-none');
+        }
+
+        return array_merge([
+            $isDeleted,
+        ], parent::configureFields($pageName));
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(BooleanFilter::new('is_deleted', $this->container->get('translator')->trans('admin.list.is_deleted', [], 'admin')))
+        ;
+    }
+
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $entityInstance->setIsDeleted(1);
@@ -116,7 +171,7 @@ abstract class AbstractUndeleteCrudController extends AbstractRedirectCrudContro
             }
 
             $event = new BeforeEntityUpdatedEvent($entityInstance);
-            $this->dispatcher->dispatch($event);
+            $this->container->get('event_dispatcher')->dispatch($event);
             $entityInstance = $event->getEntityInstance();
 
             $this->undeleteEntity($entityInstance);

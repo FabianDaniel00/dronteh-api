@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use IntlDateFormatter;
 use App\Entity\Reservation;
 use Symfony\Component\Mime\Address;
 use App\Repository\ReservationRepository;
@@ -11,6 +12,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Paknahad\JsonApiBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Paknahad\JsonApiBundle\Helper\ResourceCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\JsonApi\Document\Reservation\ReservationDocument;
@@ -21,6 +23,7 @@ use App\JsonApi\Hydrator\Reservation\CreateReservationHydrator;
 use App\JsonApi\Hydrator\Reservation\UpdateReservationHydrator;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 /**
  * @Route("/reservations")
@@ -50,6 +53,29 @@ class ReservationController extends Controller
             new ReservationsDocument(new ReservationResourceTransformer($request->getLocale())),
             $resourceCollection
         );
+    }
+
+    /**
+     * @Route("/get_set_time_info/{id}", name="get_set_time_info", methods="GET")
+     */
+    public function getSetTimeInfo(Reservation $reservation, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('setTime-'.$reservation->getId(), $request->headers->get('x-csrf-token'))) {
+            // throw new InvalidCsrfTokenException();
+        }
+
+        $formatter = new IntlDateFormatter($request->getLocale(), IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
+        $intervalStart = $formatter->format($reservation->getReservationIntervalStart());
+        $intervalEnd = $formatter->format($reservation->getReservationIntervalEnd());
+        $time = $reservation->getTime();
+
+        return new JsonResponse([
+            'data' => [
+                'time' => $time ? $time->format(\DATE_ATOM) : null,
+                'interval_start' => $intervalStart,
+                'interval_end' => $intervalEnd,
+            ]
+        ]);
     }
 
     /**

@@ -4,6 +4,7 @@
 {% block main %}
     <div class="edit-wrapper">
         {% set timeField = null %}
+        {% set isDeletedField = null %}
 
         <div class="timestamp-wrapper">
             {% for field in entity.fields %}
@@ -31,12 +32,31 @@
                         {% set timeField = field %}
                     {% endif %}
                 {% endif %}
+
+                {% if propertyName == 'is_deleted' %}
+                    {% set isDeletedField = 'not_deleted' %}
+
+                    {% if fieldValue %}
+                        {% set isDeletedField = 'deleted' %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
 
         <div class="edit-form">
+            {% if isDeletedField %}
+                <div class="edit-field form-group">
+                    <legend>{{ 'admin.list.is_deleted'|trans }}</legend>
+                    <div class="is-deleted-label">
+                        <span class="badge edit {{ isDeletedField == 'deleted' ? 'badge-boolean-true' : 'badge-boolean-false' }}">
+                            {{ (isDeletedField == 'deleted' ? 'label.true' : 'label.false')|trans({}, 'EasyAdminBundle')|upper }}
+                        </span>
+                    </div>
+                </div>
+            {% endif %}
+
             {% if timeField %}
-                <div class="reservation-time form-group">
+                <div class="edit-field form-group">
                     <legend>{{ 'admin.list.reservations.time'|trans }}</legend>
                     <div class="form-control set-time-reservation">
                         {% if timeField and timeField != 'not_set' %}
@@ -69,7 +89,7 @@
 
     {% if entity.getName() == 'Reservation' %}
         {% block set_time_form %}
-            {{ include('@EasyAdmin/crud/includes/_set_time_form.html.twig', { set_time_form, entity }, with_context = false) }}
+            {{ include('@EasyAdmin/crud/includes/_set_time_form.html.twig', { set_time_form }, with_context = false) }}
         {% endblock set_time_form %}
     {% endif %}
 {% endblock %}

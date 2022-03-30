@@ -13,7 +13,7 @@ class GetCsrfToken extends AbstractController
      */
     public function getCsrfToken(): Response
     {
-        $token = $this->container->get('security.csrf.token_manager')->refreshToken($this->getParameter('csrf_token_id'))->getValue();
+        $token = $this->container->get('security.csrf.token_manager')->refreshToken('user-register')->getValue();
 
         return $this->json([
             'data' => [

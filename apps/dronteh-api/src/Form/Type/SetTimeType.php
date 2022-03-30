@@ -11,11 +11,9 @@ class SetTimeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $time = $options['data']['time'];
-
         $builder->add('time', DateTimeType::class, [
             'widget' => 'single_text',
-            'label' => $time ? 'admin.list.reservations.label.has_time' : false,
+            'label' => 'admin.list.reservations.label.has_time',
             'attr' => ['class' => 'form-inline form-control set-time'],
             'translation_domain' => 'admin',
         ]);

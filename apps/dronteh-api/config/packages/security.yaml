@@ -74,7 +74,7 @@ security:
     - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api/reservations/(\d+)/send_notification, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')", methods: [POST] }
+    - { path: ^/api/reservations/get_set_time_info, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH, DELETE] }
     - { path: ^/api/ratings, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
     - { path: ^/api/ratings, roles: PUBLIC_ACCESS, methods: [GET] }

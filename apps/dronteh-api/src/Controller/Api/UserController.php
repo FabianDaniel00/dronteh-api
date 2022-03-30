@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EmailVerifier $emailVerifier, TranslatorInterface $translator, KernelInterface $kernel): Response
     {
-        if ($kernel->getEnvironment() !== 'dev' && !$this->isCsrfTokenValid($this->getParameter('csrf_token_id'), $request->headers->get('x-csrf-token'))) {
+        if ($kernel->getEnvironment() !== 'dev' && !$this->isCsrfTokenValid('user-register', $request->headers->get('x-csrf-token'))) {
             // throw new AccessDeniedHttpException($translator->trans('api.users.new.invlaid_csrf_token', [], 'api'));
             throw new InvalidCsrfTokenException();
         }

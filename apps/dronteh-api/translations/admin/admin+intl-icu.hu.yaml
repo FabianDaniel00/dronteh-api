@@ -17,6 +17,10 @@ admin:
   not_null:
     'Nem üres'
 
+  section:
+    others:
+      'Egyebek'
+
   list:
     id:
       'ID'
@@ -25,13 +29,15 @@ admin:
     updated_at:
       'Módosítva'
     is_deleted:
-      'Törölve'
+      'Törölve?'
     not_updated:
       '-nem volt módosítva-'
-
-    help:
-      is_deleted:
-        'Ez arra van hogy töröljük, de nem az adatbázisból'
+    name_sr_Latn:
+      'Név szerbül'
+    name_hu:
+      'Név magyarul'
+    name_en:
+      'Név angolul'
 
     users:
       email:
@@ -54,7 +60,7 @@ admin:
         super_admin:
           'Szuper adminisztrátor'
       is_verified:
-        'Ellenőrizve'
+        'Ellenőrizve?'
       locale:
         'Nyelv'
       last_verification_email_sent:
@@ -67,6 +73,8 @@ admin:
     reservations:
       parcel_number:
         'Parcella szám'
+      gps_coordinates:
+        'GPS koordináták'
       land_area:
         'Terület [m2]'
       status:
@@ -79,7 +87,7 @@ admin:
         '2':
           'Nem aktív'
       to_be_present:
-        'Jelen lenni'
+        'Jelen lenni?'
       time:
         'A foglalás időpontja'
       reservation_interval_start:
@@ -96,6 +104,18 @@ admin:
       label:
         has_time:
           'Erre a foglalásra már van idő beállítva.'
+
+    chemicals:
+      price_per_liter:
+        'Ár/[L]'
+
+    drone_data_per_reservations:
+      chemical_quantity_per_ha:
+        'Vegyszer [L]/[ha]'
+      water_quantity:
+        'Víz [L]'
+      results:
+        'Eredmények'
 
   title:
     index:
@@ -137,6 +157,10 @@ admin:
       'Vegyszer'
     plant:
       'Növény'
+    rating:
+      'Értékelés'
+    drone_data_per_reservation:
+      'Drón adat'
 
   plural:
     user:
@@ -147,6 +171,10 @@ admin:
       'Vegyszerek'
     plant:
       'Növények'
+    rating:
+      'Értékelések'
+    drone_data_per_reservation:
+      'Drón adatok'
 
   flash:
     entity:
@@ -175,6 +203,11 @@ admin:
   modal:
     can_undelete:
       'Ez a művelet visszavonható.'
+    reservation_set_time:
+      must_be:
+        'Az idő a következő dátumok között kell legyen'
+      and:
+        'és'
 
     set_time:
       title:

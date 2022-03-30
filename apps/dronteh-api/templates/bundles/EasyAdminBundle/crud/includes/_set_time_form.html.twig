@@ -1,19 +1,23 @@
 {% trans_default_domain 'admin' %}
 
-{% set entity_id = entity.getPrimaryKeyValue %}
-
-<div id="modal-set-time-{{ entity_id }}" class="modal fade" tabindex="-1">
+<div id="modal-set-time" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <h4>{{ 'admin.modal.set_time.title'|trans }}</h4>
                 <p>{{ 'admin.modal.set_time.content'|trans }}</p>
-                {% set reservation = entity.getInstance() %}
-                <p>
-                    {{ 'admin.flash.reservations.set_time.time_between_interval'|trans({'%interval_start%': reservation.getReservationIntervalStart(), '%interval_end%': reservation.getReservationIntervalEnd()})|raw }}
-                </p>
 
-                {{ form(set_time_form, {'attr': {'id': 'set-time-form-'~entity_id, 'action': ea_url().setAction('setTime').setEntityId(entity_id).removeReferrer.generateUrl()}}) }}
+                <div id="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
+                <div class="content">
+                    <p>
+                        {{ 'admin.modal.reservation_set_time.must_be'|trans }} <b id="interval-start"></b> {{ 'admin.modal.reservation_set_time.and'|trans }} <b id="interval-end"></b>
+                    </p>
+
+                    {{ form(set_time_form, {'attr': {'id': 'set-time-form'}}) }}
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
@@ -21,7 +25,7 @@
                     <span class="btn-label">{{ 'action.cancel'|trans([], 'EasyAdminBundle') }}</span>
                 </button>
 
-                <button type="submit" class="btn btn-success" form="set-time-form-{{ entity_id }}">
+                <button type="submit" class="btn btn-success" form="set-time-form" id="modal-set-time-button">
                     <i class="fas fa-paper-plane"></i>
                     <span class="btn-label">{{ 'admin.modal.set_time.send'|trans }}</span>
                 </button>

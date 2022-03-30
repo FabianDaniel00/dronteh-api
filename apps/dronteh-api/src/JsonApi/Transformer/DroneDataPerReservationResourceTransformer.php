@@ -58,9 +58,6 @@ class DroneDataPerReservationResourceTransformer extends AbstractResource
     public function getAttributes($droneDataPerReservation): array
     {
         return [
-            'gps_coordinates' => function (DroneDataPerReservation $droneDataPerReservation) {
-                return $droneDataPerReservation->getGpsCoordinates();
-            },
             'results' => function (DroneDataPerReservation $droneDataPerReservation) {
                 return $droneDataPerReservation->getResults();
             },

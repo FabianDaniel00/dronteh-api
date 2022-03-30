@@ -18,6 +18,9 @@ class UpdateReservationHydrator extends AbstractReservationHydrator
             'parcel_number' => function (Reservation $reservation, $attribute, $data, $attributeName) {
                 $reservation->setParcelNumber($attribute);
             },
+            'gps_coordinates' => function (Reservation $reservation, $attribute, $data, $attributeName) {
+                $reservation->setGpsCoordinates($attribute);
+            },
             'land_area' => function (Reservation $reservation, $attribute, $data, $attributeName) {
                 $reservation->setLandArea($attribute);
             },

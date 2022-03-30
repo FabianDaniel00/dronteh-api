@@ -101,10 +101,9 @@ body {
     }
 }
 
-.responsive-header {
-    display: none;
-}
-
+// .responsive-header {
+//     display: none;
+// }
 .responsive-locale-switcher {
     display: flex;
     align-items: center;
@@ -116,10 +115,6 @@ body {
     max-height: 200px;
 }
 
-.form-inline.form-control.set-time {
-    max-width: 15em;
-}
-
 .timestamp-wrapper {
     display: flex;
     flex-direction: column;
@@ -127,14 +122,16 @@ body {
     color: rgb(100, 100, 100);
     font-size: 0.8rem;
     width: -webkit-fill-available;
+    max-width: 20em;
 }
 
 .edit-wrapper {
     display: flex;
     flex-direction: row-reverse;
+    justify-content: space-between;
 }
 
-.reservation-time {
+.edit-field {
     legend {
         color: var(--form-label-color);
         font-size: var(--font-size-base);
@@ -148,6 +145,37 @@ body {
 
 .set-time-reservation {
     cursor: text;
+}
+
+form#edit-User-form button[type='button'].btn.btn-link {
+    &.field-collection-add-button,
+    &.btn-link-danger.field-collection-delete-button {
+        display: none;
+    }
+}
+
+.is-deleted-label span {
+    color: var(--white);
+    &.edit {
+        font-size: 1rem;
+        display: inline;
+        padding: 3px 15px;
+    }
+    &.badge-boolean-true {
+        background: var(--red-600);
+    }
+    &.badge-boolean-false {
+        background: var(--color-success);
+    }
+}
+
+.edit-form {
+    flex: 1;
+}
+
+#modal-set-time #loading {
+    text-align: center;
+    font-size: 2.5em;
 }
 
 @media only screen and (max-width: 991.98px) {
@@ -183,5 +211,17 @@ body {
     .edit-wrapper {
         flex-direction: column;
         gap: 2em;
+    }
+    .page-actions {
+        gap: 0.5em;
+    }
+    .timestamp-wrapper {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 767.98px) {
+    .edit-field .form-control {
+        max-width: 100%;
     }
 }

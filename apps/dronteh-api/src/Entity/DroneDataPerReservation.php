@@ -19,11 +19,6 @@ class DroneDataPerReservation
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $gps_coordinates;
-
-    /**
      * @ORM\Column(type="string", length=5000)
      */
     private $results;
@@ -57,18 +52,6 @@ class DroneDataPerReservation
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getGpsCoordinates(): ?string
-    {
-        return $this->gps_coordinates;
-    }
-
-    public function setGpsCoordinates(string $gps_coordinates): self
-    {
-        $this->gps_coordinates = $gps_coordinates;
-
-        return $this;
     }
 
     public function getResults(): ?string
@@ -149,5 +132,10 @@ class DroneDataPerReservation
     public function convertDates(): void
     {
         $this->created_at = new \DateTime('@'.strtotime('now'));
+    }
+
+    public function __toString(): string
+    {
+        return $this->reservation;
     }
 }

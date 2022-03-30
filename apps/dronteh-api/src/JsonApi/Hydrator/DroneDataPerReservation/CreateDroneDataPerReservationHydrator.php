@@ -15,9 +15,6 @@ class CreateDroneDataPerReservationHydrator extends AbstractDroneDataPerReservat
     protected function getAttributeHydrator($droneDataPerReservation): array
     {
         return [
-            'gps_coordinates' => function (DroneDataPerReservation $droneDataPerReservation, $attribute, $data, $attributeName) {
-                $droneDataPerReservation->setGpsCoordinates($attribute);
-            },
             'results' => function (DroneDataPerReservation $droneDataPerReservation, $attribute, $data, $attributeName) {
                 $droneDataPerReservation->setResults($attribute);
             },

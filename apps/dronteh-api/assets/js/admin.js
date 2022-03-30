@@ -6,6 +6,7 @@ function windowLoaded() {
     setTimeClick();
     undeleteActions();
     setTimeActions();
+    changeNumberType();
 }
 
 function rowClick() {
@@ -46,18 +47,18 @@ function setTimeClick() {
 }
 
 function sendTimeAndSendNotificationClick() {
-    const setTimeForm = document.querySelector("#set-time-form");
-    if (setTimeForm) setTimeForm.addEventListener("submit", () => {
+    const setTimeModal = document.querySelector("#modal-set-time");
+    if (setTimeModal) setTimeModal.querySelector("#set-time-form").addEventListener("submit", () => {
         document.addEventListener("click", (event) => {
             event.stopPropagation();
             event.preventDefault();
         }, true);
-        const submitButton = document.querySelector("button.btn[type='submit'][form='set-time-form']");
+        const submitButton = setTimeModal.querySelector("button.btn[type='submit'][form='set-time-form']");
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         submitButton.style.width = '70px';
         submitButton.style.textAling = 'center';
         submitButton.disabled = true;
-        document.querySelector("div#modal-set-time button[type='button'][data-bs-dismiss='modal']").disabled = true;
+        setTimeModal.querySelector("div#modal-set-time button[type='button'][data-bs-dismiss='modal']").disabled = true;
     });
 }
 
@@ -67,10 +68,8 @@ const undeleteActions = () => {
             event.preventDefault();
 
             document.querySelector('#modal-undelete-button').addEventListener('click', () => {
-                const undeleteFormAction = new URL(actionElement.getAttribute('href'));
-                undeleteFormAction.search = undeleteFormAction.search.split('&').filter(param => param.substring(0, 8) !== 'referrer').join('&');
                 const undeleteForm = document.querySelector('#undelete-form');
-                undeleteForm.setAttribute('action', undeleteFormAction);
+                undeleteForm.setAttribute('action', actionElement.getAttribute('formaction'));
                 undeleteForm.submit();
             });
         });
@@ -78,36 +77,60 @@ const undeleteActions = () => {
 }
 
 const setTimeActions = () => {
-    function isNumeric(str) {
-        if (typeof str != "string") return false // we only process strings!
-        return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-            !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-    }
+    document.querySelectorAll('.action-setTime').forEach((actionElement) => {
+        actionElement.addEventListener('click', (event) => {
+            event.preventDefault();
+            const setTimeModal = document.querySelector('#modal-set-time');
+            const setTimeModalContent = setTimeModal.querySelector('.modal-body .content');
+            const loading = setTimeModal.querySelector('#loading');
 
-    const bodyId = document.querySelector("body").id.split('-');
-    const entityId = bodyId[bodyId.length - 1];
+            loading.style.display = 'block';
+            setTimeModalContent.style.display = 'none';
 
-    if (isNumeric(entityId)) {
-        document.querySelector("a[data-bs-target='#modal-set-time']").setAttribute('data-bs-target', '#modal-set-time-' + entityId);
-    } else if (bodyId[1] === 'index') {
-        document.querySelectorAll(".table-wrapper table tbody tr").forEach(row => {
-            const entityId = row.getAttribute("data-id");
-            row.querySelector("td.actions a[data-bs-target='#modal-set-time']").setAttribute('data-bs-target', '#modal-set-time-' + entityId);
-        })
-    }
+            const fetchUrl = actionElement.getAttribute('fetchurl');
+            const csrfToken = actionElement.getAttribute('csrf-token');
 
-    document.querySelectorAll("[id^='modal-set-time-']").forEach(modalSetTime => {
-        modalSetTime.querySelector("form").addEventListener("submit", () => {
-            document.addEventListener("click", (event) => {
-                event.stopPropagation();
-                event.preventDefault();
-            }, true);
-            const submitButton = modalSetTime.querySelector("button.btn[type='submit'][form^='set-time-form-']");
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            submitButton.style.width = '70px';
-            submitButton.style.textAling = 'center';
-            submitButton.disabled = true;
-            modalSetTime.querySelector("div button[type='button'][data-bs-dismiss='modal']").disabled = true;
+            getSetTimeData(fetchUrl, csrfToken).then(data => {
+                const time = data.data.time;
+
+                setTimeModal.querySelector('input#set_time_time').setAttribute('value', time ? time.split('+')[0] : null);
+                setTimeModal.querySelector('#interval-start').innerText = data.data.interval_start;
+                setTimeModal.querySelector('#interval-end').innerText = data.data.interval_end;
+                setTimeModal.querySelector('label[for="set_time_time"]').style.opacity = time ? 1 : 0;
+
+                loading.style.display = 'none';
+                setTimeModalContent.style.display = 'block';
+
+                setTimeModal.querySelector('#modal-set-time-button').addEventListener('click', () => {
+                    const undeleteForm = setTimeModal.querySelector('#set-time-form');
+                    undeleteForm.setAttribute('action', actionElement.getAttribute('formaction'));
+                    undeleteForm.submit();
+                });
+            });
         });
     });
+}
+
+async function getSetTimeData(fetchUrl, csrfToken) {
+    const response = await fetch(fetchUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken
+        },
+    });
+
+    return response.json();
+}
+
+function changeNumberType() {
+    const form = document.querySelector("form#edit-Rating-form");
+    if (form) {
+        input = form.querySelector("input[type='text']#Rating_rating");
+        if (input) {
+            input.setAttribute("type", "number");
+            input.setAttribute("max", "5");
+            input.setAttribute("min", "1");
+        }
+    }
 }

@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Admin\ChemicalCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -30,6 +29,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -47,7 +47,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\NumericFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
@@ -65,9 +64,8 @@ class ReservationCrudController extends AbstractUndeleteCrudController
     private AdminContextProvider $adminContextProvider;
     private EventDispatcher $dispatcher;
     private MailerInterface $mailer;
-    private SessionInterface $session;
 
-    public function __construct(AdminUrlGenerator $adminUrlGenerator, TranslatorInterface $translator, ManagerRegistry $doctrine, AdminContextProvider $adminContextProvider, MailerInterface $mailer, SessionInterface $session)
+    public function __construct(AdminUrlGenerator $adminUrlGenerator, TranslatorInterface $translator, ManagerRegistry $doctrine, AdminContextProvider $adminContextProvider, MailerInterface $mailer)
     {
         $this->adminUrlGenerator = $adminUrlGenerator;
         $this->translator = $translator;
@@ -75,7 +73,6 @@ class ReservationCrudController extends AbstractUndeleteCrudController
         $this->adminContextProvider = $adminContextProvider;
         $this->dispatcher = new EventDispatcher();
         $this->mailer = $mailer;
-        $this->session = $session;
     }
 
     public static function getEntityFqcn(): string
@@ -86,31 +83,40 @@ class ReservationCrudController extends AbstractUndeleteCrudController
     public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
     {
         $pageName = $responseParameters->get('pageName');
+        $entityInstances = [];
 
         if (Crud::PAGE_DETAIL === $pageName || Crud::PAGE_EDIT === $pageName) {
-            $setTimeForm = $this->createForm(SetTimeType::class, [
-                'time' => $responseParameters->get('entity')->getInstance()->getTime(),
-            ])->createView();
-
-            $responseParameters->set('set_time_form', $setTimeForm);
+            $entityInstances[] = $responseParameters->get('entity');
         } else if (Crud::PAGE_INDEX === $pageName) {
-            $setTimeForms = [];
-            foreach($responseParameters->get('entities') as $entity) {
-                $entityInstance = $entity->getInstance();
-                $setTimeForms[$entityInstance->getId()] = $this->createForm(SetTimeType::class, [
-                    'time' => $entityInstance->getTime(),
-                ])->createView();
-            }
-
-            $responseParameters->set('set_time_forms', $setTimeForms);
+            $entityInstances = $responseParameters->get('entities');
         }
 
-        return $responseParameters;
+        foreach($entityInstances as $entity) {
+            $entityInstance = $entity->getInstance();
+
+            foreach($entity->getActions() as $action) {
+                if ($action->getName() === 'setTime') {
+                    $entityId = $entityInstance->getId();
+
+                    $action->addHtmlAttributes([
+                        'formaction' => $this->adminUrlGenerator->setAction('setTime')->setEntityId($entityId)->removeReferrer()->generateUrl(),
+                        'fetchurl' => $this->generateUrl('get_set_time_info', [
+                            'id' => $entityId,
+                        ], false),
+                        'csrf-token' => $this->container->get('security.csrf.token_manager')->refreshToken('setTime-'.$entityId)->getValue()
+                    ]);
+                }
+            }
+        }
+
+        $responseParameters->set('set_time_form', $this->createForm(SetTimeType::class)->createView());
+
+        return parent::configureResponseParameters($responseParameters);
     }
 
     public function configureFields(string $pageName): iterable
     {
-        $toBePresent = BooleanField::new('to_be_present', 'admin.list.reservations.to_be_present')->hideWhenCreating();
+        $toBePresent = BooleanField::new('to_be_present', 'admin.list.reservations.to_be_present')->hideWhenCreating()->hideOnIndex();
         $time = DateTimeField::new('time', 'admin.list.reservations.time');
         $createdAt = DateTimeField::new('created_at', 'admin.list.created_at');
         $updatedAt = DateTimeField::new('updated_at', 'admin.list.updated_at');
@@ -133,8 +139,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
 
         $locale = $this->adminContextProvider->getContext()->getRequest()->getLocale();
 
-        return [
-            IdField::new('id', 'admin.list.id')->hideOnForm(),
+        return array_merge(parent::configureFields($pageName), [
             AssociationField::new('user', 'admin.singular.user')
                 ->setCrudController(UserCrudController::class)
                 ->autocomplete()
@@ -142,10 +147,12 @@ class ReservationCrudController extends AbstractUndeleteCrudController
                     fn (QueryBuilder $queryBuilder) => $queryBuilder
                         ->getEntityManager()
                         ->getRepository(User::class)
-                        ->createQueryBuilder('r')
-                        ->where('r.is_deleted = 0')
-                        ->orderBy('r.firstname', 'ASC')
-                        ->orderBy('r.lastname', 'ASC')
+                        ->findBy([
+                            'is_deleted' => false,
+                        ], [
+                            'firstname' => 'ASC',
+                            'lastname' => 'ASC',
+                        ])
                 )
             ,
             AssociationField::new('chemical', 'admin.singular.chemical')
@@ -155,9 +162,11 @@ class ReservationCrudController extends AbstractUndeleteCrudController
                     fn (QueryBuilder $queryBuilder) => $queryBuilder
                         ->getEntityManager()
                         ->getRepository(Chemical::class)
-                        ->createQueryBuilder('r')
-                        ->where('r.is_deleted = 0')
-                        ->orderBy('r.name_'.$locale, 'ASC')
+                        ->findBy([
+                            'is_deleted' => false,
+                        ], [
+                            'name_'.$locale => 'ASC',
+                        ])
                 )
             ,
             AssociationField::new('plant', 'admin.singular.plant')
@@ -167,12 +176,15 @@ class ReservationCrudController extends AbstractUndeleteCrudController
                     fn (QueryBuilder $queryBuilder) => $queryBuilder
                         ->getEntityManager()
                         ->getRepository(Plant::class)
-                        ->createQueryBuilder('r')
-                        ->where('r.is_deleted = 0')
-                        ->orderBy('r.name_'.$locale, 'ASC')
+                        ->findBy([
+                            'is_deleted' => false,
+                        ], [
+                            'name_'.$locale => 'ASC',
+                        ])
                 )
             ,
             TextField::new('parcel_number', 'admin.list.reservations.parcel_number'),
+            TextField::new('gps_coordinates', 'admin.list.reservations.gps_coordinates'),
             NumberField::new('land_area', 'admin.list.reservations.land_area'),
             ChoiceField::new('status', 'admin.list.reservations.status')
                 ->setChoices($statuses)
@@ -187,8 +199,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             TextareaField::new('comment', 'admin.list.reservations.comment')->setMaxLength(5000)->setNumOfRows(6)->stripTags()->hideOnIndex(),
             $createdAt,
             $updatedAt,
-            BooleanField::new('is_deleted', 'admin.list.is_deleted')->renderAsSwitch(false)->setHelp('admin.list.help.is_deleted')->hideOnForm(),
-        ];
+        ]);
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -275,7 +286,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
         $intervalEnd = $entityInstance->getReservationIntervalEnd();
 
         if ($intervalStart > $formattedTime || $intervalEnd < $formattedTime) {
-            $this->session->getFlashBag()->add('danger', new TranslatableMessage('admin.flash.reservations.set_time.time_between_interval', [
+            $this->addFlash('danger', new TranslatableMessage('admin.flash.reservations.set_time.time_between_interval', [
                 '%interval_start%' => $intervalStart,
                 '%interval_end%' => $intervalEnd,
             ], 'admin'));
@@ -301,7 +312,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
 
             $this->setTimeAndSendNotification($setTimeForm->getData()['time'], $entityInstance);
 
-            $this->session->getFlashBag()->add('success', new TranslatableMessage('admin.flash.reservations.set_time.success', [
+            $this->addFlash('success', new TranslatableMessage('admin.flash.reservations.set_time.success', [
                 '%reservation%' => (string) $entityInstance
             ], 'admin'));
 
@@ -360,7 +371,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
         try {
             $this->mailer->send($email);
         } catch(TransportExceptionInterface $e) {
-            $this->session->getFlashBag()->add('danger', new TranslatableMessage('admin.flash.reservations.set_time.error', [
+            $this->addFlash('danger', new TranslatableMessage('admin.flash.reservations.set_time.error', [
                 '%entity%' => (string) $reservation
             ], 'admin'));
         }
@@ -373,7 +384,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             $statuses[$this->translator->trans('admin.list.reservations.statuses.'.$i, [], 'admin')] = $i;
         }
 
-        return $filters
+        return parent::configureFilters($filters)
             ->add(EntityFilter::new('user', $this->translator->trans('admin.singular.user', [], 'admin'))
                 ->setFormTypeOption('value_type_options', [
                     'multiple' => true,
@@ -410,10 +421,9 @@ class ReservationCrudController extends AbstractUndeleteCrudController
                     }
                 ])
             )
-            ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
-            ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
             ->add(ReservationDateTimeFilter::new('time', $this->translator->trans('admin.list.reservations.time', [], 'admin')))
             ->add(NumericFilter::new('parcel_number', $this->translator->trans('admin.list.reservations.parcel_number', [], 'admin')))
+            ->add(TextFilter::new('gps_coordinates', $this->translator->trans('admin.list.reservations.gps_coordinates', [], 'admin')))
             ->add(NumericFilter::new('land_area', $this->translator->trans('admin.list.reservations.land_area', [], 'admin')))
             ->add(ChoiceFilter::new('status', $this->translator->trans('admin.list.reservations.status', [], 'admin'))
                 ->setChoices($statuses)
@@ -425,7 +435,8 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             )
             ->add(DateTimeFilter::new('reservation_interval_start', $this->translator->trans('admin.list.reservations.reservation_interval_start', [], 'admin')))
             ->add(DateTimeFilter::new('reservation_interval_end', $this->translator->trans('admin.list.reservations.reservation_interval_end', [], 'admin')))
-            ->add(BooleanFilter::new('is_deleted', $this->translator->trans('admin.list.is_deleted', [], 'admin')))
+            ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
+            ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
         ;
     }
 }

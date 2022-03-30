@@ -61,6 +61,9 @@ class ReservationResourceTransformer extends AbstractResource
             'parcel_number' => function (Reservation $reservation) {
                 return $reservation->getParcelNumber();
             },
+            'gps_coordinates' => function (Reservation $reservation) {
+                return $reservation->getGpsCoordinates();
+            },
             'land_area' => function (Reservation $reservation) {
                 return $reservation->getLandArea();
             },

@@ -30,6 +30,11 @@ class Reservation
     private $parcel_number;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $gps_coordinates;
+
+    /**
      * @ORM\Column(type="float")
      */
     private $land_area;
@@ -116,6 +121,18 @@ class Reservation
     public function setParcelNumber(string $parcel_number): self
     {
         $this->parcel_number = $parcel_number;
+
+        return $this;
+    }
+
+    public function getGpsCoordinates(): ?string
+    {
+        return $this->gps_coordinates;
+    }
+
+    public function setGpsCoordinates(string $gps_coordinates): self
+    {
+        $this->gps_coordinates = $gps_coordinates;
 
         return $this;
     }
@@ -240,7 +257,7 @@ class Reservation
         return $this;
     }
 
-    public function getReservationIntervalStart(): ?\DateTime
+    public function getReservationIntervalStart(): \DateTime
     {
         return $this->reservation_interval_start;
     }
@@ -252,7 +269,7 @@ class Reservation
         return $this;
     }
 
-    public function getReservationIntervalEnd(): ?\DateTime
+    public function getReservationIntervalEnd(): \DateTime
     {
         return $this->reservation_interval_end;
     }
@@ -283,6 +300,6 @@ class Reservation
 
     public function __toString(): string
     {
-        return '#'.$this->parcel_number;
+        return '#'.$this->parcel_number.' - '.$this->user->getFirstname().' '.$this->user->getLastname();
     }
 }
