@@ -75,6 +75,7 @@ security:
     - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
     - { path: ^/api/reservations/get_set_time_info, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api/reservations/get_map_info, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH, DELETE] }
     - { path: ^/api/ratings, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
     - { path: ^/api/ratings, roles: PUBLIC_ACCESS, methods: [GET] }

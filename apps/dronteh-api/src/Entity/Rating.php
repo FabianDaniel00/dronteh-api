@@ -24,7 +24,7 @@ class Rating
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Chemical::class)
+     * @ORM\ManyToOne(targetEntity=Chemical::class, inversedBy="ratings")
      * @ORM\JoinColumn(nullable=false)
      */
     private $chemical;

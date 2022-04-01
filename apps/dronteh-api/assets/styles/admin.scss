@@ -1,3 +1,4 @@
+@import 'leaflet/dist/leaflet.css';
 // :root {
 //     --body-bg: var(--gray-800);
 // }
@@ -5,7 +6,7 @@ body {
     overflow-x: hidden;
 }
 
-* {
+* :not(#map > *) {
     transition: .3s;
     -webkit-transition: .3s;
     -moz-transition: .3s;
@@ -61,6 +62,7 @@ body {
     gap: 1em;
     flex-wrap: wrap;
     justify-content: flex-end !important;
+    flex: 2;
     >* {
         margin-left: 0 !important;
     }
@@ -78,6 +80,10 @@ body {
     .vr {
         height: 2.5em;
     }
+}
+
+.responsive-header {
+    display: none;
 }
 
 .locale-switcher {
@@ -101,9 +107,6 @@ body {
     }
 }
 
-// .responsive-header {
-//     display: none;
-// }
 .responsive-locale-switcher {
     display: flex;
     align-items: center;
@@ -147,7 +150,7 @@ body {
     cursor: text;
 }
 
-form#edit-User-form button[type='button'].btn.btn-link {
+button[type='button'].btn.btn-link {
     &.field-collection-add-button,
     &.btn-link-danger.field-collection-delete-button {
         display: none;
@@ -173,9 +176,18 @@ form#edit-User-form button[type='button'].btn.btn-link {
     flex: 1;
 }
 
-#modal-set-time #loading {
-    text-align: center;
-    font-size: 2.5em;
+.content-header-title h1.title {
+    font-size: 1.5rem;
+}
+
+#map {
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
 @media only screen and (max-width: 991.98px) {
@@ -210,7 +222,6 @@ form#edit-User-form button[type='button'].btn.btn-link {
     }
     .edit-wrapper {
         flex-direction: column;
-        gap: 2em;
     }
     .page-actions {
         gap: 0.5em;
@@ -223,5 +234,8 @@ form#edit-User-form button[type='button'].btn.btn-link {
 @media only screen and (max-width: 767.98px) {
     .edit-field .form-control {
         max-width: 100%;
+    }
+    #map {
+        height: 300px;
     }
 }

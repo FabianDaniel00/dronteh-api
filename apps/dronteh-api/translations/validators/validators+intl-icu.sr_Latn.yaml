@@ -39,3 +39,8 @@ validators:
         }
       locale:
         "'{string}' nije podržan jezik."
+
+  reservations:
+    constraint:
+      latlng:
+        'Nevažeće koordinate. [{string}]'

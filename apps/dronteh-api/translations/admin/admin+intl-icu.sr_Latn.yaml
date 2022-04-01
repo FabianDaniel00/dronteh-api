@@ -96,6 +96,14 @@ admin:
        'Kraj intervala'
       comment:
         'Komentar'
+      drone_data:
+        'Podaci o dronovima'
+      chemical_quantity_per_ha:
+        'Hemijski [L]/[ha]'
+      water_quantity:
+        'Voda [L]'
+      results:
+        'Rezultati'
 
       help:
         status:
@@ -108,14 +116,6 @@ admin:
     chemicals:
       price_per_liter:
         'Cena/[L]'
-
-    drone_data_per_reservations:
-      chemical_quantity_per_ha:
-        'Hemijski [L]/[ha]'
-      water_quantity:
-        'Voda [L]'
-      results:
-        'Rezultati'
 
   title:
     index:
@@ -159,8 +159,6 @@ admin:
       'Biljka'
     rating:
       'Rejting'
-    drone_data_per_reservation:
-      'Podaci o dronovima'
 
   plural:
     user:
@@ -173,8 +171,6 @@ admin:
       'Biljke'
     rating:
       'Ocene'
-    drone_data_per_reservation:
-      'Podaci o dronovima'
 
   flash:
     entity:

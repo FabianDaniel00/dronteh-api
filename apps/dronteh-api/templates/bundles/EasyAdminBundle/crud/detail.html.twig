@@ -1,6 +1,12 @@
 {% extends '@!EasyAdmin/crud/detail.html.twig' %}
 
 {% block main %}
+    {% set entityName = entity.getName() %}
+
+    {% if entityName == 'Reservation' %}
+        <div id="map" class="my-3 shadow-sm" data-latlng="{{ entity.getInstance().getGpsCoordinates()|join(';') }}"></div>
+    {% endif %}
+
     {% block detail_fields %}
         {% set form_panel_is_already_open = false %}
         {% for field in entity.fields %}
@@ -39,7 +45,7 @@
         {% endblock undelete_form %}
     {% endif %}
 
-    {% if entity.getName() == 'Reservation' %}
+    {% if entityName == 'Reservation' %}
         {% block set_time_form %}
             {{ include('@EasyAdmin/crud/includes/_set_time_form.html.twig', { set_time_form }, with_context = false) }}
         {% endblock set_time_form %}

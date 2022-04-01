@@ -38,4 +38,9 @@ validators:
           other {'{string, string}' roles are invalid.}
         }
       locale:
-        "The '{string}' is not supported language."z
+        "The '{string}' is not supported language."
+
+  reservations:
+    constraint:
+      latlng:
+        'Not valid coordinates. [{string}]'

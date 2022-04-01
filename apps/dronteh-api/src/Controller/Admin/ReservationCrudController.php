@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\Plant;
+use IntlDateFormatter;
 use App\Entity\Chemical;
 use App\Entity\Reservation;
 use App\Form\Type\SetTimeType;
@@ -21,15 +22,16 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Admin\ChemicalCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -96,14 +98,14 @@ class ReservationCrudController extends AbstractUndeleteCrudController
 
             foreach($entity->getActions() as $action) {
                 if ($action->getName() === 'setTime') {
-                    $entityId = $entityInstance->getId();
+                    $formatter = new IntlDateFormatter($this->adminContextProvider->getContext()->getRequest()->getLocale(), IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
+                    $time = $entityInstance->getTime();
 
                     $action->addHtmlAttributes([
-                        'formaction' => $this->adminUrlGenerator->setAction('setTime')->setEntityId($entityId)->removeReferrer()->generateUrl(),
-                        'fetchurl' => $this->generateUrl('get_set_time_info', [
-                            'id' => $entityId,
-                        ], false),
-                        'csrf-token' => $this->container->get('security.csrf.token_manager')->refreshToken('setTime-'.$entityId)->getValue()
+                        'formaction' => $this->adminUrlGenerator->setAction('setTime')->setEntityId($entityInstance->getId())->removeReferrer()->generateUrl(),
+                        'data-time' => $time ? $time->format('Y-m-d\\TH:i') : null,
+                        'data-interval-start' => $formatter->format($entityInstance->getReservationIntervalStart()),
+                        'data-interval-end' => $formatter->format($entityInstance->getReservationIntervalEnd()),
                     ]);
                 }
             }
@@ -114,8 +116,21 @@ class ReservationCrudController extends AbstractUndeleteCrudController
         return parent::configureResponseParameters($responseParameters);
     }
 
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addWebpackEncoreEntry('reservation')
+        ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
+        $isDeleted = BooleanField::new('is_deleted', 'admin.list.is_deleted')
+            ->renderAsSwitch(false)
+            ->addCssClass('is-deleted-label')
+            ->hideOnIndex()
+            ->hideWhenCreating()
+        ;
         $toBePresent = BooleanField::new('to_be_present', 'admin.list.reservations.to_be_present')->hideWhenCreating()->hideOnIndex();
         $time = DateTimeField::new('time', 'admin.list.reservations.time');
         $createdAt = DateTimeField::new('created_at', 'admin.list.created_at');
@@ -127,6 +142,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             $createdAt->hideWhenCreating();
             $updatedAt->hideWhenCreating();
         } else {
+            $isDeleted->addCssClass('d-none');
             $time->addCssClass('d-none');
             $createdAt->addCssClass('d-none');
             $updatedAt->addCssClass('d-none');
@@ -139,7 +155,9 @@ class ReservationCrudController extends AbstractUndeleteCrudController
 
         $locale = $this->adminContextProvider->getContext()->getRequest()->getLocale();
 
-        return array_merge(parent::configureFields($pageName), [
+        return [
+            FormField::addTab('admin.singular.reservation'),
+            $isDeleted,
             AssociationField::new('user', 'admin.singular.user')
                 ->setCrudController(UserCrudController::class)
                 ->autocomplete()
@@ -184,7 +202,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
                 )
             ,
             TextField::new('parcel_number', 'admin.list.reservations.parcel_number'),
-            TextField::new('gps_coordinates', 'admin.list.reservations.gps_coordinates'),
+            ArrayField::new('gps_coordinates', 'admin.list.reservations.gps_coordinates'),
             NumberField::new('land_area', 'admin.list.reservations.land_area'),
             ChoiceField::new('status', 'admin.list.reservations.status')
                 ->setChoices($statuses)
@@ -199,7 +217,12 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             TextareaField::new('comment', 'admin.list.reservations.comment')->setMaxLength(5000)->setNumOfRows(6)->stripTags()->hideOnIndex(),
             $createdAt,
             $updatedAt,
-        ]);
+            FormField::addTab('admin.list.reservations.drone_data'),
+            FormField::addPanel('admin.list.reservations.drone_data')->onlyOnDetail(),
+            TextareaField::new('results', 'admin.list.reservations.results')->setMaxLength(5000)->setNumOfRows(6)->stripTags()->hideOnIndex(),
+            NumberField::new('chemical_quantity_per_ha', 'admin.list.reservations.chemical_quantity_per_ha')->hideOnIndex(),
+            NumberField::new('water_quantity', 'admin.list.reservations.water_quantity')->hideOnIndex(),
+        ];
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -423,7 +446,6 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             )
             ->add(ReservationDateTimeFilter::new('time', $this->translator->trans('admin.list.reservations.time', [], 'admin')))
             ->add(NumericFilter::new('parcel_number', $this->translator->trans('admin.list.reservations.parcel_number', [], 'admin')))
-            ->add(TextFilter::new('gps_coordinates', $this->translator->trans('admin.list.reservations.gps_coordinates', [], 'admin')))
             ->add(NumericFilter::new('land_area', $this->translator->trans('admin.list.reservations.land_area', [], 'admin')))
             ->add(ChoiceFilter::new('status', $this->translator->trans('admin.list.reservations.status', [], 'admin'))
                 ->setChoices($statuses)
@@ -435,6 +457,8 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             )
             ->add(DateTimeFilter::new('reservation_interval_start', $this->translator->trans('admin.list.reservations.reservation_interval_start', [], 'admin')))
             ->add(DateTimeFilter::new('reservation_interval_end', $this->translator->trans('admin.list.reservations.reservation_interval_end', [], 'admin')))
+            ->add(NumericFilter::new('chemical_quantity_per_ha', $this->translator->trans('admin.list.reservations.chemical_quantity_per_ha', [], 'admin')))
+            ->add(NumericFilter::new('water_quantity', $this->translator->trans('admin.list.reservations.water_quantity', [], 'admin')))
             ->add(DateTimeFilter::new('created_at', $this->translator->trans('admin.list.created_at', [], 'admin')))
             ->add(DateTimeFilter::new('updated_at', $this->translator->trans('admin.list.updated_at', [], 'admin')))
         ;

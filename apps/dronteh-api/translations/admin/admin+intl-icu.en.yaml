@@ -96,6 +96,14 @@ admin:
        'Interval end'
       comment:
         'Comment'
+      drone_data:
+        'Drone datas'
+      chemical_quantity_per_ha:
+        'Chemical [L]/[ha]'
+      water_quantity:
+        'Water [L]'
+      results:
+        'Results'
 
       help:
         status:
@@ -108,14 +116,6 @@ admin:
     chemicals:
       price_per_liter:
         'Price/[L]'
-
-    drone_data_per_reservations:
-      chemical_quantity_per_ha:
-        'Chemical [L]/[ha]'
-      water_quantity:
-        'Water [L]'
-      results:
-        'Results'
 
   title:
     index:
@@ -159,8 +159,6 @@ admin:
       'Plant'
     rating:
       'Rating'
-    drone_data_per_reservation:
-      'Drone Data'
 
   plural:
     user:
@@ -173,8 +171,6 @@ admin:
       'Plants'
     rating:
       'Ratings'
-    drone_data_per_reservation:
-      'Drone Datas'
 
   flash:
     entity:

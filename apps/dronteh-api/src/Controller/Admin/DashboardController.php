@@ -4,10 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\Plant;
-use App\Entity\Rating;
 use App\Entity\Chemical;
 use App\Entity\Reservation;
-use App\Entity\DroneDataPerReservation;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -103,6 +101,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
+            MenuItem::section('admin.plural.user'),
             MenuItem::linkToCrud('admin.plural.user', 'fas fa-users', User::class)
                 ->setQueryParameter('filters[is_deleted][comparison]', '0')
             ,
@@ -111,18 +110,12 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('admin.plural.reservation', 'fa fa-ticket', Reservation::class)
                 ->setQueryParameter('filters[is_deleted][comparison]', '0')
             ,
-            MenuItem::linkToCrud('admin.plural.drone_data_per_reservation', 'fas fa-clipboard-check', DroneDataPerReservation::class)
-                ->setQueryParameter('filters[is_deleted][comparison]', '0')
-            ,
 
             MenuItem::section('admin.section.others'),
             MenuItem::linkToCrud('admin.plural.plant', 'fas fa-seedling', Plant::class)
                 ->setQueryParameter('filters[is_deleted][comparison]', '0')
             ,
             MenuItem::linkToCrud('admin.plural.chemical', 'fas fa-bong', Chemical::class)
-                ->setQueryParameter('filters[is_deleted][comparison]', '0')
-            ,
-            MenuItem::linkToCrud('admin.plural.rating', 'fas fa-star-half-alt', Rating::class)
                 ->setQueryParameter('filters[is_deleted][comparison]', '0')
             ,
 

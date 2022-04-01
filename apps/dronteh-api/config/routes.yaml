@@ -6,3 +6,7 @@ gesdinet_jwt_refresh_token:
   path: /api/token/refresh
   controller: gesdinet.jwtrefreshtoken::refresh
   methods: GET
+
+_geojson_get_stores:
+  path: /geojson/stores
+  defaults: { _controller: AppBundle:GeoJson:getStores }

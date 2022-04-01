@@ -2,26 +2,18 @@
 
 namespace App\Validator;
 
-use App\Validator\Locales;
+use App\Validator\LatLng;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class LocalesValidator extends ConstraintValidator
+class LatLngValidator extends ConstraintValidator
 {
-    private ParameterBagInterface $params;
-
-    public function __construct(ParameterBagInterface $params)
-    {
-        $this->params = $params;
-    }
-
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof Locales) {
-            throw new UnexpectedTypeException($constraint, Locales::class);
+        if (!$constraint instanceof LatLng) {
+            throw new UnexpectedTypeException($constraint, LatLng::class);
         }
 
         // custom constraints should ignore null and empty values to allow
@@ -30,17 +22,18 @@ class LocalesValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_string($value)) {
+        if (!is_array($value)) {
             // throw this exception if your validator cannot handle the passed type so that it can be marked as invalid
-            throw new UnexpectedValueException($value, 'string');
+            throw new UnexpectedValueException($value, 'array');
 
             // separate multiple types using pipes
             // throw new UnexpectedValueException($value, 'string|int');
         }
 
-        if (!in_array($value, explode('|', $this->params->get('app.supported_locales')))) {
+        $latLng = join(';', $value);
+        if (!preg_match('/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?);\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/', $latLng)) {
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ string }}', $value)
+                ->setParameter('{{ string }}', $latLng)
                 ->addViolation();
         }
     }

@@ -56,29 +56,6 @@ class ReservationController extends Controller
     }
 
     /**
-     * @Route("/get_set_time_info/{id}", name="get_set_time_info", methods="GET")
-     */
-    public function getSetTimeInfo(Reservation $reservation, Request $request): Response
-    {
-        if (!$this->isCsrfTokenValid('setTime-'.$reservation->getId(), $request->headers->get('x-csrf-token'))) {
-            // throw new InvalidCsrfTokenException();
-        }
-
-        $formatter = new IntlDateFormatter($request->getLocale(), IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
-        $intervalStart = $formatter->format($reservation->getReservationIntervalStart());
-        $intervalEnd = $formatter->format($reservation->getReservationIntervalEnd());
-        $time = $reservation->getTime();
-
-        return new JsonResponse([
-            'data' => [
-                'time' => $time ? $time->format(\DATE_ATOM) : null,
-                'interval_start' => $intervalStart,
-                'interval_end' => $intervalEnd,
-            ]
-        ]);
-    }
-
-    /**
      * @Route("/", name="reservations_new", methods="POST")
      */
     public function new(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response

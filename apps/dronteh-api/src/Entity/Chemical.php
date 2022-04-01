@@ -2,15 +2,27 @@
 
 namespace App\Entity;
 
-use App\Repository\ChemicalRepository;
+use App\Entity\Rating;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Locale;
+use App\Repository\ChemicalRepository;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * @ORM\Entity(repositoryClass=ChemicalRepository::class)
  */
 class Chemical
 {
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+        $this->ratings = new ArrayCollection();
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -42,6 +54,11 @@ class Chemical
      * @ORM\Column(type="string", length=255)
      */
     private $name_sr_Latn;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rating::class, mappedBy="chemical", orphanRemoval=true)
+     */
+    private $ratings;
 
     public function getId(): ?int
     {
@@ -116,6 +133,49 @@ class Chemical
     public function setNameSrLatn(?string $name_sr_Latn): self
     {
         $this->name_sr_Latn = $name_sr_Latn;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function getAvgRating(): ?float
+    {
+        $sumRating = 0;
+        $ratings = $this->ratings->getValues();
+
+        foreach ($ratings as $rating) {
+            $sumRating += $rating->getRating();
+        }
+
+        $ratingsCount = count($ratings);
+        return $ratingsCount ? $sumRating / count($ratings) : 0;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings[] = $rating;
+            $rating->setChemical($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getChemical() === $this) {
+                $rating->setChemical(null);
+            }
+        }
 
         return $this;
     }

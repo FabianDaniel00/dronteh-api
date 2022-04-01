@@ -36,6 +36,9 @@ App\Entity\Reservation:
       - NotBlank: ~
     parcel_number:
       - NotBlank: ~
+    gps_coordinates:
+      - NotBlank: ~
+      - App\Validator\LatLng: ~
     land_area:
       - NotBlank: ~
       - Positive: ~
@@ -76,26 +79,6 @@ App\Entity\Plant:
       - Length: { min: 2, max: 255 }
     name_sr_Latn:
       - Length: { max: 255 }
-    is_deleted:
-      - Choice: { choices: [true, false, 1, 0] }
-
-
-App\Entity\DroneDataPerReservation:
-  properties:
-    gps_coordinates:
-      - NotBlank: ~
-      - Regex: { pattern: '/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?);[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', match: false }
-    results:
-      - NotBlank: ~
-      - Length: { min: 2, max: 5000 }
-    chemical_quantity_per_ha:
-      - NotBlank: ~
-      - Positive: ~
-    water_quantity:
-      - NotBlank: ~
-      - Positive: ~
-    reservation:
-      - NotBlank: ~
     is_deleted:
       - Choice: { choices: [true, false, 1, 0] }
 

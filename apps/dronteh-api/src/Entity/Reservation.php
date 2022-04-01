@@ -30,7 +30,7 @@ class Reservation
     private $parcel_number;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="json")
      */
     private $gps_coordinates;
 
@@ -44,16 +44,6 @@ class Reservation
      * @ORM\JoinColumn(nullable=false)
      */
     private $chemical;
-
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="boolean", options={"default": 0})
-     */
-    private $is_deleted = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -82,11 +72,6 @@ class Reservation
     private $plant;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $updated_at;
-
-    /**
      * @ORM\Column(type="date")
      */
     private $reservation_interval_start;
@@ -95,6 +80,36 @@ class Reservation
      * @ORM\Column(type="date")
      */
     private $reservation_interval_end;
+
+    /**
+     * @ORM\Column(type="string", length=5000, nullable=true)
+     */
+    private $results;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chemical_quantity_per_ha;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $water_quantity;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $updated_at;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $is_deleted = 0;
 
     public function getId(): ?int
     {
@@ -125,12 +140,12 @@ class Reservation
         return $this;
     }
 
-    public function getGpsCoordinates(): ?string
+    public function getGpsCoordinates(): array
     {
         return $this->gps_coordinates;
     }
 
-    public function setGpsCoordinates(string $gps_coordinates): self
+    public function setGpsCoordinates(array $gps_coordinates): self
     {
         $this->gps_coordinates = $gps_coordinates;
 
@@ -157,30 +172,6 @@ class Reservation
     public function setChemical(Chemical $chemical): self
     {
         $this->chemical = $chemical;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTime
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTime $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function isDeleted(): ?bool
-    {
-        return $this->is_deleted;
-    }
-
-    public function setIsDeleted(bool $is_deleted): self
-    {
-        $this->is_deleted = $is_deleted;
 
         return $this;
     }
@@ -245,18 +236,6 @@ class Reservation
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTime $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
     public function getReservationIntervalStart(): \DateTime
     {
         return $this->reservation_interval_start;
@@ -277,6 +256,78 @@ class Reservation
     public function setReservationIntervalEnd(\DateTime $reservation_interval_end): self
     {
         $this->reservation_interval_end = $reservation_interval_end;
+
+        return $this;
+    }
+
+    public function getResults(): ?string
+    {
+        return $this->results;
+    }
+
+    public function setResults(?string $results): self
+    {
+        $this->results = $results;
+
+        return $this;
+    }
+
+    public function getChemicalQuantityPerHa(): ?float
+    {
+        return $this->chemical_quantity_per_ha;
+    }
+
+    public function setChemicalQuantityPerHa(?float $chemical_quantity_per_ha): self
+    {
+        $this->chemical_quantity_per_ha = $chemical_quantity_per_ha;
+
+        return $this;
+    }
+
+    public function getWaterQuantity(): ?float
+    {
+        return $this->water_quantity;
+    }
+
+    public function setWaterQuantity(?float $water_quantity): self
+    {
+        $this->water_quantity = $water_quantity;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTime $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): self
+    {
+        $this->is_deleted = $is_deleted;
 
         return $this;
     }

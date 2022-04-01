@@ -7,13 +7,11 @@
                 <h4>{{ 'admin.modal.set_time.title'|trans }}</h4>
                 <p>{{ 'admin.modal.set_time.content'|trans }}</p>
 
-                <div id="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </div>
-
                 <div class="content">
                     <p>
-                        {{ 'admin.modal.reservation_set_time.must_be'|trans }} <b id="interval-start"></b> {{ 'admin.modal.reservation_set_time.and'|trans }} <b id="interval-end"></b>
+                        {{ 'admin.modal.reservation_set_time.must_be'|trans }}
+                        <br />
+                        <b id="interval-start"></b> {{ 'admin.modal.reservation_set_time.and'|trans }} <b id="interval-end"></b>
                     </p>
 
                     {{ form(set_time_form, {'attr': {'id': 'set-time-form'}}) }}

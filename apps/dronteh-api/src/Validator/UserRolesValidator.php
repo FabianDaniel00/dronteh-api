@@ -2,11 +2,12 @@
 
 namespace App\Validator;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Validator\UserRoles;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class UserRolesValidator extends ConstraintValidator
 {

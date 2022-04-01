@@ -39,3 +39,8 @@ validators:
         }
       locale:
         "A(z) '{string}' nem támogatott nyelv."
+
+  reservations:
+    constraint:
+      latlng:
+        'Nem érvényes koordináták. [{string}]'
