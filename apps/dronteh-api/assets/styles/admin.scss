@@ -1,4 +1,6 @@
 @import 'leaflet/dist/leaflet.css';
+@import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+@import 'leaflet-loading/src/Control.Loading.css';
 // :root {
 //     --body-bg: var(--gray-800);
 // }
@@ -6,7 +8,7 @@ body {
     overflow-x: hidden;
 }
 
-* :not(#map > *) {
+.dropdown-menu {
     transition: .3s;
     -webkit-transition: .3s;
     -moz-transition: .3s;
@@ -182,12 +184,35 @@ button[type='button'].btn.btn-link {
 
 #map {
     width: 100%;
-    height: 500px;
+    height: 549px;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
+    margin: 0 !important;
+}
+
+.collapse-button {
+    margin-bottom: 20px;
+}
+
+.map-container {
+    height: 0;
+    overflow: hidden;
+    transition: .3s ease-out;
+    -webkit-transition: .3s ease-out;
+    -moz-transition: .3s ease-out;
+    -ms-transition: .3s ease-out;
+    -o-transition: .3s ease-out;
+}
+
+.leaflet-routing-collapse-btn {
+    cursor: pointer;
+}
+
+.leaflet-routing-container {
+    padding: 0;
 }
 
 @media only screen and (max-width: 991.98px) {
@@ -234,8 +259,5 @@ button[type='button'].btn.btn-link {
 @media only screen and (max-width: 767.98px) {
     .edit-field .form-control {
         max-width: 100%;
-    }
-    #map {
-        height: 300px;
     }
 }

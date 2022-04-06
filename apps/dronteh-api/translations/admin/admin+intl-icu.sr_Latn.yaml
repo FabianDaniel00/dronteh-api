@@ -130,6 +130,10 @@ admin:
       help:
         "Polje 'Izbrisano je' briše korisnika, ali ne i iz baze podataka."
 
+  detail:
+    collapse_map:
+      'Otvori mapu'
+
   buttons:
     save_and_continue:
       'Sačuvajte i nastavite sa uređivanjem'

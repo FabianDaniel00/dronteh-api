@@ -29,6 +29,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
@@ -222,6 +223,12 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             TextareaField::new('results', 'admin.list.reservations.results')->setMaxLength(5000)->setNumOfRows(6)->stripTags()->hideOnIndex(),
             NumberField::new('chemical_quantity_per_ha', 'admin.list.reservations.chemical_quantity_per_ha')->hideOnIndex(),
             NumberField::new('water_quantity', 'admin.list.reservations.water_quantity')->hideOnIndex(),
+            ImageField::new('image')
+                ->setBasePath('images/reservation')
+                ->setUploadDir('public/images/reservation')
+                ->setUploadedFileNamePattern('[randomhash].[extension]')
+                ->hideOnIndex()
+            ,
         ];
     }
 

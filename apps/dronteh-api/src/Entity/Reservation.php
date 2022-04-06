@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReservationRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation\Uploadable;
+use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @Uploadable
  */
 class Reservation
 {
@@ -85,6 +89,16 @@ class Reservation
      * @ORM\Column(type="string", length=5000, nullable=true)
      */
     private $results;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @UploadableField(mapping="reservation", fileNameProperty="image")
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -270,6 +284,28 @@ class Reservation
         $this->results = $results;
 
         return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
     }
 
     public function getChemicalQuantityPerHa(): ?float

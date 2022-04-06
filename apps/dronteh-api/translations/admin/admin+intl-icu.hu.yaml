@@ -130,6 +130,10 @@ admin:
       help:
         "A 'Törölve' mező törli a felhasználót de nem az adatbázisból."
 
+  detail:
+    collapse_map:
+      'Térkép megnyitása'
+
   buttons:
     save_and_continue:
       'Mentés és szerkesztés folytatása'

@@ -1,33 +1,107 @@
-import 'leaflet';
+import L from 'leaflet';
+import 'leaflet-routing-machine';
+import 'leaflet-control-geocoder';
+import 'leaflet-loading';
 
 window.addEventListener('load', () => {
-    loadMap();
     setTimeClick();
     sendTimeAndSendNotificationClick();
     setTimeActions();
     selectFirstTab();
+    collapseMap();
 });
 
 function loadMap() {
     const mapElement = document.querySelector('#map');
 
     if (mapElement) {
-        var latlng = mapElement.getAttribute('data-latlng').split(';');
-        var map = L.map(mapElement).setView(latlng, 13);
-
-        var myIcon = L.icon({
-            iconUrl: '../../assets/images/marker-icon-2x.png',
-            iconSize: [38, 60],
-            iconAnchor: [22, 60],
-            popupAnchor: [-3, -65],
-            shadowUrl: '../../assets/images/marker-shadow.png',
-            shadowSize: [68, 60],
-            shadowAnchor: [22, 60]
-        });
+        var latLng = mapElement.getAttribute('data-latlng').split(';');
+        var map = L.map(mapElement, {
+            loadingControl: true
+        }).setView(latLng, 11);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        L.marker(latlng, { icon: myIcon }).addTo(map);
+        const routingControl = L.Routing.control({
+            plan: new L.Routing.Plan([
+                L.latLng(45.972544730285605, 19.830133099999998),
+                L.latLng(latLng[0], latLng[1]),
+            ], {
+                geocoder: L.Control.Geocoder.nominatim(),
+                reverseWaypoints: true,
+                createMarker: (i, start, n) => {
+                    const markerIconOptions = {
+                        iconSize: [38, 60],
+                        iconAnchor: [20, 60],
+                        shadowUrl: '../../assets/images/marker-shadow.png',
+                        shadowSize: [68, 60],
+                        shadowAnchor: [20, 60]
+                    };
+
+                    let markerIcon = L.icon({
+                        iconUrl: '../../assets/images/marker-icon.png',
+                        ...markerIconOptions
+                    });
+
+                    if (i == 0) {
+                        markerIcon = L.icon({
+                            iconUrl: '../../assets/images/start-marker-icon.png',
+                            ...markerIconOptions
+                        });
+                    } else if (i == n - 1) {
+                        markerIcon = L.icon({
+                            iconUrl: '../../assets/images/destination-marker-icon.png',
+                            ...markerIconOptions
+                        });
+                    }
+
+                    return L.marker(start.latLng, {
+                        icon: markerIcon,
+                        draggable: true
+                    });
+                }
+            }),
+            router: L.Routing.mapbox('pk.eyJ1IjoiZmFiaWFuZGFuaWVsMDAiLCJhIjoiY2wxbTF5Z3I4MGdqajNka3FiZDMxNHdvbCJ9.pURJ4GNmtHbERjXSCXc9iw'),
+            showAlternatives: true,
+            fitSelectedRoutes: true,
+            lineOptions: {
+                styles: [
+                    { color: 'black', opacity: 0.15, weight: 9 },
+                    { color: 'white', opacity: 0.8, weight: 6 },
+                    { color: 'blue', opacity: 1, weight: 2 },
+                ]
+            },
+            altLineOptions: {
+                styles: [
+                    { color: 'black', opacity: 0.15, weight: 8 },
+                    { color: 'white', opacity: 0.8, weight: 5 },
+                    { color: '#808080', opacity: 1, weight: 2 },
+                ]
+            },
+            collapsible: true
+        }).addTo(map);
+
+        L.Routing.errorControl(routingControl).addTo(map);
+    }
+}
+
+function collapseMap() {
+    const collapseButton = document.querySelector(".collapse-button");
+
+    if (collapseButton) {
+        let mapLoaded = false;
+        collapseButton.addEventListener("click", () => {
+            const map = document.querySelector('.map-container');
+            if (map.style.height) {
+                map.style.height = null;
+            } else {
+                if (!mapLoaded) {
+                    loadMap();
+                    mapLoaded = true;
+                }
+                map.style.height = "549px";
+            }
+        });
     }
 }
 

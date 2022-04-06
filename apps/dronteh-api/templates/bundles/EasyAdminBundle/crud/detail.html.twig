@@ -1,10 +1,14 @@
 {% extends '@!EasyAdmin/crud/detail.html.twig' %}
+{% trans_default_domain 'admin' %}
 
 {% block main %}
     {% set entityName = entity.getName() %}
 
     {% if entityName == 'Reservation' %}
-        <div id="map" class="my-3 shadow-sm" data-latlng="{{ entity.getInstance().getGpsCoordinates()|join(';') }}"></div>
+        <button class="collapse-button btn btn-info">{{ 'admin.detail.collapse_map'|trans }}</button>
+        <div class="map-container">
+            <div id="map" class="my-3 shadow-sm" data-latlng="{{ entity.getInstance().getGpsCoordinates()|join(';') }}"></div>
+        </div>
     {% endif %}
 
     {% block detail_fields %}

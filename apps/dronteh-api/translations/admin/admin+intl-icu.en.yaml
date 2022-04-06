@@ -130,6 +130,10 @@ admin:
       help:
         "The 'Is deleted' field delete the user but not from the database."
 
+  detail:
+    collapse_map:
+      'Open map'
+
   buttons:
     save_and_continue:
       'Save and continue editing'

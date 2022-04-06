@@ -18,6 +18,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "leaflet": "^1.7.1"
+        "leaflet": "^1.7.1",
+        "leaflet-control-geocoder": "^2.4.0",
+        "leaflet-loading": "^0.1.24",
+        "leaflet-routing-machine": "^3.2.12"
     }
 }
