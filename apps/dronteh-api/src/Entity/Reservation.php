@@ -36,7 +36,7 @@ class Reservation
     /**
      * @ORM\Column(type="json")
      */
-    private $gps_coordinates;
+    private $gps_coordinates = [];
 
     /**
      * @ORM\Column(type="float")
@@ -250,7 +250,7 @@ class Reservation
         return $this;
     }
 
-    public function getReservationIntervalStart(): \DateTime
+    public function getReservationIntervalStart(): ?\DateTime
     {
         return $this->reservation_interval_start;
     }
@@ -262,7 +262,7 @@ class Reservation
         return $this;
     }
 
-    public function getReservationIntervalEnd(): \DateTime
+    public function getReservationIntervalEnd(): ?\DateTime
     {
         return $this->reservation_interval_end;
     }

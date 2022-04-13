@@ -104,6 +104,8 @@ admin:
         'Water [L]'
       results:
         'Results'
+      image:
+        'Image'
 
       help:
         status:

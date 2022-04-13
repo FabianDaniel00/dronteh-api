@@ -104,6 +104,8 @@ admin:
         'Voda [L]'
       results:
         'Rezultati'
+      image:
+        'Slika'
 
       help:
         status:

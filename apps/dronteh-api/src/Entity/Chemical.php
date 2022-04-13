@@ -8,18 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Locale;
 use App\Repository\ChemicalRepository;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * @ORM\Entity(repositoryClass=ChemicalRepository::class)
  */
 class Chemical
 {
-    private ManagerRegistry $doctrine;
-
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct()
     {
-        $this->doctrine = $doctrine;
         $this->ratings = new ArrayCollection();
     }
 
@@ -145,7 +141,7 @@ class Chemical
         return $this->ratings;
     }
 
-    public function getAvgRating(): ?float
+    public function getAvgRating(): ?string
     {
         $sumRating = 0;
         $ratings = $this->ratings->getValues();
@@ -155,7 +151,7 @@ class Chemical
         }
 
         $ratingsCount = count($ratings);
-        return $ratingsCount ? $sumRating / count($ratings) : 0;
+        return $ratingsCount ? $sumRating / $ratingsCount.' | '.$ratingsCount : '0 | 0';
     }
 
     public function addRating(Rating $rating): self

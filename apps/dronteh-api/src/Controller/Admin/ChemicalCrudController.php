@@ -7,7 +7,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Controller\Admin\AbstractUndeleteCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\NumericFilter;
@@ -33,7 +32,7 @@ class ChemicalCrudController extends AbstractUndeleteCrudController
             TextField::new('name_sr_Latn', 'admin.list.name_sr_Latn'),
             TextField::new('name_hu', 'admin.list.name_hu'),
             TextField::new('name_en', 'admin.list.name_en'),
-            NumberField::new('avgRating', 'admin.singular.rating')->hideOnForm(),
+            TextField::new('avgRating', 'admin.singular.rating')->hideOnForm(),
         ]);
     }
 

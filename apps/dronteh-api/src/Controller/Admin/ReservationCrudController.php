@@ -223,7 +223,7 @@ class ReservationCrudController extends AbstractUndeleteCrudController
             TextareaField::new('results', 'admin.list.reservations.results')->setMaxLength(5000)->setNumOfRows(6)->stripTags()->hideOnIndex(),
             NumberField::new('chemical_quantity_per_ha', 'admin.list.reservations.chemical_quantity_per_ha')->hideOnIndex(),
             NumberField::new('water_quantity', 'admin.list.reservations.water_quantity')->hideOnIndex(),
-            ImageField::new('image')
+            ImageField::new('image', 'admin.list.reservations.image')
                 ->setBasePath('images/reservation')
                 ->setUploadDir('public/images/reservation')
                 ->setUploadedFileNamePattern('[randomhash].[extension]')

@@ -104,6 +104,8 @@ admin:
         'Víz [L]'
       results:
         'Eredmények'
+      image:
+        'Kép'
 
       help:
         status:
