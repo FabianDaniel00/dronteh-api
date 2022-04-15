@@ -14,7 +14,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class VerifyUserEmailController extends AbstractController
 {
     /**
-     * @Route("/{_locale}/verify/email", name="app_users_verify_email", methods="GET", requirements={"_locale" = "%app.supported_locales%"})
+     * @Route("/verify/email", name="app_users_verify_email", methods="GET")
      */
     public function verifyUserEmail(Request $request, UserRepository $userRepository, EmailVerifier $emailVerifier, TranslatorInterface $translator): Response
     {
