@@ -36,7 +36,7 @@ class Reservation
     /**
      * @ORM\Column(type="json")
      */
-    private $gps_coordinates = [];
+    private $gps_coordinates = ["", ""];
 
     /**
      * @ORM\Column(type="float")

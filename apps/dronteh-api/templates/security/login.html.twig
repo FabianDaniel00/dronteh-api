@@ -1,34 +1,29 @@
 {% extends 'base.html.twig' %}
 {% trans_default_domain 'app' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ 'app.title.login'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="form-wrapper">
-        <form class="form" method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+    {% if error %}
+        {% include 'includes/_alert.html.twig' with {'type': 'danger', 'message': error.messageKey|trans(error.messageData, 'security')} %}
+    {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            <label for="inputEmail">Email</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <h1 class="">{{ 'app.login.header'|trans }}</h1>
 
-            <input type="hidden" name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-            >
+    {{ form_start(loginForm) }}
+        {{ form_row(loginForm.email, {'attr': {'value': last_username}}) }}
+        {{ form_row(loginForm.plainPassword) }}
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <button class="btn btn-lg btn-primary" type="submit">
-                Sign in
-            </button>
-        </form>
-    </div>
+        <div class="">
+            <label>
+                <input type="checkbox" name="_remember_me"> {{ 'app.login.remember_me'|trans }}
+            </label>
+        </div>
+
+        <button class="" type="submit">
+            {{ 'app.login.sign_in'|trans }}
+        </button>
+    {{ form_end(loginForm) }}
 {% endblock %}

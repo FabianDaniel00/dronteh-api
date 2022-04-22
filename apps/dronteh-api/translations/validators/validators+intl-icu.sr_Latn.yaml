@@ -1,27 +1,20 @@
 validators:
-  reset_password_request:
-    email:
-      not_blank:
-        'Unesite svoju e-mail.'
+  locales:
+    en:
+      'Engleski'
+    hu:
+      'Mađarski'
+    sr_Latn:
+      'Srpski'
 
   change_password:
     plain_password:
       first_options:
-        not_blank:
-          'Molimo unesite lozinku.'
-        length:
-          'Vaša lozinka treba da ima najmanje {limit} znakova.'
         label:
           'Nova lozinka'
-        placeholder:
-          'Lozinka...'
       second_options:
         label:
           'Ponovite lozinku'
-        placeholder:
-          'Potvrdi lozinku...'
-      invalid_message:
-        'Polja za lozinku moraju se podudarati.'
 
   users:
     constraint:
@@ -44,3 +37,29 @@ validators:
     constraint:
       latlng:
         'Nevažeće koordinate. [{string}]'
+
+  register:
+    plain_password:
+      first_options:
+        label:
+          'Lozinka'
+      second_options:
+        label:
+          'Potvrdi lozinku'
+      not_match:
+        'Lozinke se ne poklapaju.'
+    email:
+      label:
+        'E-mail'
+    firstname:
+      label:
+        'Ime'
+    lastname:
+      label:
+        'Prezime'
+    tel:
+      label:
+        'Tel'
+    locale:
+      label:
+        'Tvoj jezik:'

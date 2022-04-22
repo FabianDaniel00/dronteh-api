@@ -12,3 +12,4 @@ import './styles/app.scss';
 // import './bootstrap.js';
 
 import './js/app.js';
+import './images/dronteh_logo.png';

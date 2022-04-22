@@ -1,7 +1,11 @@
 app:
-  base:
-    welcome:
+  title:
+    base:
       'Üdvözöljük! | DronTeh'
+    register:
+      'Regisztráció | DronTeh'
+    login:
+      'Bejelentkezés | DronTeh'
 
   reset_password:
     request:
@@ -85,3 +89,25 @@ app:
         }
     home:
       'Vissza a kezdőlapra'
+
+  register:
+    header:
+      'Regisztráció'
+    sign_up:
+      'Regisztrálj'
+    error:
+      'A regisztráció nem volt sikeres, kérjük ellenőrizze hibákat.'
+    verify_email:
+      'Az e-mail címe sikeresen megerősítve. Jelentkezzen be a folytatáshoz.'
+    success_registration:
+      'Sikeres regisztráció. A megerősítő link el lett küldve az ön e-mail címére.'
+    captcha:
+      'A captcha érvénytelen. Kérlek próbáld újra.'
+
+  login:
+    header:
+      'Kérjük jelentkezzen be'
+    remember_me:
+      'Jegyezzen meg'
+    sign_in:
+      'Bejelentkezés'

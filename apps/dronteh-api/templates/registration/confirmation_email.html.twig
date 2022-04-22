@@ -1,13 +1,11 @@
-{% trans_default_domain 'mails' %}
-
-<h1>{{ 'mails.register_confirmation.header'|trans({'%name%': name}, locale) }}</h1>
+<h1>{{ 'mails.register_confirmation.header'|trans({'%name%': name}, 'mails', locale) }}</h1>
 
 <p>
-    {{ 'mails.register_confirmation.content'|trans({}, locale) }}<br><br>
-    <a href="{{ signedUrl }}">{{ 'mails.register_confirmation.confirm_email'|trans({}, locale) }}</a>.
-    {{ 'mails.register_confirmation.expires_in'|trans(expiresAtMessageData, locale) }}
+    {{ 'mails.register_confirmation.content'|trans({}, 'mails', locale) }}<br><br>
+    <a href="{{ signedUrl }}">{{ 'mails.register_confirmation.confirm_email'|trans({}, 'mails', locale) }}</a>.
+    {{ 'mails.register_confirmation.expires_in'|trans(expiresAtMessageData, 'mails', locale) }}
 </p>
 
 <p>
-    {{ 'mails.cheers'|trans({}, locale) }}
+    {{ 'mails.cheers'|trans({}, 'mails', locale) }}
 </p>

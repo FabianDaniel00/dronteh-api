@@ -1,7 +1,11 @@
 app:
-  base:
-    welcome:
+  title:
+    base:
       'Dobrodošli! | DronTeh'
+    register:
+      'Registrovati | DronTeh'
+    login:
+      'Prijavite se | DronTeh'
 
   reset_password:
     request:
@@ -85,3 +89,25 @@ app:
         }
     home:
       'vratiti na početnu stranicu'
+
+  register:
+    header:
+      'Registrovati'
+    sign_up:
+      'Prijavi se'
+    error:
+      'Registracija nije uspela, molimo vas da proverite greške u nastavku.'
+    verify_email:
+      'E-mail je uspešno verifikovan. Prijavite se da biste nastavili.'
+    success_registration:
+      'Registracija je bila uspešna. Veza za verifikaciju je poslata na vašu e-mail.'
+    captcha:
+      'Captcha je nevažeća. Molim vas, pokušajte ponovo.'
+
+  login:
+    header:
+      'Molim vas prijavite se'
+    remember_me:
+      'Seti me se'
+    sign_in:
+      'Prijavite se'

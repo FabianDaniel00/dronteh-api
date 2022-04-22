@@ -8,8 +8,9 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class ResetPasswordRequestFormType extends AbstractType
+class LoginFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -25,6 +26,17 @@ class ResetPasswordRequestFormType extends AbstractType
                     new Email(),
                 ],
             ])
+            ->add('plainPassword', PasswordType::class, [
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'placeholder' => ' ',
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+                'label' => 'validators.register.plain_password.first_options.label',
+              'mapped' => false,
+          ])
         ;
     }
 

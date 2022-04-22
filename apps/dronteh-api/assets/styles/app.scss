@@ -1,1 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+body {
+  @apply overflow-x-hidden;
+}
+
+.btn {
+  @apply px-3 py-2 rounded-lg shadow-md transition-colors duration-200 cursor-pointer;
+  &.btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white;
+  }
+}
+
+.alert-container {
+  @apply transition-all pt-3 duration-300 z-10 font-medium text-lg sticky top-0 opacity-0 max-h-0 overflow-y-auto transform translate-x-full;
+  .alert {
+    @apply pl-5 mx-3 mb-3 border-2 flex justify-between items-center rounded-md shadow-md;
+    &.alert-danger {
+      @apply bg-red-200 text-red-800 border-red-600;
+    }
+    &.alert-success {
+      @apply bg-green-200 text-green-800 border-green-600;
+    }
+  }
+  &.show {
+    @apply opacity-95 max-h-screen translate-x-0;
+  }
+}
+
+.form {
+  @apply bg-white rounded-lg shadow-lg py-8 px-4 md:px-8 w-fit mx-auto;
+  .form-control {
+    @apply relative whitespace-nowrap w-min mb-8;
+    input {
+      @apply px-3 py-2 shadow-inner bg-gray-100 border-b-4 border-blue-300 focus:outline-none transition-colors duration-300;
+      &:focus-within, &:not(:placeholder-shown) {
+        @apply border-blue-500;
+        + label {
+          @apply left-0 -top-5 text-black text-sm cursor-default font-normal;
+        }
+      }
+      &:focus-within + label{
+        @apply text-blue-700;
+      }
+    }
+    label {
+      @apply absolute left-11 top-2 transition-all duration-300 text-gray-500 cursor-text font-light;
+    }
+  }
+  label:after {
+    content: "*";
+    @apply text-red-500 ml-1;
+  }
+  .form-row {
+    @apply flex md:gap-8 flex-col md:flex-row;
+  }
+  svg {
+    @apply text-gray-500;
+  }
+  .form-error {
+    @apply text-red-600 whitespace-normal;
+  }
+  select {
+    @apply px-3 py-1.5 text-base shadow-sm font-normal text-gray-700 bg-gray-100 border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;
+  }
+  input[type="checkbox"] {
+    @apply w-5 h-5 rounded-md;
+  }
+}

@@ -3,6 +3,9 @@ twig:
     globals:
         clientSideHost: '%client_side_host%'
         supportedLocales: '%app.supported_locales%'
+        gg_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    form_themes:
+        - 'form/custom_types.html.twig'
 
 when@test:
     twig:

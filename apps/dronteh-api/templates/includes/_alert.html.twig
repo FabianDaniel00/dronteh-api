@@ -1,0 +1,10 @@
+{% trans_default_domain 'app' %}
+
+<div class="alert-container show" role="alert">
+    <div class="alert alert-{{ type }}">
+        {{ message|trans|raw }}
+        <button type="button" class="p-5">
+            <i class="fa-solid fa-xmark fa-lg"></i>
+        </button>
+    </div>
+</div>

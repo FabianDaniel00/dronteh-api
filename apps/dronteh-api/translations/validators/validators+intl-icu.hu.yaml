@@ -1,27 +1,20 @@
 validators:
-  reset_password_request:
-    email:
-      not_blank:
-        'Kérjük adja meg e-mail címét.'
+  locales:
+    en:
+      'Angol'
+    hu:
+      'Magyar'
+    sr_Latn:
+      'Szerb'
 
   change_password:
     plain_password:
       first_options:
-        not_blank:
-          'Adjon meg egy jelszót.'
-        length:
-          'A jelszónak legalább {limit} karakterből kell állnia.'
         label:
           'Új jelszó'
-        placeholder:
-          'Jelszó...'
       second_options:
         label:
           'Új jelszó megerősítése'
-        placeholder:
-          'Jelszó megerősítése...'
-      invalid_message:
-        'A jelszómezőknek egyeznie kell.'
 
   users:
     constraint:
@@ -44,3 +37,29 @@ validators:
     constraint:
       latlng:
         'Nem érvényes koordináták. [{string}]'
+
+  register:
+    plain_password:
+      first_options:
+        label:
+          'Jelszó'
+      second_options:
+        label:
+          'Jelszó megerősítése'
+      not_match:
+        'A jelszavak nem egyeznek.'
+    email:
+      label:
+        'E-mail'
+    firstname:
+      label:
+        'Keresztnév'
+    lastname:
+      label:
+        'Vezetéknév'
+    tel:
+      label:
+        'Tel'
+    locale:
+      label:
+        'Az ön nyelve:'

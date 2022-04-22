@@ -15,9 +15,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private string $captcha;
+    private array $captcha;
 
-    public function __construct(string $captcha = '')
+    public function __construct(array $captcha = [])
     {
         $this->captcha = $captcha;
     }
@@ -277,6 +277,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getCaptcha(): ?array
+    {
+        return $this->captcha;
+    }
+
+    public function setCaptcha(?array $captcha): self
+    {
+        $this->captcha = $captcha;
 
         return $this;
     }

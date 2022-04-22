@@ -1,7 +1,11 @@
 app:
-  base:
-    welcome:
+  title:
+    base:
       'Welcome! | DronTeh'
+    register:
+      'Register | DronTeh'
+    login:
+      'Login | DronTeh'
 
   reset_password:
     request:
@@ -85,3 +89,25 @@ app:
         }
     home:
       'return to the homepage'
+
+  register:
+    header:
+      'Register'
+    sign_up:
+      'Sign up'
+    error:
+      'The registration was not successfull, please check the errors below.'
+    verify_email:
+      'The email was successfully verified. Login to continue.'
+    success_registration:
+      'The registration was successfull. The verification link was sent to your email.'
+    captcha:
+      'The captcha is invalid. Please try again.'
+
+  login:
+    header:
+      'Please login'
+    remember_me:
+      'Remember me'
+    sign_in:
+      'Sign in'

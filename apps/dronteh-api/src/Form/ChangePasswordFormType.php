@@ -20,15 +20,12 @@ class ChangePasswordFormType extends AbstractType
                 'first_options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'placeholder' => 'validators.change_password.plain_password.first_options.placeholder',
+                        'placeholder' => ' ',
                     ],
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'validators.change_password.plain_password.first_options.not_blank',
-                        ]),
+                        new NotBlank(),
                         new Length([
                             'min' => 6,
-                            'minMessage' => 'validators.change_password.plain_password.first_options.length',
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
@@ -38,12 +35,10 @@ class ChangePasswordFormType extends AbstractType
                 'second_options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'placeholder' => 'validators.change_password.plain_password.second_options.placeholder',
+                        'placeholder' => ' ',
                     ],
                     'label' => 'validators.change_password.plain_password.second_options.label',
                 ],
-                'translation_domain' => 'validators',
-                'invalid_message' => 'validators.change_password.plain_password.invalid_message',
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -53,6 +48,8 @@ class ChangePasswordFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'translation_domain' => 'validators',
+        ]);
     }
 }
