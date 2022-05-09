@@ -17,15 +17,17 @@
         {% endblock %}
     </head>
     <body>
-        <main class="bg-gray-200 min-h-[calc(100vh-3.5rem)] mb-14">
-            {% for type, message in app.flashes %}
-                {% include 'includes/_alert.html.twig' with {'type': type, 'message': message[0]} %}
-            {% endfor %}
+        <main class="min-h-[calc(100vh-3.5rem)] mb-14" style="{% block main_style %}{% endblock %}">
+            <div class="alert-container">
+                {% for type, message in app.flashes %}
+                    {% include 'includes/_alert.html.twig' with {'type': type, 'message': message[0]} %}
+                {% endfor %}
+            </div>
 
             {% block body %}{% endblock %}
         <main>
 
-        <footer class="fixed bottom-0 inset-x-0 h-14 px-10 py-4 bg-gray-100 -z-10 text-center">
+        <footer class="fixed bottom-0 inset-x-0 h-14 px-10 py-4 bg-gray-100/95 -z-10 text-center">
             Footer
         </footer>
 

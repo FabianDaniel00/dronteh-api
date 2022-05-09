@@ -1,4 +1,6 @@
 app:
+  click_here:
+    'click here'
   title:
     base:
       'Welcome! | DronTeh'
@@ -111,3 +113,10 @@ app:
       'Remember me'
     sign_in:
       'Sign in'
+
+  have_account: >-
+    {have, select,
+      true {If you already have an account}
+      false {If you don't have an account}
+      other {}
+    }

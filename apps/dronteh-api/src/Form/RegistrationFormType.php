@@ -56,6 +56,10 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['min' => 6, 'max' => 4096]),
+                ],
                 'first_options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',

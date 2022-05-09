@@ -1,4 +1,6 @@
 app:
+  click_here:
+    'kattintson ide'
   title:
     base:
       'Üdvözöljük! | DronTeh'
@@ -111,3 +113,9 @@ app:
       'Jegyezzen meg'
     sign_in:
       'Bejelentkezés'
+  have_account: >-
+    {have, select,
+      true {Ha már van fiókja}
+      false {Ha nincs fiókja}
+      other {}
+    }

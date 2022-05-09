@@ -14,15 +14,16 @@ body {
 }
 
 .alert-container {
-  @apply transition-all pt-3 duration-300 z-10 font-medium text-lg sticky top-0 opacity-0 max-h-0 overflow-y-auto transform translate-x-full;
-  .alert {
-    @apply pl-5 mx-3 mb-3 border-2 flex justify-between items-center rounded-md shadow-md;
-    &.alert-danger {
-      @apply bg-red-200 text-red-800 border-red-600;
-    }
-    &.alert-success {
-      @apply bg-green-200 text-green-800 border-green-600;
-    }
+  @apply fixed top-3 inset-x-3 z-50;
+}
+
+.alert {
+  @apply pl-5 border-2 flex justify-between items-center rounded-md shadow-md transition-all duration-300 font-medium text-lg  opacity-0 max-h-0 overflow-y-auto transform translate-x-full space-y-3;
+  &.alert-danger {
+    @apply bg-red-200 text-red-800 border-red-600;
+  }
+  &.alert-success {
+    @apply bg-green-200 text-green-800 border-green-600;
   }
   &.show {
     @apply opacity-95 max-h-screen translate-x-0;
@@ -30,11 +31,11 @@ body {
 }
 
 .form {
-  @apply bg-white rounded-lg shadow-lg py-8 px-4 md:px-8 w-fit mx-auto;
+  @apply rounded-lg shadow-lg w-fit mx-auto;
   .form-control {
     @apply relative whitespace-nowrap w-min mb-8;
     input {
-      @apply px-3 py-2 shadow-inner bg-gray-100 border-b-4 border-blue-300 focus:outline-none transition-colors duration-300;
+      @apply pl-12 pr-3 py-2 bg-gray-100 border-b-[3px] border-blue-300 focus:outline-none transition-colors duration-300;
       &:focus-within, &:not(:placeholder-shown) {
         @apply border-blue-500;
         + label {
@@ -46,10 +47,13 @@ body {
       }
     }
     label {
-      @apply absolute left-11 top-2 transition-all duration-300 text-gray-500 cursor-text font-light;
+      @apply absolute left-12 top-2 transition-all duration-300 text-gray-500 cursor-text font-light;
+    }
+    svg {
+      @apply absolute top-2 left-3;
     }
   }
-  label:after {
+  label:not([type="checkbox"] + label):after {
     content: "*";
     @apply text-red-500 ml-1;
   }
@@ -60,7 +64,10 @@ body {
     @apply text-gray-500;
   }
   .form-error {
-    @apply text-red-600 whitespace-normal;
+    @apply text-red-600 whitespace-normal font-medium pl-5;
+    ul {
+      list-style-type: circle;
+    }
   }
   select {
     @apply px-3 py-1.5 text-base shadow-sm font-normal text-gray-700 bg-gray-100 border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;

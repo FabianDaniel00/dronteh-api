@@ -3,91 +3,135 @@
 
 {% block title %}{{ 'app.title.register'|trans }}{% endblock %}
 
+{% block main_style %}
+    background-image: url('{{ asset('public/build/images/drone.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+{% endblock %}
+
 {% block body %}
-    <h1 class="font-medium text-2xl pt-8 mb-3 md:mb-10 text-center">
+    <h1 class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
         <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="150px" class="mx-auto" />
         {{ 'app.register.header'|trans }}
     </h1>
 
     <div class="p-3">
         {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
-            <div class="form-control">
-                <i class="fa-solid fa-envelope fa-xl mr-1"></i>
-                {% set form_errors = form_errors(registrationForm.email) %}
-                {{ form_widget(registrationForm.email, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                {{ form_label(registrationForm.email) }}
-                <div class="form-error">
-                    {{ form_errors|raw }}
-                </div>
-            </div>
-            <div class="form-row {{ app.request.getLocale == 'hu' ? '!flex-col-reverse md:!flex-row-reverse' }}">
+            <div class="py-8 px-4 md:px-8 bg-white/60 backdrop-blur-md rounded-lg">
                 <div class="form-control">
-                    <i class="fa-solid fa-user fa-xl mr-1"></i>
-                    {% set form_errors = form_errors(registrationForm.firstname) %}
-                    {{ form_widget(registrationForm.firstname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                    {{ form_label(registrationForm.firstname) }}
+                    <i class="fa-solid fa-envelope fa-xl mr-1"></i>
+                    {% set form_errors = form_errors(registrationForm.email) %}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                    {{ form_label(registrationForm.email) }}
+                    <div class="form-error">
+                        {{ form_errors|raw }}
+                    </div>
+                </div>
+                <div class="form-row {{ app.request.getLocale == 'hu' ? '!flex-col-reverse md:!flex-row-reverse' }}">
+                    <div class="form-control">
+                        <i class="fa-solid fa-user fa-xl mr-1"></i>
+                        {% set form_errors = form_errors(registrationForm.firstname) %}
+                        {{ form_widget(registrationForm.firstname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                        {{ form_label(registrationForm.firstname) }}
+                        <div class="form-error">
+                            {{ form_errors|raw  }}
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <i class="fa-solid fa-user fa-xl mr-1"></i>
+                        {% set form_errors = form_errors(registrationForm.lastname) %}
+                        {{ form_widget(registrationForm.lastname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                        {{ form_label(registrationForm.lastname) }}
+                        <div class="form-error">
+                            {{ form_errors|raw  }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-control">
+                        <i class="fa-solid fa-lock fa-xl mr-1"></i>
+                        {% set form_errors = form_errors(registrationForm.password.first) %}
+                        {{ form_widget(registrationForm.password.first, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                        {{ form_label(registrationForm.password.first) }}
+                        <div class="form-error">
+                            {{ form_errors|raw  }}
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <i class="fa-solid fa-lock fa-xl mr-1"></i>
+                        {% set form_errors = form_errors(registrationForm.password.second) %}
+                        {{ form_widget(registrationForm.password.second, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                        {{ form_label(registrationForm.password.second) }}
+                        <div class="form-error">
+                            {{ form_errors|raw  }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <i class="fa-solid fa-phone fa-xl mr-1"></i>
+                        {% set form_errors = form_errors(registrationForm.tel) %}
+                    {{ form_widget(registrationForm.tel, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                    {{ form_label(registrationForm.tel) }}
                     <div class="form-error">
                         {{ form_errors|raw  }}
                     </div>
                 </div>
-                <div class="form-control">
-                    <i class="fa-solid fa-user fa-xl mr-1"></i>
-                    {% set form_errors = form_errors(registrationForm.lastname) %}
-                    {{ form_widget(registrationForm.lastname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                    {{ form_label(registrationForm.lastname) }}
+                <div class="mb-10">
+                    <i class="fa-solid fa-earth-europe fa-xl mr-1"></i>
+                    {{ form_label(registrationForm.locale) }}
+                    {% set form_errors = form_errors(registrationForm.locale) %}
+                    {{ form_widget(registrationForm.locale, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
                     <div class="form-error">
                         {{ form_errors|raw  }}
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-control">
-                    <i class="fa-solid fa-lock fa-xl mr-1"></i>
-                    {% set form_errors = form_errors(registrationForm.password.first) %}
-                    {{ form_widget(registrationForm.password.first, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                    {{ form_label(registrationForm.password.first) }}
-                    <div class="form-error">
-                        {{ form_errors|raw  }}
-                    </div>
-                </div>
-                <div class="form-control">
-                    <i class="fa-solid fa-lock fa-xl mr-1"></i>
-                    {% set form_errors = form_errors(registrationForm.password.second) %}
-                    {{ form_widget(registrationForm.password.second, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                    {{ form_label(registrationForm.password.second) }}
-                    <div class="form-error">
-                        {{ form_errors|raw  }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-control">
-                <i class="fa-solid fa-phone fa-xl mr-1"></i>
-                    {% set form_errors = form_errors(registrationForm.tel) %}
-                {{ form_widget(registrationForm.tel, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                {{ form_label(registrationForm.tel) }}
-                <div class="form-error">
-                    {{ form_errors|raw  }}
-                </div>
-            </div>
-            <div class="mb-10">
-                <i class="fa-solid fa-earth-europe fa-xl mr-1"></i>
-                {{ form_label(registrationForm.locale) }}
-                {% set form_errors = form_errors(registrationForm.locale) %}
-                {{ form_widget(registrationForm.locale, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
-                <div class="form-error">
-                    {{ form_errors|raw  }}
-                </div>
-            </div>
 
-            {% if form_errors(registrationForm) %}
-                <div class="form-error mb-8">
-                    {{ form_errors(registrationForm) }}
-                </div>
-            {% endif %}
+                {% if form_errors(registrationForm) %}
+                    <div class="form-error mb-8 p-3 bg-red-200">
+                        {{ form_errors(registrationForm) }}
+                    </div>
+                {% endif %}
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <button type="submit" class="btn btn-primary w-full">{{ 'app.register.sign_up'|trans }}</button>
+                <button type="submit" class="btn btn-primary block w-full mb-8">{{ 'app.register.sign_up'|trans }}</button>
+
+                <span>
+                    {{ 'app.have_account'|trans({'%have%': 'true'}) }}
+                    <a href="{{ path('app_login') }}" class="text-blue-500 hover:underline">
+                        {{ 'app.click_here'|trans }}
+                    </a>.
+                </span>
+
+                <button id="dropdown-language" data-dropdown-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+                    {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
+                    {% set flagCode = flagCode(locale) %}
+
+                    <span class="flex space-x-1 items-center">
+                        <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                        <i class="fa-solid fa-chevron-down fa-xs !text-blue-700 hidden md:inline-block"></i>
+                        <i class="fa-solid fa-chevron-up fa-xs !text-blue-700 md:hidden"></i>
+                    </span>
+                    <ul id="dropdown_language" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
+                        {% set queryParams = app.request.requestUri|split('?') %}
+                        {% set queryParams = queryParams|length  > 1 ? queryParams[1] : '' %}
+
+                        {% for supportedLocale in supportedLocales|split('|') %}
+                            {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
+                            {% set flagCode = flagCode(supportedLocale) %}
+
+                            <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
+                                <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                                    <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                                    {{ supportedLocaleTrans|trans({}, 'admin') }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </button>
+            </div>
         {{ form_end(registrationForm) }}
     </div>
 {% endblock %}

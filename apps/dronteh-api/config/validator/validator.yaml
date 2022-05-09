@@ -6,9 +6,6 @@ App\Entity\User:
     roles:
       - NotBlank: ~
       - App\Validator\UserRoles: ~
-    password:
-      - NotBlank: ~
-      - Length: { min: 6, max: 4096 }
     firstname:
       - NotBlank: ~
       - Length: { min: 2, max: 50 }
@@ -22,8 +19,6 @@ App\Entity\User:
     locale:
       - NotBlank: ~
       - App\Validator\Locales: ~
-    # captcha:
-    #   - Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3: { message: 'validators.users.constraint.captcha' }
     isVerified:
       - Choice: { choices: [true, false, 1, 0] }
     is_deleted:

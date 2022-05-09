@@ -1,4 +1,6 @@
 app:
+  click_here:
+    'kliknite ovde'
   title:
     base:
       'Dobrodošli! | DronTeh'
@@ -111,3 +113,9 @@ app:
       'Seti me se'
     sign_in:
       'Prijavite se'
+  have_account: >-
+    {have, select,
+      true {Ako već imate profil}
+      false {Ako nemate profil}
+      other {}
+    }

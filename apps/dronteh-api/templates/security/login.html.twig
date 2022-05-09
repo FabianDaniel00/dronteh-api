@@ -3,27 +3,89 @@
 
 {% block title %}{{ 'app.title.login'|trans }}{% endblock %}
 
+{% block main_style %}
+    background-image: url('{{ asset('public/build/images/drone.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+{% endblock %}
+
 {% block body %}
-    {% if error %}
-        {% include 'includes/_alert.html.twig' with {'type': 'danger', 'message': error.messageKey|trans(error.messageData, 'security')} %}
-    {% endif %}
+    <h1 class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
+        <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="150px" class="mx-auto" />
+        {{ 'app.login.header'|trans }}
+    </h1>
 
-    <h1 class="">{{ 'app.login.header'|trans }}</h1>
+    {{ form_start(loginForm, {'attr': {'class': 'form py-8 px-4 md:px-8 bg-white/60 backdrop-blur-md rounded-lg'}}) }}
+        {% if error %}
+            <div class="bg-red-50/60 p-3 text-red-600 mb-8 w-80 whitespace-normal">
+                <i class="fa-solid fa-triangle-exclamation fa-lg !text-red-600"></i>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    {{ form_start(loginForm) }}
-        {{ form_row(loginForm.email, {'attr': {'value': last_username}}) }}
-        {{ form_row(loginForm.plainPassword) }}
+        <div class="form-control">
+            <i class="fa-solid fa-envelope fa-xl mr-1"></i>
+            {% set form_errors = form_errors(loginForm.email) %}
+            {{ form_widget(loginForm.email, {'attr': {'value': last_username, 'class': form_errors ? '!border-red-500'}}) }}
+            {{ form_label(loginForm.email) }}
+            <div class="form-error">
+                {{ form_errors|raw }}
+            </div>
+        </div>
+
+        <div class="form-control">
+            <i class="fa-solid fa-lock fa-xl mr-1"></i>
+            {% set form_errors = form_errors(loginForm.plainPassword) %}
+            {{ form_widget(loginForm.plainPassword, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+            {{ form_label(loginForm.plainPassword) }}
+            <div class="form-error">
+                {{ form_errors|raw }}
+            </div>
+        </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <div class="">
-            <label>
-                <input type="checkbox" name="_remember_me"> {{ 'app.login.remember_me'|trans }}
-            </label>
+        <div class="flex items-center mb-8">
+            <input type="checkbox" id="remember-me" name="_remember_me" class="mr-2">
+            <label for="remember-me">{{ 'app.login.remember_me'|trans }}</label>
         </div>
 
-        <button class="" type="submit">
-            {{ 'app.login.sign_in'|trans }}
+        <button class="btn btn-primary block mb-8 w-full" type="submit">{{ 'app.login.sign_in'|trans }}</button>
+
+        <span>
+            {{ 'app.have_account'|trans({'%have%': 'false'}) }}
+            <a href="{{ path('app_register') }}" class="text-blue-500 hover:underline">
+                {{ 'app.click_here'|trans }}
+            </a>.
+        </span>
+
+        <button id="dropdown-language" data-dropdown-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+            {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
+            {% set flagCode = flagCode(locale) %}
+
+            <span class="flex space-x-1 items-center">
+                <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                <i class="fa-solid fa-chevron-down fa-xs !text-blue-700 hidden md:inline-block"></i>
+                <i class="fa-solid fa-chevron-up fa-xs !text-blue-700 md:hidden"></i>
+            </span>
+            <ul id="dropdown_language" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
+                {% set queryParams = app.request.requestUri|split('?') %}
+                {% set queryParams = queryParams|length  > 1 ? queryParams[1] : '' %}
+
+                {% for supportedLocale in supportedLocales|split('|') %}
+                    {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
+                    {% set flagCode = flagCode(supportedLocale) %}
+
+                    <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
+                        <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                            <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                            {{ supportedLocaleTrans|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         </button>
     {{ form_end(loginForm) }}
 {% endblock %}

@@ -13,3 +13,4 @@ import './styles/app.scss';
 
 import './js/app.js';
 import './images/dronteh_logo.png';
+import './images/drone.jpg';
