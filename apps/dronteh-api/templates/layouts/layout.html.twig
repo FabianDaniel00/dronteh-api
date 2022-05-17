@@ -13,7 +13,7 @@
             <div id="flash-messages">
                 {% for label, messages in flash_messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{ label }} alert-dismissible fade show-alert" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             {{ message|trans|raw }}
                         </div>
@@ -24,6 +24,10 @@
     {% endif %}
 
     <nav class="navbar">
+        <button class="toggle-sidebar" data-vs-toggle="sidebar">
+            <i class="fa-solid fa-bars fa-xl"></i>
+        </button>
+
         <a href="{{ path('app_home') }}" class="logo">
             <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="80px" />
         </a>
@@ -50,23 +54,44 @@
             </li>
         </ul>
 
-        <div class="space-x-2">
-            <a class="button" href="{{ path('app_login') }}">
-                <i class="fa-solid fa-arrow-right-to-bracket mr-1 text-gray-300"></i>
-                Log in
-            </a>
-            <a class="button" href="{{ path('app_register') }}">
-                <i class="fa-solid fa-user-plus mr-1 text-gray-300"></i>
-                Register
-            </a>
-        </div>
+        {% if app.user %}
+            <button class="user-menu" data-vs-toggle="user-menu">
+                <div class="flex {{ app.user.locale == 'hu' ? 'flex-row-reverse' }}">
+                    <span>{{ app.user.firstname|first }}</span>
+                    <span>{{ app.user.lastname|first }}</span>
+                </div>
 
-        <button class="language-picker" data-dropdown-toggle="language-picker">
+                <div id="user-menu" data-vs-toggle-class="hidden" class="hidden">
+                    <a href="{{ path('app_user') }}">
+                        <i class="fa-solid fa-user mr-1"></i>
+                        Profile
+                    </a>
+                    <hr class="border-t border-gray-400" />
+                    <a href="{{ path('app_logout') }}">
+                        <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
+                        Logout
+                    </a>
+                </div>
+            </button>
+        {% else %}
+            <div class="hidden md:block space-x-2">
+                <a class="button" href="{{ path('app_login') }}">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-1 text-gray-300"></i>
+                    Log in
+                </a>
+                <a class="button" href="{{ path('app_register') }}">
+                    <i class="fa-solid fa-user-plus mr-1 text-gray-300"></i>
+                    Register
+                </a>
+            </div>
+        {% endif %}
+
+        <button class="language-picker" data-vs-toggle="language-picker">
             {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
             {% set flagCode = flagCode(locale) %}
             {{ flagCode }}
 
-            <ul id="language-picker" class="hidden">
+            <ul id="language-picker" class="hidden" data-vs-toggle-class="hidden">
                 {% set queryParams = app.request.requestUri|split('/?') %}
                 {% set queryParams = queryParams|length  > 1 ? '?' ~ queryParams[1] : '' %}
 
@@ -84,6 +109,52 @@
             </ul>
         </button>
     </nav>
+
+    <nav id="sidebar" class="hide-sidebar" data-vs-toggle-class="hide-sidebar">
+        <button class="toggle-sidebar" data-vs-toggle="sidebar">
+            <i class="fa-solid fa-bars fa-xl"></i>
+        </button>
+
+        {% if app.user %}
+            <div class="flex flex-wrap gap-1 mb-10 mt-5 text-xl text-green-200 {{ app.user.locale == 'hu' ? 'flex-row-reverse justify-end' }}">
+                <span>{{ app.user.firstname }}</span>
+                <span>{{ app.user.lastname }}</span>
+            </div>
+        {% else %}
+            <div class="gap-3 flex flex-wrap my-5">
+                <a class="button" href="{{ path('app_login') }}">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-1 text-gray-300"></i>
+                    Log in
+                </a>
+                <a class="button" href="{{ path('app_register') }}">
+                    <i class="fa-solid fa-user-plus mr-1 text-gray-300"></i>
+                    Register
+                </a>
+            </div>
+        {% endif %}
+
+        <ul class="links">
+            <li>
+                <a href="{{ path('app_home') }}">Home</a>
+            </li>
+            <li>
+                <a href="{{ path('app_specializations') }}">Our specializations</a>
+            </li>
+            <li>
+                <a href="{{ path('app_team') }}">Our team</a>
+            </li>
+
+            {% if app.user %}
+                <li class="absolute bottom-3 w-[calc(100%-24px)]">
+                    <a href="{{ path('app_logout') }}">
+                        <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
+                        Logout
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="sidebar-overlay"></div>
 
     {% block content %}{% endblock %}
 {% endblock %}

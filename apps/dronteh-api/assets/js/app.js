@@ -19,8 +19,18 @@ function dismissAlert() {
 }
 
 function dropdownToggle() {
-  document.querySelectorAll('[data-dropdown-toggle]').forEach(button =>
-    button.onclick = () =>
-      document.getElementById(button.getAttribute('data-dropdown-toggle')).classList.toggle('hidden')
-  );
+  document.querySelectorAll('[data-vs-toggle]').forEach(button => {
+    const toggleElement = document.getElementById(button.getAttribute('data-vs-toggle'));
+    const toggleClass = toggleElement.getAttribute('data-vs-toggle-class');
+
+    button.onclick = (event) => {
+      event.stopPropagation();
+
+      toggleElement.classList.toggle(toggleClass);
+    }
+
+    toggleElement.onclick = (event) => event.stopPropagation();
+
+    window.addEventListener('click', () => toggleElement.classList.add(toggleClass));
+  });
 }

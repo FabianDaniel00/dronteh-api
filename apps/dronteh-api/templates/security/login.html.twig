@@ -61,7 +61,7 @@
             </a>.
         </span>
 
-        <button id="dropdown-language" data-dropdown-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+        <button id="dropdown-language" data-bs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
             {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
             {% set flagCode = flagCode(locale) %}
 
