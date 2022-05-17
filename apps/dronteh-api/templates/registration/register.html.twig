@@ -115,15 +115,15 @@
                         <i class="fa-solid fa-chevron-up fa-xs !text-blue-700 md:hidden"></i>
                     </span>
                     <ul id="dropdown_language" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
-                        {% set queryParams = app.request.requestUri|split('?') %}
-                        {% set queryParams = queryParams|length  > 1 ? queryParams[1] : '' %}
+                        {% set queryParams = app.request.requestUri|split('/?') %}
+                        {% set queryParams = queryParams|length  > 1 ? '?'~queryParams[1] : '' %}
 
                         {% for supportedLocale in supportedLocales|split('|') %}
                             {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
                             {% set flagCode = flagCode(supportedLocale) %}
 
                             <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
-                                <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                                <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~queryParams }}">
                                     <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
                                     {{ supportedLocaleTrans|trans({}, 'admin') }}
                                 </a>

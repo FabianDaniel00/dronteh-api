@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply overflow-x-hidden;
+  @apply overflow-x-hidden bg-gray-900;
 }
 
 .btn {
@@ -18,7 +18,7 @@ body {
 }
 
 .alert {
-  @apply pl-5 border-2 flex justify-between items-center rounded-md shadow-md transition-all duration-300 font-medium text-lg  opacity-0 max-h-0 overflow-y-auto transform translate-x-full space-y-3;
+  @apply pl-5 border-2 flex justify-between items-center rounded-md shadow-md transition-all duration-300 font-medium text-lg opacity-0 max-h-0 overflow-y-auto transform translate-x-full space-y-3;
   &.alert-danger {
     @apply bg-red-200 text-red-800 border-red-600;
   }
@@ -74,5 +74,42 @@ body {
   }
   input[type="checkbox"] {
     @apply w-5 h-5 rounded-md;
+  }
+}
+
+.navbar {
+  @apply flex justify-end space-x-10 items-center relative p-3;
+  .logo {
+    @apply bg-white rounded-full h-20 flex items-center absolute top-1 left-1;
+  }
+  .links {
+    @apply flex space-x-5 items-center;
+    span {
+      @apply w-[1px] h-7 bg-gray-400;
+    }
+  }
+  .button {
+    @apply rounded-full border-2 border-green-500 px-3 py-1 transition-colors duration-200 hover:bg-green-800;
+  }
+  li hr {
+    @apply border border-gray-900 transition-[width] duration-200 w-0;
+  }
+  li a:hover hr {
+    @apply w-full border-gray-100;
+  }
+  .language-picker {
+    @apply px-2 py-1 border border-gray-100 rounded-md relative;
+    #language-picker {
+      @apply absolute right-0 top-[calc(100%+10px)] space-y-1 bg-gray-800 p-1 rounded-md min-w-[150px];
+      li {
+        @apply hover:bg-gray-700 transition-colors p-1 rounded-md;
+        a {
+          @apply flex;
+          img {
+            @apply mr-1;
+          }
+        }
+      }
+    }
   }
 }
