@@ -61,7 +61,7 @@
             </a>.
         </span>
 
-        <button id="dropdown-language" data-bs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+        <button type="button" id="dropdown-language" data-vs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
             {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
             {% set flagCode = flagCode(locale) %}
 
@@ -70,16 +70,16 @@
                 <i class="fa-solid fa-chevron-down fa-xs !text-blue-700 hidden md:inline-block"></i>
                 <i class="fa-solid fa-chevron-up fa-xs !text-blue-700 md:hidden"></i>
             </span>
-            <ul id="dropdown_language" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
-                {% set queryParams = app.request.requestUri|split('?') %}
-                {% set queryParams = queryParams|length  > 1 ? queryParams[1] : '' %}
+            <ul id="dropdown_language" data-vs-toggle-class="hidden" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
+                {% set queryParams = app.request.requestUri|split('/?') %}
+                {% set queryParams = queryParams|length  > 1 ? '?'~queryParams[1] : '' %}
 
                 {% for supportedLocale in supportedLocales|split('|') %}
                     {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
                     {% set flagCode = flagCode(supportedLocale) %}
 
                     <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
-                        <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~'?'~queryParams }}">
+                        <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~queryParams }}" class="block">
                             <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
                             {{ supportedLocaleTrans|trans({}, 'admin') }}
                         </a>

@@ -78,12 +78,12 @@ body {
 }
 
 .navbar {
-  @apply flex justify-between md:justify-end space-x-10 items-center relative py-2 px-3;
+  @apply flex justify-between md:justify-end space-x-10 items-center py-2 px-3 sticky top-0 bg-gray-900/50;
   .toggle-sidebar {
     @apply md:hidden;
   }
   .logo {
-    @apply bg-white rounded-full h-20 hidden md:flex items-center absolute top-1 -left-9;
+    @apply bg-white rounded-full h-20 hidden md:flex items-center absolute top-1 -left-9 z-10;
   }
   .links {
     @apply hidden md:flex space-x-5 items-center;

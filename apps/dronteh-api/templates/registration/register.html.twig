@@ -105,7 +105,7 @@
                     </a>.
                 </span>
 
-                <button id="dropdown-language" data-vs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+                <button type="button" id="dropdown-language" data-vs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
                     {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
                     {% set flagCode = flagCode(locale) %}
 
@@ -123,7 +123,7 @@
                             {% set flagCode = flagCode(supportedLocale) %}
 
                             <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
-                                <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~queryParams }}">
+                                <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~queryParams }}" class="block">
                                     <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
                                     {{ supportedLocaleTrans|trans({}, 'admin') }}
                                 </a>
