@@ -8,6 +8,14 @@ app:
       'Registrovati | DronTeh'
     login:
       'Prijavite se | DronTeh'
+    reservation:
+      'Rezervacija | DronTeh'
+    specializations:
+      'Specijalizacije | DronTeh'
+    team:
+      'Tim | DronTeh'
+    user:
+      'Profil | DronTeh'
 
   reset_password:
     request:
@@ -28,19 +36,11 @@ app:
           'Došlo je do problema pri validaciji vašeg zahteva za resetovanje - Već ste zahtevali e-mail za resetovanje lozinke. Proverite svoju e-mail ili pokušajte ponovo uskoro.'
         token_null:
           'Nije pronađen token za resetovanje lozinke u URL-u ili u sesiji.'
-
-    check_email:
-      title:
-        'Poruka e-mail za resetovanje lozinke je poslata | DronTeh'
-      paragraph1: >-
+      success: >-
         {count, plural,
           one {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count, number} sat.}
           other {Ako postoji nalog koji odgovara vašoj e-maili, tada je upravo poslata poruka e-mail koja sadrži vezu koju možete da koristite za resetovanje lozinke. Ova veza ističe za {count, number} sati.}
         }
-      paragraph2:
-        'Ako ne dobijete e-mailu, proverite svoj spam folder ili'
-      try_again:
-        'Pokušajte ponovo'
 
     reset:
       title:
@@ -49,6 +49,8 @@ app:
         'Resetujte vašu lozinku'
       button:
         'Resetuj šifru'
+      success:
+        'Vaša lozinka je uspešno resetovana. Sada se možete prijaviti.'
 
   verify_user_email:
     id_null:
@@ -68,7 +70,6 @@ app:
       message:
         'Vaša e-maila je uspešno verifikovana!'
       click:
-        'Kliknite ovde da se ulogujete'
 
   error_page:
     title: >-
@@ -113,9 +114,91 @@ app:
       'Seti me se'
     sign_in:
       'Prijavite se'
+    forgot_password:
+      'Zaboravili ste lozinku?'
+
   have_account: >-
     {have, select,
       true {Ako već imate profil}
       false {Ako nemate profil}
       other {}
     }
+
+  home:
+    header:
+      'Digitalizovana poljoprivreda'
+    p1:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    p2:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    learn_more:
+      'Saznajte više'
+
+  reservation:
+    header:
+      'Molimo uzmite svoju rezervaciju'
+    send:
+      'Pošalji'
+    success:
+      'Rezervacija je uspešno registrovana. Sačekajte odgovor u e-mailu.'
+    error:
+      'Nešto je krenulo naopako. Pokušajte ponovo.'
+    select_land:
+      'Izaberite gde je vaša zemlja'
+    time:
+      'Tačno vreme'
+    status:
+      'Status'
+    chemical:
+      'Hemijski'
+    parcel_number:
+      'Parcela broj'
+    plant:
+      'Biljka'
+    reorder:
+      'Preurediti'
+    not_active:
+      'Nije aktivno'
+    pending:
+      'Nerešen'
+    in_progress:
+      'U toku'
+    date:
+      help:
+        'Izaberite vremenski interval kada želite da se vrši prskanje. Između dva datuma mora biti najmanje 1 nedelja.'
+      to:
+        'iz'
+
+  team:
+    description1:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description2:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description3:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description4:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+
+  user:
+    my_profile:
+      'Moj profil'
+    my_reservations:
+      'Moje rezervacije'
+    save:
+      'Sačuvati'
+    change_password:
+      'Kliknite ovde da promenite lozinku'

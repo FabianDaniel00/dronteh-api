@@ -1,7 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
-        clientSideHost: '%client_side_host%'
         supportedLocales: '%app.supported_locales%'
         gg_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     form_themes:

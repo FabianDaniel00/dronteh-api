@@ -21,18 +21,18 @@
             background-repeat: no-repeat;
         "
     >
-        <h1 class="p-3 border-4 border-green-500 text-5xl bg-green-500/20 inline-block mb-5">Digitized agriculture</h1>
+        <h1 class="p-3 border-4 border-green-500 text-5xl bg-green-500/20 inline-block mb-5">{{ 'app.home.header'|trans }}</h1>
 
         <p class="md:w-1/2 text-lg mb-5">
-            Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
-            Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+            {{ 'app.home.p1'|trans }}
         </p>
 
         <p class="md:w-1/2 text-lg mb-5">
-            Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
-            Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+            {{ 'app.home.p2'|trans }}
         </p>
 
-        <a class="rounded-full border-2 border-green-500 px-3 py-1 transition-colors duration-200 hover:bg-green-800 cursor-pointer mb-10 inline-block">Learn more</a>
+        <a href="{{ path('app_specializations') }}" class="rounded-full border-2 border-green-500 px-3 py-1 transition-colors duration-200 hover:bg-green-800 cursor-pointer mb-10 inline-block">
+            {{ 'app.home.learn_more'|trans }}
+        </a>
     </section>
 {% endblock content %}

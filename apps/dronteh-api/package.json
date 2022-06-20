@@ -22,8 +22,10 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "flowbite-datepicker": "^1.2.1",
         "leaflet": "^1.7.1",
         "leaflet-control-geocoder": "^2.4.0",
+        "leaflet-gesture-handling": "^1.2.2",
         "leaflet-loading": "^0.1.24",
         "leaflet-routing-machine": "^3.2.12"
     }

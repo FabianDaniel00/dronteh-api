@@ -2,7 +2,7 @@
 * The callback function executed
 * once all the Google dependencies have loaded
 */
-    function onGoogleReCaptchaApiLoad() {
+function onGoogleReCaptchaApiLoad() {
     const widgets = document.querySelectorAll('[data-toggle="recaptcha"]');
     for (const widget of widgets) {
         renderReCaptcha(widget);

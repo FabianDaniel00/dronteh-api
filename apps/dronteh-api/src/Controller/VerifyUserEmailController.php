@@ -21,29 +21,28 @@ class VerifyUserEmailController extends AbstractController
         $id = $request->get('id');
 
         if (null === $id) {
-            return new Response($translator->trans('app.verify_user_email.id_null', [], 'app'), Response::HTTP_FORBIDDEN);
+            $this->addFlash('danger', $this->translator->trans('app.verify_user_email.id_null', [], 'app'));
         }
 
         $user = $userRepository->find($id);
 
         if (null === $user) {
-            return new Response($translator->trans('app.verify_user_email.user_null', [], 'app'), Response::HTTP_FORBIDDEN);
+            $this->addFlash('danger', $this->translator->trans('app.verify_user_email.user_null', [], 'app'));
         }
 
         if ($user->isVerified()) {
-            return new Response($translator->trans('app.verify_user_email.is_verified', [], 'app').' <a href="'.$this->getParameter('client_side_host').'/auth?locale='.$request->getLocale().'">'.$translator->trans('app.verify_user_email.success.click', [], 'app').'</a>.');
+            $this->addFlash('danger', $this->translator->trans('app.verify_user_email.is_verified', [], 'app'));
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $emailVerifier->handleEmailConfirmation($request, $user);
+
+            $this->addFlash('success', $this->translator->trans('app.verify_user_email.success.message', [], 'app'));
         } catch (VerifyEmailExceptionInterface $exception) {
-            return new Response($translator->trans('app.verify_user_email.errors.'.$exception->getReason(), [], 'app'), Response::HTTP_FORBIDDEN);
+            $this->addFlash('danger', $this->translator->trans('app.verify_user_email.errors.'.$exception->getReason(), [], 'app'));
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        return new Response(
-            $translator->trans('app.verify_user_email.success.message', [], 'app').' <a href="'.$this->getParameter('client_side_host').'/'.$request->getLocale().'/auth?success_verification=true">'.$translator->trans('app.verify_user_email.success.click', [], 'app').'</a>.'
-        );
+        return $this->redirectToRoute('app_login');
     }
 }

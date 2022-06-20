@@ -37,6 +37,44 @@ validators:
     constraint:
       latlng:
         'Not valid coordinates. [{string}]'
+      start_date:
+        "Start date must be greater than today's date"
+      daterange:
+        'There must be a minimum of 1 week between the two dates'
+    chemical:
+      label:
+        'Chemical'
+      placeholder:
+        'Choose an option'
+    plant:
+      label:
+        'Plant'
+      placeholder:
+        'Choose an option'
+    parcel_number:
+      label:
+        'Parcel number'
+    land_area:
+      label:
+        'Land area [m2]'
+    to_be_present:
+      label:
+        'To be present'
+      placeholder:
+        'Choose an option'
+      yes:
+        'Yes'
+      no:
+        'No'
+    comment:
+      label:
+        'Comment (optional)'
+    reservation_interval_start:
+      label:
+        'Start date'
+    reservation_interval_end:
+      label:
+        'End date'
 
   register:
     plain_password:
@@ -60,6 +98,8 @@ validators:
     tel:
       label:
         'Tel'
+      help:
+        'e.g.: +38163...'
     locale:
       label:
         'Your language:'

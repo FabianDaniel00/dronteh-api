@@ -1,0 +1,39 @@
+{% if pageCount > 1 %}
+    <div class="inline-block">
+        <div class="flex space-x-1">
+			{% if first is defined and current != first %}
+				<a href="{{ path(route, query|merge({(pageParameterName): first})) }}" class="text-green-100 w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors duration-200 hover:bg-gray-500">
+					<i class="fa-solid fa-angles-left fa-xs"></i>
+				</a>
+			{% endif %}
+
+			{% if previous is defined %}
+				<a rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="text-green-100 w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors duration-200 hover:bg-gray-500">
+					<i class="fa-solid fa-angle-left fa-xs"></i>
+				</a>
+			{% endif %}
+
+			{% for page in pagesInRange %}
+				{% if page != current %}
+					<a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="text-green-100 w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors duration-200 hover:bg-gray-500">
+						{{ page }}
+					</a>
+				{% else %}
+					<span class="bg-green-600 text-white w-10 h-10 flex items-center justify-center text-lg font-bold rounded-full">{{ page }}</span>
+				{% endif %}
+			{% endfor %}
+
+			{% if next is defined %}
+				<a rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}" class="text-green-100 w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors duration-200 hover:bg-gray-500">
+					<i class="fa-solid fa-angle-right fa-xs"></i>
+				</a>
+			{% endif %}
+
+			{% if last is defined and current != last %}
+				<a href="{{ path(route, query|merge({(pageParameterName): last})) }}" class="text-green-100 w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors duration-200 hover:bg-gray-500">
+					<i class="fa-solid fa-angles-right fa-xs"></i>
+				</a>
+			{% endif %}
+        </div>
+    </div>
+{% endif %}

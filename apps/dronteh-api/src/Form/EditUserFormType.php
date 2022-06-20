@@ -3,21 +3,16 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\Type\ReCaptchaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class RegistrationFormType extends AbstractType
+class EditUserFormType extends AbstractType
 {
     private ParameterBagInterface $params;
 
@@ -29,8 +24,8 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $locales = [];
-        foreach(explode('|', $this->params->get('app.supported_locales')) as $locale) {
-            $locales['validators.locales.'.$locale] = $locale;
+        foreach (explode('|', $this->params->get('app.supported_locales')) as $locale) {
+            $locales['validators.locales.' . $locale] = $locale;
         }
 
         $builder
@@ -52,46 +47,16 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => 'validators.register.lastname.label',
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(['min' => 6, 'max' => 4096]),
-                ],
-                'first_options' => [
-                    'attr' => [
-                        'autocomplete' => 'new-password',
-                        'placeholder' => ' ',
-                    ],
-                    'label' => 'validators.register.plain_password.first_options.label',
-                ],
-                'second_options' => [
-                    'attr' => [
-                        'autocomplete' => 'new-password',
-                        'placeholder' => ' ',
-                    ],
-                    'label' => 'validators.register.plain_password.second_options.label',
-                ],
-                // Instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'invalid_message' => 'validators.register.plain_password.not_match'
-            ])
             ->add('tel', TelType::class, [
                 'attr' => [
                     'placeholder' => ' ',
                 ],
                 'label' => 'validators.register.tel.label',
-                'help' => 'validators.register.tel.help'
             ])
             ->add('locale', ChoiceType::class, [
                 'label' => 'validators.register.locale.label',
                 'choices' => $locales,
-            ])
-            ->add('captcha', ReCaptchaType::class, [
-                'type' => 'invisible', // (invisible, checkbox)
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

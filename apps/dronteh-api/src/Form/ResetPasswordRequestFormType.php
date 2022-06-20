@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Form\Type\ReCaptchaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -25,6 +26,9 @@ class ResetPasswordRequestFormType extends AbstractType
                     new Email(),
                 ],
             ])
+            // ->add('captcha', ReCaptchaType::class, [
+            //     'type' => 'invisible', // (invisible, checkbox)
+            // ])
         ;
     }
 

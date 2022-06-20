@@ -8,6 +8,14 @@ app:
       'Register | DronTeh'
     login:
       'Login | DronTeh'
+    reservation:
+      'Reservation | DronTeh'
+    specializations:
+      'Specializations | DronTeh'
+    team:
+      'Team | DronTeh'
+    user:
+      'Profile | DronTeh'
 
   reset_password:
     request:
@@ -28,19 +36,11 @@ app:
           'There was a problem validating your reset request - You have already requested a reset password e-mail. Please check your e-mail or try again soon.'
         token_null:
           'No reset password token found in the URL or in the session.'
-
-    check_email:
-      title:
-        'Password Reset Email Sent | DronTeh'
-      paragraph1: >-
+      success: >-
         {count, plural,
           one {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count, number} hour.}
           other {If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in {count, number} hours.}
         }
-      paragraph2:
-        "If you don't receive an email please check your spam folder or"
-      try_again:
-        'Try again'
 
     reset:
       title:
@@ -49,6 +49,8 @@ app:
         'Reset your password'
       button:
         'Reset password'
+      success:
+        'Your password was successfully reseted. Now you can login.'
 
   verify_user_email:
     id_null:
@@ -67,8 +69,6 @@ app:
     success:
       message:
         'Your email has been successfully verificated!'
-      click:
-        'Click here to login'
 
   error_page:
     title: >-
@@ -113,6 +113,8 @@ app:
       'Remember me'
     sign_in:
       'Sign in'
+    forgot_password:
+      'Forgot password?'
 
   have_account: >-
     {have, select,
@@ -120,3 +122,82 @@ app:
       false {If you don't have an account}
       other {}
     }
+
+  home:
+    header:
+      'Digitized agriculture'
+    p1:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    p2:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    learn_more:
+      'Learn more'
+
+  reservation:
+    header:
+      'Please take your reservation'
+    send:
+      'Send'
+    success:
+      'Reservation successfully registered. Wait for the response in email.'
+    error:
+      'Something went wrong. Try again.'
+    select_land:
+      'Select where is your land'
+    time:
+      'Exact time'
+    status:
+      'Status'
+    chemical:
+      'Chemical'
+    parcel_number:
+      'Parcel number'
+    plant:
+      'Plant'
+    reorder:
+      'Reorder'
+    not_active:
+      'Not active'
+    pending:
+      'Pending'
+    in_progress:
+      'In progress'
+    date:
+      help:
+        'Select a time interval when you want the spraying to take place. There must be a minimum of 1 week between the two dates.'
+      to:
+        'to'
+
+  team:
+    description1:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description2:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description3:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description4:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+
+  user:
+    my_profile:
+      'My profile'
+    my_reservations:
+      'My reservations'
+    save:
+      'Save'
+    change_password:
+      'Click here to change password'

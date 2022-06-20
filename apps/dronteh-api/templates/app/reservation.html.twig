@@ -1,0 +1,109 @@
+{% extends 'layouts/layout.html.twig' %}
+{% trans_default_domain 'app' %}
+
+{% block title %}{{ 'app.title.reservation'|trans }}{% endblock %}
+
+{% block content %}
+  <h1 class="mx-5 md:mx-10 mt-5 md:mt-10 font-bold text-2xl">{{ 'app.reservation.header'|trans }}</h1>
+  <section class="bg-gray-900 p-5 md:p-10 flex gap-5 flex-col xl:flex-row items-center justify-center">
+    {{ form_start(reservationForm, {'attr': {'class': 'form form-dark !shadow-none'}}) }}
+      <div class="mb-5 space-y-2">
+        <i class="fa-solid fa-bong fa-xl mr-1"></i>
+        {{ form_label(reservationForm.chemical) }}
+        {% set form_errors = form_errors(reservationForm.chemical) %}
+        {{ form_widget(reservationForm.chemical, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        <div class="form-error">
+          {{ form_errors|raw  }}
+        </div>
+      </div>
+      <div class="mb-8 space-y-2">
+        <i class="fa-solid fa-seedling fa-xl mr-1"></i>
+        {{ form_label(reservationForm.plant) }}
+        {% set form_errors = form_errors(reservationForm.plant) %}
+        {{ form_widget(reservationForm.plant, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        <div class="form-error">
+          {{ form_errors|raw  }}
+        </div>
+      </div>
+      <div class="form-control !w-full">
+        <i class="fa-solid fa-hashtag fa-xl mr-1"></i>
+        {% set form_errors = form_errors(reservationForm.parcel_number) %}
+        {{ form_widget(reservationForm.parcel_number, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        {{ form_label(reservationForm.parcel_number) }}
+        <div class="form-error">
+          {{ form_errors|raw }}
+        </div>
+      </div>
+      <div class="form-control !mb-5 !w-full">
+        <i class="fa-solid fa-earth-europe fa-xl mr-1"></i>
+        {% set form_errors = form_errors(reservationForm.land_area) %}
+        {{ form_widget(reservationForm.land_area, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        {{ form_label(reservationForm.land_area) }}
+        <div class="form-error">
+          {{ form_errors|raw }}
+        </div>
+      </div>
+      <div class="mb-8 space-y-2">
+        <i class="fa-solid fa-street-view fa-xl mr-1"></i>
+        {{ form_label(reservationForm.to_be_present) }}
+        {% set form_errors = form_errors(reservationForm.to_be_present) %}
+        {{ form_widget(reservationForm.to_be_present, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        <div class="form-error">
+          {{ form_errors|raw  }}
+        </div>
+      </div>
+      <div class="flex flex-col gap-1 mb-8">
+        <div date-rangepicker class="form-row items-center !gap-5">
+          <div class="form-control !mb-0 !w-full !min-w-[200px]">
+            <i class="fa-solid fa-calendar fa-xl"></i>
+            {% set form_errors = form_errors(reservationForm.reservation_interval_start) %}
+            {{ form_widget(reservationForm.reservation_interval_start, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'!w-full', 'autocomplete': 'off'}}) }}
+            {{ form_label(reservationForm.reservation_interval_start) }}
+            <div class="form-error">
+              {{ form_errors|raw }}
+            </div>
+          </div>
+          <span class="text-gray-500 whitespace-nowrap">{{ 'app.reservation.date.to'|trans }}</span>
+          <div class="form-control !mb-0 !w-full !min-w-[200px]">
+            <i class="fa-solid fa-calendar fa-xl"></i>
+            {% set form_errors = form_errors(reservationForm.reservation_interval_end) %}
+            {{ form_widget(reservationForm.reservation_interval_end, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'!w-full', 'autocomplete': 'off'}}) }}
+            {{ form_label(reservationForm.reservation_interval_end) }}
+            <div class="form-error">
+              {{ form_errors|raw }}
+            </div>
+          </div>
+        </div>
+        <small class="text-gray-300">
+          {{ 'app.reservation.date.help'|trans }}
+        </small>
+      </div>
+      <div class="form-control !w-full mb-8">
+        <i class="fa-solid fa-comment fa-xl mr-1"></i>
+        {% set form_errors = form_errors(reservationForm.comment) %}
+        {{ form_widget(reservationForm.comment, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-full'}}) }}
+        {{ form_label(reservationForm.comment) }}
+        <div class="form-error">
+          {{ form_errors|raw }}
+        </div>
+      </div>
+
+      {% if form_errors(reservationForm) %}
+        <div class="form-error mb-8 p-3 !pl-8 bg-red-200">
+          {{ form_errors(reservationForm) }}
+        </div>
+      {% endif %}
+
+      {{ form_widget(reservationForm.gps_coordinates, {'attr': {'class': 'hidden'}}) }}
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+      <button type="submit" class="btn btn-primary block w-full">{{ 'app.reservation.send'|trans }}</button>
+    {{ form_end(reservationForm) }}
+
+    <div class="w-full">
+      <label id="map-help" class="mb-1 required">{{ 'app.reservation.select_land'|trans }}</label>
+      <div id="map"></div>
+    </div>
+  </section>
+{% endblock content %}

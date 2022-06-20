@@ -1,0 +1,138 @@
+{% extends 'layouts/layout.html.twig' %}
+{% trans_default_domain 'app' %}
+
+{% block title %}{{ 'app.title.user'|trans }}{% endblock %}
+
+{% block content %}
+	<div class="p-3 md:p-8 flex flex-wrap justify-center bg-gray-900 gap-8 items-start">
+		<section class="bg-gray-700 p-5 rounded-xl shadow-md">
+			<div class="flex space-x-3 items-center text-xl mb-10">
+				<div class="rounded-full bg-gray-300 text-gray-900 flex items-center justify-center w-10 h-10 font-medium{{ app.user.locale == 'hu' ? ' flex-row-reverse' }} !w-16 !h-16">
+					<span>{{ app.user.firstname|first }}</span>
+					<span>{{ app.user.lastname|first }}</span>
+				</div>
+				<div class="flex{{ app.user.locale == 'hu' ? ' flex-row-reverse' }} gap-1 font-light">
+					<span>{{ app.user.firstname }}</span>
+					<span>{{ app.user.lastname }}</span>
+				</div>
+			</div>
+
+			<div>
+				<h2 class="font-bold">{{ 'app.user.my_profile'|trans }}</h2>
+
+				{{ form_start(editUserForm, {'attr': {'class': 'form mt-10 form-dark !shadow-none'}}) }}
+					<div class="form-control">
+						<i class="fa-solid fa-envelope fa-xl mr-1"></i>
+						{% set form_errors = form_errors(editUserForm.email) %}
+						{{ form_widget(editUserForm.email, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+						{{ form_label(editUserForm.email) }}
+						<div class="form-error">
+							{{ form_errors|raw }}
+						</div>
+					</div>
+					<div class="form-row {{ app.request.getLocale == 'hu' ? '!flex-col-reverse md:!flex-row-reverse' }}">
+						<div class="form-control">
+							<i class="fa-solid fa-user fa-xl mr-1"></i>
+							{% set form_errors = form_errors(editUserForm.firstname) %}
+							{{ form_widget(editUserForm.firstname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+							{{ form_label(editUserForm.firstname) }}
+							<div class="form-error">
+								{{ form_errors|raw  }}
+							</div>
+						</div>
+						<div class="form-control">
+							<i class="fa-solid fa-user fa-xl mr-1"></i>
+							{% set form_errors = form_errors(editUserForm.lastname) %}
+							{{ form_widget(editUserForm.lastname, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+							{{ form_label(editUserForm.lastname) }}
+							<div class="form-error">
+								{{ form_errors|raw  }}
+							</div>
+						</div>
+					</div>
+					<div class="form-control">
+						<i class="fa-solid fa-phone fa-xl mr-1"></i>
+							{% set form_errors = form_errors(editUserForm.tel) %}
+						{{ form_widget(editUserForm.tel, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+						{{ form_label(editUserForm.tel) }}
+						<div class="form-error">
+							{{ form_errors|raw  }}
+						</div>
+					</div>
+					<div class="mb-5">
+						<i class="fa-solid fa-earth-europe fa-xl mr-1"></i>
+						{{ form_label(editUserForm.locale) }}
+						{% set form_errors = form_errors(editUserForm.locale) %}
+						{{ form_widget(editUserForm.locale, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-36'}}) }}
+						<div class="form-error">
+							{{ form_errors|raw  }}
+						</div>
+					</div>
+
+					<a href="{{ path('app_forgot_password_request') }}" class="my-10 block text-blue-500 hover:underline">{{ 'app.user.change_password'|trans }}</a>
+
+					{% if form_errors(editUserForm) %}
+						<div class="form-error mb-8 p-3 !pl-8 bg-red-200">
+							{{ form_errors(editUserForm) }}
+						</div>
+					{% endif %}
+
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+					<button type="submit" class="btn btn-primary block w-full">{{ 'app.user.save'|trans }}</button>
+				{{ form_end(editUserForm) }}
+			</div>
+		</section>
+
+		<section class="bg-gray-700 p-5 rounded-xl shadow-md max-w-full">
+			<h2 class="font-bold mb-10">{{ 'app.user.my_reservations'|trans }}</h2>
+			<div class="overflow-x-auto">
+				<table class="table">
+					<thead>
+						<tr>
+							<th{% if pagination.isSorted('r.time') %} class="sorted"{% endif %}>
+								{{ knp_pagination_sortable(pagination, 'app.reservation.time'|trans, 'r.time') }}
+							</th>
+							<th>
+								{{ 'app.reservation.chemical'|trans }}
+							</th>
+							<th>
+								{{ 'app.reservation.parcel_number'|trans }}
+							</th>
+							<th>
+								{{ 'app.reservation.plant'|trans }}
+							</th>
+							<th{% if pagination.isSorted('r.status') %} class="sorted"{% endif %}>
+								{{ knp_pagination_sortable(pagination, 'app.reservation.status'|trans, 'r.status') }}
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for reservation in pagination %}
+							<tr>
+								<td>
+									<span class="whitespace-nowrap">{{ reservation.time|date('Y-m-d') }}</span>
+									<span class="whitespace-nowrap">{{ reservation.time|date('H:i') }}</span>
+								</td>
+								<td>{{ attribute(reservation.chemical, 'getName'~app.request.locale|capitalize|replace({'_': ''})) }}</td>
+								<td>{{ reservation.getParcelNumber }}</td>
+								<td>{{ attribute(reservation.plant, 'getName'~app.request.locale|capitalize|replace({'_': ''})) }}</td>
+								<td>{{ reservation.status == 0 ? 'app.reservation.not_active'|trans : reservation.status == 1 ? 'app.reservation.pending'|trans : reservation.status == 2 ? 'app.reservation.in_progress'|trans : '-'  }}</td>
+								<td>
+									<a href="{{ path('app_reservation', {id: reservation.id}) }}" class="btn btn-primary">{{ 'app.reservation.reorder'|trans }}</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<div class="text-right">
+					{{ knp_pagination_render(pagination) }}
+					<div class="text-gray-300 mt-5">
+					  {{ (pagination.currentPageNumber * 10 - 9)~' - '~(pagination.items|length + (pagination.currentPageNumber - 1) * 10)~' / '~pagination.getTotalItemCount }}
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+{% endblock content %}

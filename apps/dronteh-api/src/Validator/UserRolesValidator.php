@@ -47,7 +47,8 @@ class UserRolesValidator extends ConstraintValidator
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', join(', ', $invalidRoles))
                 ->setParameter('{{ count }}', count($invalidRoles))
-                ->addViolation();
+                ->addViolation()
+            ;
         }
     }
 }

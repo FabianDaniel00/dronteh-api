@@ -1,15 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet-loading/src/Control.Loading.css';
+@import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+@import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css';
 
 body {
   @apply overflow-x-hidden bg-gray-900;
 }
 
+::-webkit-scrollbar {
+  @apply w-4 h-3;
+}
+
+::-webkit-scrollbar-track {
+  @apply rounded-full bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-green-500 rounded-full border-2 border-solid border-gray-100 hover:bg-green-600;
+}
+
 .btn {
-  @apply px-3 py-2 rounded-lg shadow-md transition-colors duration-200 cursor-pointer;
+  @apply px-3 py-2 rounded-lg shadow-md transition-colors duration-200 cursor-pointer font-medium;
   &.btn-primary {
-    @apply bg-blue-500 hover:bg-blue-600 text-white;
+    @apply bg-green-500 hover:bg-green-600 text-white;
   }
 }
 
@@ -34,16 +51,16 @@ body {
   @apply rounded-lg shadow-lg w-fit mx-auto;
   .form-control {
     @apply relative whitespace-nowrap w-min mb-8;
-    input {
-      @apply pl-12 pr-3 py-2 bg-gray-100 border-b-[3px] border-blue-300 focus:outline-none transition-colors duration-300;
+    input, textarea {
+      @apply pl-12 pr-3 py-2 bg-gray-100 border-b-[3px] border-green-300 focus:outline-none focus:ring-0 appearance-none transition-colors duration-300;
       &:focus-within, &:not(:placeholder-shown) {
-        @apply border-blue-500;
+        @apply border-green-500;
         + label {
           @apply left-0 -top-5 text-black text-sm cursor-default font-normal;
         }
       }
       &:focus-within + label{
-        @apply text-blue-700;
+        @apply text-green-700;
       }
     }
     label {
@@ -52,10 +69,9 @@ body {
     svg {
       @apply absolute top-2 left-3;
     }
-  }
-  label:not([type="checkbox"] + label):after {
-    content: "*";
-    @apply text-red-500 ml-1;
+    small {
+      @apply text-gray-500;
+    }
   }
   .form-row {
     @apply flex md:gap-8 flex-col md:flex-row;
@@ -64,7 +80,7 @@ body {
     @apply text-gray-500;
   }
   .form-error {
-    @apply text-red-600 whitespace-normal font-medium pl-5;
+    @apply text-red-600 whitespace-normal font-medium pl-5 break-words;
     ul {
       list-style-type: circle;
     }
@@ -75,10 +91,30 @@ body {
   input[type="checkbox"] {
     @apply w-5 h-5 rounded-md;
   }
+
+  &.form-dark {
+    input, textarea {
+      @apply text-black;
+      &:not(:placeholder-shown) + label {
+        @apply text-gray-300 #{!important};
+      }
+      &:focus-within + label{
+        @apply text-green-400 #{!important};
+      }
+    }
+    svg {
+      @apply text-gray-400;
+    }
+  }
+}
+
+label.required:not([type="checkbox"] + label):after {
+  content: "*";
+  @apply text-red-500 ml-1;
 }
 
 .navbar {
-  @apply flex justify-between md:justify-end space-x-10 items-center py-2 px-3 sticky top-0 bg-gray-900/50;
+  @apply flex justify-between md:justify-end space-x-10 items-center py-2 px-3 sticky top-0 bg-gray-900/50 z-40 backdrop-blur-[2px];
   .toggle-sidebar {
     @apply md:hidden;
   }
@@ -95,15 +131,15 @@ body {
     @apply rounded-full border-2 border-green-500 px-3 py-1 transition-colors duration-200 hover:bg-green-800;
   }
   li hr {
-    @apply border border-gray-900 transition-[width] duration-200 w-0;
+    @apply border border-gray-900 transition-[width] duration-200 w-0 invisible;
   }
   li a:hover hr {
-    @apply w-full border-gray-100;
+    @apply visible w-full border-green-300;
   }
   .language-picker {
     @apply px-2 py-1 border border-gray-100 rounded-md relative;
     #language-picker {
-      @apply absolute right-0 top-[calc(100%+10px)] space-y-1 bg-gray-800 p-1 rounded-md min-w-[150px];
+      @apply absolute right-0 top-[calc(100%+10px)] space-y-1 bg-gray-800 p-1 rounded-md min-w-[150px] shadow-md;
       li {
         @apply hover:bg-gray-700 transition-colors p-1 rounded-md;
         a {
@@ -115,13 +151,14 @@ body {
       }
     }
   }
-  .user-menu {
-    @apply rounded-full bg-gray-300 text-gray-900 flex items-center justify-center w-10 h-10 font-medium relative;
-    #user-menu {
-      @apply absolute -right-1/2 md:right-0 top-[calc(100%+10px)] bg-gray-800 text-gray-100 p-1 rounded-md min-w-[150px] text-left space-y-1;
-      a {
-        @apply block p-1 transition-colors duration-200 hover:bg-gray-700 rounded-md;
-      }
+}
+
+.user-menu {
+  @apply rounded-full bg-gray-300 text-gray-900 flex items-center justify-center w-10 h-10 font-medium relative;
+  #user-menu {
+    @apply absolute -right-1/2 top-[calc(100%+10px)] bg-gray-800 text-gray-100 p-1 rounded-md min-w-[150px] text-left space-y-1 z-50 shadow-md;
+    a {
+      @apply block p-1 transition-colors duration-200 hover:bg-gray-700 rounded-md;
     }
   }
 }
@@ -135,7 +172,7 @@ body {
     }
   }
   .toggle-sidebar {
-    @apply block w-full text-right;
+    @apply text-center px-3 m-0;
   }
   .links {
     @apply divide-y divide-gray-100;
@@ -146,7 +183,86 @@ body {
   .button {
     @apply border border-green-500 rounded-full px-3 py-1;
   }
+  .logo {
+    @apply bg-white rounded-full h-16 w-16 flex items-center;
+  }
 }
 .sidebar-overlay {
   @apply inset-0 fixed z-40 bg-black/30 backdrop-blur-[1px] transition-colors duration-200 transform translate-x-0;
+}
+
+.table {
+  @apply mb-2;
+  thead {
+    @apply bg-gray-900 text-left text-gray-300;
+  }
+  tbody {
+    tr {
+      @apply hover:bg-gray-600 #{!important};
+      @apply transition-colors duration-200;
+      &:nth-child(even) {
+        @apply bg-gray-800;
+      }
+    }
+  }
+  td, th {
+    @apply p-3;
+  }
+  th.sorted {
+    @apply bg-gray-800;
+  }
+}
+
+.datepicker {
+  @apply z-30;
+  .days {
+    .days-of-week span {
+      @apply font-extrabold text-gray-600 text-base;
+    }
+    .datepicker-grid {
+      @apply gap-[1px];
+      .day {
+        @apply bg-white hover:bg-gray-100 transition-colors;
+        &.range {
+          @apply bg-gray-200 hover:bg-gray-300;
+        }
+        &.disabled {
+          @apply opacity-30 hover:bg-gray-300 bg-gray-300;
+        }
+        &.today {
+          @apply bg-green-100 hover:bg-green-200;
+        }
+        &.prev, &.next {
+          @apply text-gray-600 font-normal;
+        }
+        &.range-start, &.range-end {
+          @apply bg-green-400 hover:bg-green-500;
+          &.selected {
+            @apply font-black;
+          }
+        }
+      }
+    }
+  }
+  .datepicker-controls {
+    button {
+      @apply transition-colors duration-200;
+    }
+    .today-btn {
+      @apply bg-green-500 hover:bg-green-600;
+    }
+  }
+  &:first-of-type .range-start.selected {
+    @apply rounded-r-none rounded-l-lg;
+  }
+}
+
+#map {
+  @apply h-[549px] rounded-xl text-black z-0 shadow-md transition-all duration-200;
+  .leaflet-control-geocoder-throbber button svg {
+    @apply invisible;
+  }
+  .leaflet-control-geocoder-form input[type="text"] {
+    @apply w-56 md:w-64;
+  }
 }

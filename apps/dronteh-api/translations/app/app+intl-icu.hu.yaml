@@ -8,6 +8,14 @@ app:
       'Regisztráció | DronTeh'
     login:
       'Bejelentkezés | DronTeh'
+    reservation:
+      'Foglalás | DronTeh'
+    specializations:
+      'Szakterületek | DronTeh'
+    team:
+      'Csapat | DronTeh'
+    user:
+      'Fiók | DronTeh'
 
   reset_password:
     request:
@@ -28,19 +36,11 @@ app:
           'Hiba történt a visszaállítási kérés érvényesítése során - Már kért jelszó-visszaállítási e-mailt. Kérjük, ellenőrizze e-mailjeit, vagy próbálja újra később.'
         token_null:
           'Nem található jelszó visszaállítási token az URL-ben vagy a munkamenetben.'
-
-    check_email:
-      title:
-        'Jelszó visszaállítási e-mail elküldve | DronTeh'
-      paragraph1: >-
+      success: >-
         {count, plural,
           one {Ha létezik az ön e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count, number} órán belül.}
           other {Ha létezik az 0n e-mail címének megfelelő fiók, akkor az imént egy e-mailt küldtünk, amely tartalmaz egy linket, amellyel visszaállíthatja jelszavát. Ez a link lejár {count, number} órán belül.}
         }
-      paragraph2:
-        "Ha nem kapott e-mailt, kérjük, ellenőrizze a spam mappáját vagy"
-      try_again:
-        'Próbálja újra'
 
     reset:
       title:
@@ -49,6 +49,8 @@ app:
         'Állítsa vissza a jelszavát'
       button:
         'Jelszó visszaállítása'
+      success:
+        'Jelszava sikeresen visszaállításra került. Most már bejelentkezhet.'
 
   verify_user_email:
     id_null:
@@ -66,9 +68,7 @@ app:
         'Hiba történt... Úgy tűnik, hogy az e-mail-cím ellenőrzésére szolgáló link egy másik fiókhoz vagy e-mail-címhez tartozik. Kérjen új linket.'
     success:
       message:
-        'Az e-mail-címét sikeresen ellenőriztük!'
-      click:
-        'Kattints ide a bejelentkezéshez'
+        'Az e-mail-címét sikeresen ellenőriztük!''app.verify_user_email.is_verified'
 
   error_page:
     title: >-
@@ -113,9 +113,91 @@ app:
       'Jegyezzen meg'
     sign_in:
       'Bejelentkezés'
+    forgot_password:
+      'Elfelejtette jelszavát?'
+
   have_account: >-
     {have, select,
       true {Ha már van fiókja}
       false {Ha nincs fiókja}
       other {}
     }
+
+  home:
+    header:
+      'Digitalizált mezőgazdaság'
+    p1:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    p2:
+      "
+        Fugiat tempor do voluptate laboris officia. Culpa aliquip minim nisi qui voluptate magna irure velit cupidatat. Consectetur do incididunt nulla aute sint mollit qui.
+        Tempor reprehenderit cupidatat velit cupidatat. Aliqua amet anim consequat tempor ullamco. Velit ex nulla ad Lorem labore non eu non non est do duis ipsum quis.
+      "
+    learn_more:
+      'Tudj meg többet'
+
+  reservation:
+    header:
+      'Kérjük, foglaljon egy időpontot'
+    send:
+      'Küldés'
+    success:
+      'A foglalás sikeresen regisztrálva. Várja meg a választ e-mailben.'
+    error:
+      'Valami elromlott. Próbáld újra.'
+    select_land:
+      'Válassza ki, hol van a földje'
+    time:
+      'Időpont'
+    status:
+      'Állapot'
+    chemical:
+      'Vegyszer'
+    parcel_number:
+      'Parcella szám'
+    plant:
+      'Növény'
+    reorder:
+      'Újrarendelés'
+    not_active:
+      'Nem aktív'
+    pending:
+      'Függőben'
+    in_progress:
+      'Folyamatban'
+    date:
+      help:
+        'Válassza ki a permetezés időtartamát. A két dátum között legalább 1 hétnek kell lennie.'
+      to:
+        '-tól'
+
+  team:
+    description1:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description2:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description3:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+    description4:
+      "
+        Sint deserunt ad duis velit consectetur velit. Anim sint mollit irure culpa aute. Exercitation reprehenderit consequat officia nostrud dolor consequat dolore Lorem commodo ea est dolore.
+      "
+
+  user:
+    my_profile:
+      'A profilom'
+    my_reservations:
+      'Foglalásaim'
+    save:
+      'Mentés'
+    change_password:
+      'Kattintson ide a jelszó megváltoztatásához'

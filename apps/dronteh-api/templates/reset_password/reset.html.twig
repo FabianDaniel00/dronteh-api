@@ -1,13 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/layout.html.twig' %}
 {% trans_default_domain 'app' %}
 
 {% block title %}{{ 'app.reset_password.reset.title'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'app.reset_password.reset.header'|trans }}</h1>
+    <a href="{{ path('app_home') }}" class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center block" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
+        <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="150px" class="mx-auto" />
+        {{ 'app.reset_password.reset.header'|trans }}
+    </a>
 
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">{{ 'app.reset_password.reset.button'|trans }}</button>
+    {{ form_start(resetForm, {'attr': {'class': 'form py-8 px-4 md:px-8 bg-white/60 backdrop-blur-md rounded-lg'}}) }}
+        <div class="form-row">
+            <div class="form-control">
+                <i class="fa-solid fa-lock fa-xl mr-1"></i>
+                {% set form_errors = form_errors(resetForm.plainPassword.first) %}
+                {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                {{ form_label(resetForm.plainPassword.first) }}
+                <div class="form-error">
+                    {{ form_errors|raw  }}
+                </div>
+            </div>
+            <div class="form-control">
+                <i class="fa-solid fa-lock fa-xl mr-1"></i>
+                {% set form_errors = form_errors(resetForm.plainPassword.second) %}
+                {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                {{ form_label(resetForm.plainPassword.second) }}
+                <div class="form-error">
+                    {{ form_errors|raw  }}
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <button class="btn btn-primary block mb-8 w-full" type="submit">{{ 'app.reset_password.reset.button'|trans }}</button>
+
+        <button type="button" id="dropdown-language" data-vs-toggle="dropdown_language" class="relative block hover:underline text-blue-700 mt-8 text-sm ml-auto">
+            {% set locale = app.request.attributes.get('_route_params')['_locale'] %}
+            {% set flagCode = flagCode(locale) %}
+
+            <span class="flex space-x-1 items-center">
+                <img class="country-flag" alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                <i class="fa-solid fa-chevron-down fa-xs !text-blue-700 hidden md:inline-block"></i>
+                <i class="fa-solid fa-chevron-up fa-xs !text-blue-700 md:hidden"></i>
+            </span>
+            <ul id="dropdown_language" data-vs-toggle-class="hidden" class="hidden absolute -top-32 md:top-[calc(100%+10px)] right-0 bg-white rounded-md w-32 text-left p-1 space-y-2 shadow-md" aria-labelledby="dropdown-language">
+                {% set queryParams = app.request.requestUri|split('/?') %}
+                {% set queryParams = queryParams|length  > 1 ? '?'~queryParams[1] : '' %}
+
+                {% for supportedLocale in supportedLocales|split('|') %}
+                    {% set supportedLocaleTrans = 'admin.locales.'~supportedLocale %}
+                    {% set flagCode = flagCode(supportedLocale) %}
+
+                    <li class="hover:bg-gray-200 transition-colors p-1 rounded-md">
+                        <a href="{{ path(app.request.attributes.get('_route'), {_locale: supportedLocale})~queryParams }}" class="block">
+                            <img alt="{{ flagCode~'.png' }}" src="{{ asset('bundles/easyadmin/images/flags/' ~ flagCode ~ '.png') }}" width="30px" class="inline-block">
+                            {{ supportedLocaleTrans|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </button>
     {{ form_end(resetForm) }}
 {% endblock %}

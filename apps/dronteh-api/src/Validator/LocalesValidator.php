@@ -41,7 +41,8 @@ class LocalesValidator extends ConstraintValidator
         if (!in_array($value, explode('|', $this->params->get('app.supported_locales')))) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
-                ->addViolation();
+                ->addViolation()
+            ;
         }
     }
 }

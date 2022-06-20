@@ -37,6 +37,44 @@ validators:
     constraint:
       latlng:
         'Nevažeće koordinate. [{string}]'
+      start_date:
+        "Datum početka mora biti veći od današnjeg"
+      daterange:
+        'Između dva datuma mora biti najmanje 1 nedelja'
+    chemical:
+      label:
+        'Hemijski'
+      placeholder:
+        'Izaberi opciju'
+    plant:
+      label:
+        'Biljka'
+      placeholder:
+        'Izaberi opciju'
+    parcel_number:
+      label:
+        'Parcela broj'
+    land_area:
+      label:
+        'Površina zemljišta [m2]'
+    to_be_present:
+      label:
+        'Da bude prisutna'
+      placeholder:
+        'Izaberi opciju'
+      yes:
+        'Da'
+      no:
+        'Ne'
+    comment:
+      label:
+        'Komentar (opciono)'
+    reservation_interval_start:
+      label:
+        'Datum početka'
+    reservation_interval_end:
+      label:
+        'Krajnji datum'
 
   register:
     plain_password:
@@ -60,6 +98,8 @@ validators:
     tel:
       label:
         'Tel'
+      help:
+        'na primer: +38163...'
     locale:
       label:
         'Tvoj jezik:'

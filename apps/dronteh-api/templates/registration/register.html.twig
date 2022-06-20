@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
+    <a href="{{ path('app_home') }}" class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center block" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
         <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="150px" class="mx-auto" />
         {{ 'app.register.header'|trans }}
-    </h1>
+    </a>
 
     <div class="p-3">
         {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
@@ -74,6 +74,7 @@
                         {% set form_errors = form_errors(registrationForm.tel) %}
                     {{ form_widget(registrationForm.tel, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
                     {{ form_label(registrationForm.tel) }}
+                    <small>{{ form_help(registrationForm.tel) }}</small>
                     <div class="form-error">
                         {{ form_errors|raw  }}
                     </div>
@@ -82,14 +83,14 @@
                     <i class="fa-solid fa-earth-europe fa-xl mr-1"></i>
                     {{ form_label(registrationForm.locale) }}
                     {% set form_errors = form_errors(registrationForm.locale) %}
-                    {{ form_widget(registrationForm.locale, {'attr': {'class': form_errors ? '!border-red-500'}}) }}
+                    {{ form_widget(registrationForm.locale, {'attr': {'class': (form_errors ? '!border-red-500 ' : '')~'w-36'}}) }}
                     <div class="form-error">
                         {{ form_errors|raw  }}
                     </div>
                 </div>
 
                 {% if form_errors(registrationForm) %}
-                    <div class="form-error mb-8 p-3 bg-red-200">
+                    <div class="form-error mb-8 p-3 !pl-8 bg-red-200">
                         {{ form_errors(registrationForm) }}
                     </div>
                 {% endif %}

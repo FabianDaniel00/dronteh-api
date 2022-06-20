@@ -52,26 +52,36 @@
                     <hr />
                 </a>
             </li>
+            {% if app.user %}
+                <span></span>
+                <li>
+                    <a href="{{ path('app_reservation') }}">
+                        Reservation
+                        <hr />
+                    </a>
+                </li>
+            {% endif %}
         </ul>
 
         {% if app.user %}
-            <button class="user-menu" data-vs-toggle="user-menu">
-                <div class="flex {{ app.user.locale == 'hu' ? 'flex-row-reverse' }}">
+            <button class="flex items-center space-x-2" data-vs-toggle="user-menu">
+                <div class="user-menu{{ app.user.locale == 'hu' ? ' flex-row-reverse' }}">
                     <span>{{ app.user.firstname|first }}</span>
                     <span>{{ app.user.lastname|first }}</span>
-                </div>
 
-                <div id="user-menu" data-vs-toggle-class="hidden" class="hidden">
-                    <a href="{{ path('app_user') }}">
-                        <i class="fa-solid fa-user mr-1"></i>
-                        Profile
-                    </a>
-                    <hr class="border-t border-gray-400" />
-                    <a href="{{ path('app_logout') }}">
-                        <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
-                        Logout
-                    </a>
+                    <div id="user-menu" data-vs-toggle-class="hidden" class="hidden">
+                        <a href="{{ path('app_user') }}">
+                            <i class="fa-solid fa-user mr-1"></i>
+                            Profile
+                        </a>
+                        <hr class="border-t border-gray-400" />
+                        <a href="{{ path('app_logout') }}">
+                            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
+                            Logout
+                        </a>
+                    </div>
                 </div>
+                <i class="fa-solid fa-chevron-down fa-sm text-gray-400"></i>
             </button>
         {% else %}
             <div class="hidden md:block space-x-2">
@@ -111,9 +121,15 @@
     </nav>
 
     <nav id="sidebar" class="hide-sidebar" data-vs-toggle-class="hide-sidebar">
-        <button class="toggle-sidebar" data-vs-toggle="sidebar">
-            <i class="fa-solid fa-bars fa-xl"></i>
-        </button>
+        <div class="flex space-x-5 justify-between">
+            <a href="{{ path('app_home') }}" class="logo">
+                <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="80px" />
+            </a>
+
+            <button class="toggle-sidebar" data-vs-toggle="sidebar">
+                <i class="fa-solid fa-bars fa-xl"></i>
+            </button>
+        </div>
 
         {% if app.user %}
             <div class="flex flex-wrap gap-1 mb-10 mt-5 text-xl text-green-200 {{ app.user.locale == 'hu' ? 'flex-row-reverse justify-end' }}">
@@ -143,8 +159,10 @@
             <li>
                 <a href="{{ path('app_team') }}">Our team</a>
             </li>
-
             {% if app.user %}
+                <li>
+                    <a href="{{ path('app_reservation') }}">Reservation</a>
+                </li>
                 <li class="absolute bottom-3 w-[calc(100%-24px)]">
                     <a href="{{ path('app_logout') }}">
                         <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>

@@ -41,7 +41,7 @@ App\Entity\Reservation:
       - NotBlank: ~
     is_deleted:
       - Choice: { choices: [true, false, 1, 0] }
-    # -1: non-active, 0: pending, 1: in process
+    # 0: non-active, 1: pending, 2: in process
     status:
       - Choice: { choices: [0, 1, 2] }
     to_be_present:

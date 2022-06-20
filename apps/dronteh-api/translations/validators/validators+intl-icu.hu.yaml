@@ -37,6 +37,44 @@ validators:
     constraint:
       latlng:
         'Nem érvényes koordináták. [{string}]'
+      start_date:
+        "A kezdő dátum nagyobb kell legyen mint a mai dátum"
+      daterange:
+        'A két dátum között minimum 1 hét kell lennie'
+    chemical:
+      label:
+        'Vegyszer'
+      placeholder:
+        'Válassz egy lehetőséget'
+    plant:
+      label:
+        'Növény'
+      placeholder:
+        'Válassz egy lehetőséget'
+    parcel_number:
+      label:
+        'Parcella szám'
+    land_area:
+      label:
+        'Föld területe [m2]'
+    to_be_present:
+      label:
+        'Jelen lenni'
+      placeholder:
+        'Válassz egy lehetőséget'
+      yes:
+        'Igen'
+      no:
+        'Nem'
+    comment:
+      label:
+        'Komment (nem kötelező)'
+    reservation_interval_start:
+      label:
+        'Kezdő dátum'
+    reservation_interval_end:
+      label:
+        'Befejezés dátum'
 
   register:
     plain_password:
@@ -60,6 +98,8 @@ validators:
     tel:
       label:
         'Tel'
+      help:
+        'pl.: +3663...'
     locale:
       label:
         'Az ön nyelve:'

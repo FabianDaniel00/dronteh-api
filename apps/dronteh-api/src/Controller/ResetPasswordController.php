@@ -48,33 +48,20 @@ class ResetPasswordController extends AbstractController
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
+        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
+            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
-                $mailer
+                $mailer,
+                $resetToken->getExpirationMessageData()
             );
         }
 
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * Confirmation page after a user has requested a password reset.
-     *
-     * @Route("/check_email", name="app_check_email", methods="GET")
-     */
-    public function checkEmail(): Response
-    {
-        // Generate a fake token if the user does not exist or someone hit this page directly.
-        // This prevents exposing whether or not a user was found with the given email address or not
-        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
-            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
-        }
-
-        return $this->render('reset_password/check_email.html.twig', [
-            'resetToken' => $resetToken,
         ]);
     }
 
@@ -95,7 +82,7 @@ class ResetPasswordController extends AbstractController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            $this->addFlash('reset_password_error', $this->translator->trans('app.reset_password.request.errors.token_null', [], 'app'));
+            $this->addFlash('danger', $this->translator->trans('app.reset_password.request.errors.token_null', [], 'app'));
 
             return $this->redirectToRoute('app_forgot_password_request');
         }
@@ -103,7 +90,7 @@ class ResetPasswordController extends AbstractController
         try {
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
-            $this->addFlash('reset_password_error', $this->translator->trans('app.reset_password.request.errors.'.$e->getReason(), [], 'app'));
+            $this->addFlash('danger', $this->translator->trans('app.reset_password.request.errors.'.$e->getReason(), [], 'app'));
 
             return $this->redirectToRoute('app_forgot_password_request');
         }
@@ -128,7 +115,9 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            header('Location: '.$this->getParameter('client_side_host').'/'.$request->getLocale().'/auth?password_reset=success');
+            $this->addFlash('success', $this->translator->trans('app.reset_password.reset.success', [], 'app'));
+
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('reset_password/reset.html.twig', [
@@ -136,7 +125,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, $expiresAt): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -144,37 +133,32 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
-        }
-
-        try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment
-            // the lines below and change the redirect to 'app_forgot_password_request'.
-            // Caution: This may reveal if a user is registered or not.
-            //
-            $this->addFlash('reset_password_error', $this->translator->trans('app.reset_password.request.errors.'.$e->getReason(), [], 'app'));
+            $this->addFlash('success', $this->translator->trans('app.reset_password.request.success', ['%count%' => $expiresAt], 'app'));
 
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->getParameter('sender_email'), $this->translator->trans('mails.reset_password.name', [], 'mails')))
-            ->to($user->getEmail())
-            ->subject($this->translator->trans('mails.reset_password.subject', [], 'mails'))
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-                'name' => $user->getFirstname().' '.$user->getLastname(),
-            ])
-        ;
+        try {
+            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
 
-        $mailer->send($email);
+            $email = (new TemplatedEmail())
+                ->from(new Address($this->getParameter('sender_email'), $this->translator->trans('mails.reset_password.name', [], 'mails')))
+                ->to($user->getEmail())
+                ->subject($this->translator->trans('mails.reset_password.subject', [], 'mails'))
+                ->htmlTemplate('reset_password/email.html.twig')
+                ->context([
+                    'resetToken' => $resetToken,
+                    'name' => $user->getFirstname().' '.$user->getLastname(),
+                ])
+            ;
 
-        // Store the token object in session for retrieval in check-email route.
-        $this->setTokenObjectInSession($resetToken);
+            $mailer->send($email);
 
-        return $this->redirectToRoute('app_check_email');
+            $this->addFlash('success', $this->translator->trans('app.reset_password.request.success', ['%count%' => $expiresAt], 'app'));
+        } catch (ResetPasswordExceptionInterface $e) {
+            $this->addFlash('danger', $this->translator->trans('app.reset_password.request.errors.'.$e->getReason(), [], 'app'));
+        }
+
+        return $this->redirectToRoute('app_forgot_password_request');
     }
 }

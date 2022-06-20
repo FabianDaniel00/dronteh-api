@@ -21,29 +21,6 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
-    login:
-      pattern: ^/api/login
-      stateless: true
-      provider: app_user_provider
-      user_checker: App\Security\UserChecker
-      json_login:
-        check_path: api_login_check
-        success_handler: lexik_jwt_authentication.handler.authentication_success
-        failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-    api_token_refresh:
-      pattern: ^/api/token/refresh
-      stateless: true
-      refresh_jwt: ~
-      user_checker: App\Security\UserChecker
-
-    api:
-      pattern: ^/api
-      stateless: true
-      provider: app_user_provider
-      user_checker: App\Security\UserChecker
-      jwt: ~
-
     admin:
       pattern: ^/(%app.supported_locales%)/admin
       provider: app_user_provider
@@ -78,24 +55,7 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/api/users/ask_another_user_verification_email, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
-    - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [GET, PATCH, DELETE] }
-    - { path: ^/api/login, roles: PUBLIC_ACCESS, methods: [POST] }
-    - { path: ^/api/contacts, roles: PUBLIC_ACCESS, methods: [POST] }
-    - { path: ^/api/get_csrf_token, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api/reservations/get_set_time_info, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/reservations/get_map_info, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH, DELETE] }
-    - { path: ^/api/ratings, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
-    - { path: ^/api/ratings, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/plants, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/drone_data_per_reservations, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api/chemicals, roles: PUBLIC_ACCESS, methods: [GET] }
-    - { path: ^/api/area_of_use_chemicals/chemicals, roles: IS_AUTHENTICATED_FULLY, methods: [GET] }
-    - { path: ^/api, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')" }
+    - { path: ^/(%app.supported_locales%)/profile, allow_if: "is_fully_authenticated()" }
 
     - { path: ^/(%app.supported_locales%)/admin/login, roles: PUBLIC_ACCESS, methods: [GET, POST] }
     - { path: ^/(%app.supported_locales%)/admin, allow_if: "is_fully_authenticated() and is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPER_ADMIN')" }

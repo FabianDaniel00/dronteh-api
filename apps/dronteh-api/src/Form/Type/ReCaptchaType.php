@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Type;
 
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Form\FormView;

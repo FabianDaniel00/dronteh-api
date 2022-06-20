@@ -5,11 +5,6 @@ controllers:
   requirements:
     _locale: '%app.supported_locales%'
 
-api:
-  resource: ../../src/Controller/Api/
-  type: annotation
-  prefix: /api
-
 admin:
   resource: ../../src/Controller/Admin/
   type: annotation

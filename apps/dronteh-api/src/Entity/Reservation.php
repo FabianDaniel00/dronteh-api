@@ -15,6 +15,13 @@ use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
  */
 class Reservation
 {
+    private array $captcha;
+
+    public function __construct(array $captcha = [])
+    {
+        $this->captcha = $captcha;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -62,7 +69,7 @@ class Reservation
     /**
      * @ORM\Column(type="boolean")
      */
-    private $to_be_present = 1;
+    private $to_be_present;
 
     /**
      * @ORM\Column(type="string", length=5000, nullable=true)
@@ -255,7 +262,7 @@ class Reservation
         return $this->reservation_interval_start;
     }
 
-    public function setReservationIntervalStart(\DateTime $reservation_interval_start): self
+    public function setReservationIntervalStart(?\DateTime $reservation_interval_start): self
     {
         $this->reservation_interval_start = $reservation_interval_start;
 
@@ -267,7 +274,7 @@ class Reservation
         return $this->reservation_interval_end;
     }
 
-    public function setReservationIntervalEnd(\DateTime $reservation_interval_end): self
+    public function setReservationIntervalEnd(?\DateTime $reservation_interval_end): self
     {
         $this->reservation_interval_end = $reservation_interval_end;
 
@@ -364,6 +371,18 @@ class Reservation
     public function setIsDeleted(bool $is_deleted): self
     {
         $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
+    public function getCaptcha(): ?array
+    {
+        return $this->captcha;
+    }
+
+    public function setCaptcha(?array $captcha): self
+    {
+        $this->captcha = $captcha;
 
         return $this;
     }

@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
+    <a href="{{ path('app_home') }}" class="font-semibold text-2xl pt-8 mb-3 md:mb-10 text-center block" style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">
         <img src="{{ asset('public/build/images/dronteh_logo.png') }}" alt="dronteh_logo" width="150px" class="mx-auto" />
         {{ 'app.login.header'|trans }}
-    </h1>
+    </a>
 
     {{ form_start(loginForm, {'attr': {'class': 'form py-8 px-4 md:px-8 bg-white/60 backdrop-blur-md rounded-lg'}}) }}
         {% if error %}
@@ -53,6 +53,8 @@
         </div>
 
         <button class="btn btn-primary block mb-8 w-full" type="submit">{{ 'app.login.sign_in'|trans }}</button>
+
+        <a href="{{ path('app_forgot_password_request') }}" class="mt-10 mb-3 block text-blue-500 hover:underline">{{ 'app.login.forgot_password'|trans }}</a>
 
         <span>
             {{ 'app.have_account'|trans({'%have%': 'false'}) }}

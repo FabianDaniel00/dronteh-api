@@ -2,6 +2,7 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder';
 import 'leaflet-loading';
+import { GestureHandling } from 'leaflet-gesture-handling';
 
 window.addEventListener('load', () => {
     setTimeClick();
@@ -16,8 +17,12 @@ function loadMap() {
 
     if (mapElement) {
         var latLng = mapElement.getAttribute('data-latlng').split(';');
+
+        L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
         var map = L.map(mapElement, {
-            loadingControl: true
+            loadingControl: true,
+            gestureHandling: true
         }).setView(latLng, 11);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
